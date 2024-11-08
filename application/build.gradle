@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot'
+    id 'io.freefair.lombok'
+}
+
+group = 'com.u.chirp'
+version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    mavenCentral()
+}
+
+dependencies {
+    // 导入约束依赖
+    implementation platform(project(':dependencies'))
+    implementation "org.projectlombok:lombok"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+
+    // 测试
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // 数据库
+    implementation "com.mysql:mysql-connector-j"
+    implementation "com.baomidou:mybatis-plus-spring-boot3-starter"
+    implementation "org.springframework.boot:spring-boot-starter-data-redis"
+    // 转换
+    implementation "org.mapstruct:mapstruct"
+    implementation "org.mapstruct:mapstruct-processor"
+
+    // sa-token
+    implementation "cn.dev33:sa-token-spring-boot3-starter"
+    implementation "cn.dev33:sa-token-redis-jackson"
+}
+
+configurations {
+    configureEach {
+        exclude group: "commons-logging", module: "commons-logging"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

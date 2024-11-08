@@ -1,0 +1,5 @@
+rootProject.name = 'u-chirp'
+include 'dependencies'
+include 'application'
+include 'ui'
+

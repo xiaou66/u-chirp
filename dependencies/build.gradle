@@ -1,0 +1,55 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+plugins {
+    id 'java-platform'
+    id 'org.springframework.boot'
+}
+
+group = 'com.u.chirp'
+version = '1.0-SNAPSHOT'
+
+ext {
+    guava = "33.3.1-jre"
+    commonsLang3 = "3.12.0"
+    mybatisPlus = "3.5.9"
+    resilience4jVersion = "2.2.0"
+    mapstruct = "1.6.2"
+    saToken = '1.38.0'
+}
+
+javaPlatform {
+    allowDependencies()
+}
+
+repositories {
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    mavenCentral()
+}
+
+dependencies {
+    api platform(SpringBootPlugin.BOM_COORDINATES)
+
+    constraints {
+        // 工具类
+        api "com.google.guava:guava:$guava"
+        api("org.apache.commons:commons-lang3:$commonsLang3")
+        // 数据库
+        api "com.baomidou:mybatis-plus-spring-boot3-starter:$mybatisPlus"
+        // 弹性设计模式的轻量级库: 支持熔断器、限流、重试、隔离和缓存等功能
+        api "io.github.resilience4j:resilience4j-spring-boot3:$resilience4jVersion"
+        api "io.github.resilience4j:resilience4j-reactor:$resilience4jVersion"
+        // 转换类
+        api "org.mapstruct:mapstruct:$mapstruct"
+        api "org.mapstruct:mapstruct-processor:$mapstruct"
+
+        // sa-token
+        api "cn.dev33:sa-token-spring-boot3-starter:$saToken"
+        api "cn.dev33:sa-token-redis:$saToken"
+        api "cn.dev33:sa-token-redis-jackson:$saToken"
+    }
+}
+
+configurations {
+    configureEach {
+        exclude group: "commons-logging", module: "commons-logging"
+    }
+}

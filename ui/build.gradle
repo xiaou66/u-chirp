@@ -1,0 +1,34 @@
+plugins {
+    id 'idea'
+    id 'com.github.node-gradle.node'
+}
+
+// 排除不必要的文件
+idea {
+    module {
+        excludeDirs += file('node_modules/')
+        excludeDirs += file('packages').listFiles().collect {
+            file(it.path + '/node_modules/')
+        }
+        excludeDirs += file('packages').listFiles().collect {
+            file(it.path + '/dist/')
+        }
+    }
+}
+
+tasks.register('dev', PnpmTask) {
+    dependsOn tasks.named('pnpmInstall')
+    pnpmCommand = ['run', 'dev']
+}
+tasks.register('clean', Delete) {
+    delete layout.buildDirectory
+}
+
+// 构建生产
+tasks.register('build-prod', PnpmTask) {
+    inputs.files(fileTree(layout.projectDirectory) {
+        include 'src/**', 'public/**', '*.js', '*.json', '*.yaml', 'index.html'
+        exclude '**/node_modules/**', '**/build/**', '**/dist/**'
+    })
+    pnpmCommand = ['run', 'build:prod']
+}
