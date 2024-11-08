@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <div>hell1o</div>
+  <router-view></router-view>
 </template>
 
 <style scoped>
