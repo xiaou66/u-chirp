@@ -4,14 +4,17 @@ import type { TopMenuEmits, TopMenuProps } from '../TopMenu'
 defineProps<Pick<TopMenuProps, 'menuItems'>>();
 
 const emits = defineEmits<{
-  (event: 'click', key: string): void;
-}>()
+  (event: 'click', key: string | number): void;
+}>();
+
+const active = defineModel('active');
 </script>
 
 <template>
   <ul class="menu menu-horizontal px-1">
     <li v-for="menuItem in menuItems" :key="menuItem.key">
       <a v-if="!menuItem.children || !menuItem.children.length"
+         :class="active === menuItem.key ? 'active' : ''"
          @click="emits('click', menuItem.key)">
         {{ menuItem.title }}
       </a>

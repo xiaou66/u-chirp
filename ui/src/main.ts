@@ -5,6 +5,7 @@ import { createPinia } from 'pinia'
 import i18n from './locales/i18n';
 import App from './App.vue'
 import router from './router'
+import 'virtual:svg-icons-register'
 
 const app = createApp(App)
 

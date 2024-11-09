@@ -22,6 +22,9 @@ export interface TopMenuProps {
    */
   menuPosition?: 'left' | 'center';
 
+  /**
+   * 菜单项
+   */
   menuItems: MenuItem[];
 }
 
@@ -30,5 +33,5 @@ export const topMenuDefaultProps = createDefaultProps<TopMenuProps>({
 });
 
 export interface TopMenuEmits {
-  (event: 'menuItemClick', key: string): void;
+  (event: 'menuItemClick', key: string | number): void;
 }

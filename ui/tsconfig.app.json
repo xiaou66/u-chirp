@@ -2,6 +2,8 @@
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": [
     "env.d.ts",
+    "packages/**/*",
+    "packages/**/*.vue",
     "src/**/*",
     "src/**/*.vue",
     "um-src/**/*",
@@ -19,5 +21,6 @@
     "paths": {
       "@/src": ["./src/*"]
     }
-  }
+  },
+  "types": ["vite-plugin-svg-icons/client"]
 }

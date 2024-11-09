@@ -1,6 +1,6 @@
 import pluginVue from 'eslint-plugin-vue'
 import vueTsEslintConfig from '@vue/eslint-config-typescript'
-import oxlint from 'eslint-plugin-oxlint'
+// import oxlint from 'eslint-plugin-oxlint'
 import * as tseslint from 'typescript-eslint'
 
 export default [
@@ -21,5 +21,5 @@ export default [
       'vue/multi-word-component-names': 'off'
     }
   }),
-  oxlint.configs['flat/recommended'],
+  // oxlint.configs['flat/recommended'],
 ]

@@ -2,9 +2,16 @@
 import type { TopMenuEmits, TopMenuProps } from './TopMenu'
 import  { topMenuDefaultProps } from './TopMenu'
 import LgTopMenu from './components/LgTopMenu.vue'
-withDefaults(defineProps<TopMenuProps>(), topMenuDefaultProps);
 
-const emits = defineEmits<TopMenuEmits>()
+withDefaults(defineProps<TopMenuProps>(), topMenuDefaultProps);
+const active = defineModel('active');
+const emits = defineEmits<TopMenuEmits>();
+
+// 处理菜单点击事件
+function handleMenuItemClick(key: string | number) {
+  active.value = key;
+  emits('menuItemClick', key);
+}
 </script>
 
 <template>
@@ -31,14 +38,15 @@ const emits = defineEmits<TopMenuEmits>()
           <li v-for="menuItem in menuItems"
               :key="menuItem.key">
             <a v-if="!menuItem.children || !menuItem.children.length"
-               @click="() => emits('menuItemClick', menuItem.key)">
+               :class="active === menuItem.key ? 'active' : ''"
+               @click="() => handleMenuItemClick(menuItem.key)">
               {{ menuItem.title }}
             </a>
             <ul v-else class="p-2">
               <a>{{ menuItem.title }}</a>
               <li v-for="subMenuItem in menuItem.children"
                   :key="subMenuItem.key"
-                  @click="() => emits('menuItemClick', menuItem.key)">
+                  @click="() => handleMenuItemClick(menuItem.key)">
                 <a>{{ menuItem.title }}</a>
               </li>
             </ul>
@@ -54,12 +62,14 @@ const emits = defineEmits<TopMenuEmits>()
         </div>
       </a>
       <div v-if="menuPosition === 'left'"  class="navbar-start hidden lg:flex w-1/2">
-        <lg-top-menu :menu-items="menuItems"
+        <lg-top-menu  v-model:active="active"
+                      :menu-items="menuItems"
                      @click="(key) => emits('menuItemClick', key)" />
       </div>
     </div>
     <div v-if="menuPosition === 'center'"  class="navbar-center hidden lg:flex">
-      <lg-top-menu :menu-items="menuItems"
+      <lg-top-menu v-model:active="active"
+                   :menu-items="menuItems"
                    @click="(key) => emits('menuItemClick', key)" />
     </div>
     <div class="navbar-end">
