@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
-import welcome from "@/views/welcome/welcome.vue";
+import welcome from "../views/welcome/welcome.vue";
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {path: '/', name: 'welcome', component: welcome},
-    {path: '/login', name: 'userLogin', component: () => import('@/views/users/login/login.vue')}
+    { path: '/', name: 'welcome', component: welcome },
+    { path: '/login', name: 'userLogin', component: () => import('../views/users/login/login.vue') },
+    { path: '/product', name: 'product', component: () =>  import('../views/product/product.vue')}
   ],
 })
-console.log('111')
 export default router

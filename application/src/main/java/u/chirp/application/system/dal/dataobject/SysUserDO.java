@@ -22,7 +22,7 @@ public class SysUserDO extends BaseDO<SysUserDO> {
     /**
      * 用户账号
      */
-    private String username;
+    private String email;
 
     /**
      * 用户密码
