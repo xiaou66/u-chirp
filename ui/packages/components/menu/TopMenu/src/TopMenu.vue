@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import type { TopMenuProps } from './TopMenu'
+import type { TopMenuEmits, TopMenuProps } from './TopMenu'
 import  { topMenuDefaultProps } from './TopMenu'
+import LgTopMenu from './components/LgTopMenu.vue'
 withDefaults(defineProps<TopMenuProps>(), topMenuDefaultProps);
 
+const emits = defineEmits<TopMenuEmits>()
 </script>
 
 <template>
@@ -26,15 +28,21 @@ withDefaults(defineProps<TopMenuProps>(), topMenuDefaultProps);
         <ul
           tabindex="0"
           class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-          <li><a>Item 1</a></li>
-          <li>
-            <a>Parent</a>
-            <ul class="p-2">
-              <li><a>Submenu 1</a></li>
-              <li><a>Submenu 2</a></li>
+          <li v-for="menuItem in menuItems"
+              :key="menuItem.key">
+            <a v-if="!menuItem.children || !menuItem.children.length"
+               @click="() => emits('menuItemClick', menuItem.key)">
+              {{ menuItem.title }}
+            </a>
+            <ul v-else class="p-2">
+              <a>{{ menuItem.title }}</a>
+              <li v-for="subMenuItem in menuItem.children"
+                  :key="subMenuItem.key"
+                  @click="() => emits('menuItemClick', menuItem.key)">
+                <a>{{ menuItem.title }}</a>
+              </li>
             </ul>
           </li>
-          <li><a>Item 3</a></li>
         </ul>
       </div>
       <a class="btn btn-ghost text-xl">
@@ -46,35 +54,13 @@ withDefaults(defineProps<TopMenuProps>(), topMenuDefaultProps);
         </div>
       </a>
       <div v-if="menuPosition === 'left'"  class="navbar-start hidden lg:flex w-1/2">
-        <ul class="menu menu-horizontal px-1">
-          <li><a>Item 1</a></li>
-          <li>
-            <details>
-              <summary>Parent</summary>
-              <ul class="p-2">
-                <li><a>Submenu 1</a></li>
-                <li><a>Submenu 2</a></li>
-              </ul>
-            </details>
-          </li>
-          <li><a>Item 3</a></li>
-        </ul>
+        <lg-top-menu :menu-items="menuItems"
+                     @click="(key) => emits('menuItemClick', key)" />
       </div>
     </div>
     <div v-if="menuPosition === 'center'"  class="navbar-center hidden lg:flex">
-      <ul class="menu menu-horizontal px-1">
-        <li><a>Item 1</a></li>
-        <li>
-          <details>
-            <summary>Parent</summary>
-            <ul class="p-2">
-              <li><a>Submenu 1</a></li>
-              <li><a>Submenu 2</a></li>
-            </ul>
-          </details>
-        </li>
-        <li><a>Item 3</a></li>
-      </ul>
+      <lg-top-menu :menu-items="menuItems"
+                   @click="(key) => emits('menuItemClick', key)" />
     </div>
     <div class="navbar-end">
       <slot name="extra"></slot>

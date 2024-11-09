@@ -1,5 +1,5 @@
-import TopMenu from './TopMenu.vue'
+import TopMenu from './src/TopMenu.vue'
 
-export * from './TopMenu'
+export * from './src/TopMenu'
 
 export  { TopMenu }
