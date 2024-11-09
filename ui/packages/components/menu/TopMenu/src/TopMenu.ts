@@ -1,6 +1,8 @@
 import { createDefaultProps } from '@u-chirp/utils'
 
 
+type SubMenuItem = Omit<MenuItem, 'children'>
+
 export interface MenuItem {
   key: string | number;
   /**
@@ -10,7 +12,7 @@ export interface MenuItem {
   /**
    * 仅支持二级菜单
    */
-  children?: MenuItem[];
+  children?: SubMenuItem[];
 }
 
 

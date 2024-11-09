@@ -5,6 +5,12 @@ const menuItems = ref<MenuItem[]>([
   {
     key: '1',
     title: '主页',
+    children: [
+      {
+        key: '1',
+        title: '111',
+      }
+    ]
   }
 ]);
 // 菜单单击
