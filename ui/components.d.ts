@@ -12,7 +12,5 @@ declare module 'vue' {
     ElInput: typeof import('element-plus/es')['ElInput']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    TopMenu: typeof import('./packages/components/menu/UTopMenu/TopMenu.vue')['default']
-    UTopMenu: typeof import('./packages/components/menu/UTopMenu/UTopMenu.vue')['default']
   }
 }

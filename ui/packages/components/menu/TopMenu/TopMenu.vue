@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { topMenuProps } from './TopMenu'
-defineProps(topMenuProps)
+import type { TopMenuProps } from './TopMenu'
+import  { topMenuDefaultProps } from './TopMenu'
+withDefaults(defineProps<TopMenuProps>(), topMenuDefaultProps);
+
 </script>
 
 <template>
@@ -59,7 +61,7 @@ defineProps(topMenuProps)
         </ul>
       </div>
     </div>
-    <div v-if="menuPosition === 'center'"  class="navbar-start hidden lg:flex w-1/2">
+    <div v-if="menuPosition === 'center'"  class="navbar-center hidden lg:flex">
       <ul class="menu menu-horizontal px-1">
         <li><a>Item 1</a></li>
         <li>

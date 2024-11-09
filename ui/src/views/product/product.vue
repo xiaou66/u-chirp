@@ -3,7 +3,7 @@ import { TopMenu } from "@u-chirp/components";
 </script>
 <template>
   <div>
-    <TopMenu></TopMenu>
+    <TopMenu menu-position="left"></TopMenu>
   </div>
 </template>
 <style lang="less" scoped></style>

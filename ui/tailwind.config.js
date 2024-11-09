@@ -5,6 +5,7 @@ export default {
   content: [
     "./index.html",
     "./um.html",
+    './packages/components/**/*.{vue,js,ts,jsx,tsx}',
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
   theme: {

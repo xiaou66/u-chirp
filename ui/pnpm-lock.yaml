@@ -11,6 +11,9 @@ importers:
       '@u-chirp/components':
         specifier: workspace:^
         version: link:packages/components
+      '@u-chirp/utils':
+        specifier: workspace:^
+        version: link:packages/utils
       '@vue/shared':
         specifier: ^3.5.12
         version: 3.5.12
@@ -63,6 +66,9 @@ importers:
       eslint:
         specifier: ^9.14.0
         version: 9.14.0
+      eslint-plugin-oxlint:
+        specifier: ^0.11.0
+        version: 0.11.0
       eslint-plugin-vue:
         specifier: ^9.30.0
         version: 9.30.0(eslint@9.14.0)
@@ -84,6 +90,9 @@ importers:
       typescript:
         specifier: ~5.6.3
         version: 5.6.3
+      typescript-eslint:
+        specifier: ^8.13.0
+        version: 8.13.0(eslint@9.14.0)(typescript@5.6.3)
       unplugin-auto-import:
         specifier: ^0.18.3
         version: 0.18.3
@@ -101,6 +110,12 @@ importers:
         version: 2.1.10(typescript@5.6.3)
 
   packages/components:
+    dependencies:
+      vue:
+        specifier: ^3.2.0
+        version: 3.5.12(typescript@5.6.3)
+
+  packages/utils:
     dependencies:
       vue:
         specifier: ^3.2.0
@@ -1854,6 +1869,12 @@ packages:
       eslint: 9.14.0
     dev: true
 
+  /eslint-plugin-oxlint@0.11.0:
+    resolution: {integrity: sha512-9CHYh1eLt2Z83ShLbvj79G6lqC2qLJBfsd7baGWOwDmLM2GXu2COi1r4tMMS2OI8gfB4s2uOgS8ZiYzHhN8uzQ==}
+    dependencies:
+      jsonc-parser: 3.3.1
+    dev: true
+
   /eslint-plugin-prettier@5.2.1(eslint-config-prettier@9.1.0)(eslint@9.14.0)(prettier@3.3.3):
     resolution: {integrity: sha512-gH3iR3g4JfF+yYPaJYkN7jEl9QbweL/YfkoRlNnuIEHEz1vHVlCmWOS+eGGiRuzHQXdJFCOTxRgvju9b8VUmrw==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -2380,6 +2401,10 @@ packages:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
     hasBin: true
+    dev: true
+
+  /jsonc-parser@3.3.1:
+    resolution: {integrity: sha512-HUgH65KyejrUFPvHFPbqOY0rsFip3Bo5wb4ngvdi1EpCYWUQDC5V+Y7mZws+DLkr4M//zQJoanu1SP+87Dv1oQ==}
     dev: true
 
   /jsonfile@6.1.0:
