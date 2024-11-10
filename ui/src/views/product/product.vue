@@ -1,5 +1,21 @@
 <script lang="ts" setup>
 import ProductTopMenu from './components/ProductTopMenu.vue'
+import { SvgIcon } from '@u-chirp/components'
+import { onMounted } from 'vue'
+
+function checkOverflow() {
+  const container = document.getElementById('contentContainer')!;
+  const button = document.getElementById('showMoreBtn')!;
+
+  // Check if the content overflows the container
+  if (container.scrollHeight > container.clientHeight) {
+    button.style.display = 'block'; // Show the button if overflow
+  } else {
+    button.style.display = 'none'; // Hide the button if no overflow
+  }
+}
+onMounted(() => checkOverflow())
+
 </script>
 <template>
   <div class="grid grid-rows-[auto_1fr] min-h-screen">
@@ -12,10 +28,22 @@ import ProductTopMenu from './components/ProductTopMenu.vue'
           <!-- 检索区域  -->
           <div class="flex justify-between items-center">
             <div class="flex gap-3">
-              <button class="btn btn-sm">{{$t('product.hot')}}</button>
-              <button class="btn btn-sm">{{$t('product.new')}}</button>
-              <button class="btn btn-sm">{{$t('product.good')}}</button>
-              <button class="btn btn-sm">{{$t('product.follow')}}</button>
+              <button class="btn btn-sm">
+                <svg-icon name="product-hot"></svg-icon>
+                {{$t('product.hot')}}
+              </button>
+              <button class="btn btn-sm">
+                <svg-icon name="product-new"></svg-icon>
+                {{$t('product.new')}}
+              </button>
+              <button class="btn btn-sm">
+                <svg-icon :size="16" name="product-goodProblem"></svg-icon>
+                {{$t('product.goodProblem')}}
+              </button>
+              <button class="btn btn-sm">
+                <svg-icon name="product-follow"></svg-icon>
+                {{$t('product.follow')}}
+              </button>
             </div>
             <div class="flex gap-3">
               <label class="input input-bordered flex items-center gap-2 hidden lg:flex">
@@ -37,19 +65,184 @@ import ProductTopMenu from './components/ProductTopMenu.vue'
           </div>
           <!--  主体区域  -->
           <div class="pt-5">
-            <div class="min-h-full h-full flex flex-col gap-5">
-              <!--          skeleton-->
-              <div class="h-64 rounded-xl shadow p-2  bg-base-100">
-                <div class="text-xl"></div>
+            <div class="h-full grid grid-cols-[1fr_auto] gap-2">
+              <div class="flex flex-col gap-5">
+                <!--          skeleton-->
+                <div class="rounded-xl shadow p-4 skeleton bg-base-100">
+                  <div class="flex mb-3 justify-between">
+                    <div class="flex gap-2">
+                      <el-tag>
+                        <div class="flex gap-1 items-center">
+                          <svg-icon svg-class="animate-spin" name="product-status-loading" />
+                          进行中
+                        </div>
+                      </el-tag>
+                      <el-tag type="success">
+                        <div class="flex gap-1 items-center">
+                          <svg-icon name="product-status-check" />
+                          已处理
+                        </div>
+                      </el-tag>
+                      <el-tag type="warning">
+                        <div class="flex gap-1 items-center">
+                          <svg-icon color="var(--el-tag-text-color)" name="product-status-wait" />
+                          待处理
+                        </div>
+                      </el-tag>
+                      <el-tag type="primary">
+                        <div class="flex gap-1 items-center">
+                          <svg-icon  color="var(--el-tag-text-color)" name="product-status-plan" />
+                          计划中
+                        </div>
+                      </el-tag>
+                      <el-tag type="info">
+                        <div class="flex gap-1 items-center">
+                          <svg-icon  color="var(--el-tag-text-color)" name="product-status-reject" />
+                          不采纳
+                        </div>
+                      </el-tag>
+                      <el-tag type="info">
+                        <div class="flex gap-1 items-center">
+                          <svg-icon color="var(--el-tag-text-color)" name="product-status-repeat" />
+                          重复
+                        </div>
+                      </el-tag>
+                    </div>
+                    <div class="flex gap-2">
+                      <el-tag type="danger" round>
+                        <div class="flex gap-1 items-center">
+                          <svg-icon color="var(--el-tag-text-color)" name="product-bug" />
+                          缺陷
+                        </div>
+                      </el-tag>
+                      <el-tag type="primary" round>
+                        <div class="flex gap-1 items-center">
+                          <svg-icon color="var(--el-tag-text-color)" name="product-idea" />
+                          需求
+                        </div>
+                      </el-tag>
+                      <el-tag type="primary" round>
+                        <div class="flex gap-1 items-center">
+                          <svg-icon color="var(--el-tag-text-color)" name="default-rocket" />
+                          优化
+                        </div>
+                      </el-tag>
+                      <el-tag effect="plain" round>
+                        <div class="flex gap-1 items-center">
+                          <svg-icon color="var(--el-tag-text-color)" name="product-pin" />
+                          置顶
+                        </div>
+                      </el-tag>
+                    </div>
+                  </div>
+                  <div class="font-bold">
+                    我是一个标题呀呀呀呀呀呀呀呀呀呀呀呀呀呀呀呀呀呀
+                  </div>
+                  <div id="contentContainer" class="max-h-64 overflow-y-hidden relative">
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <p>1.我要吐槽</p>
+                    <button id="showMoreBtn"
+                            class=" hover:bg-gray-200 absolute bottom-0 left-0 right-0 bg-gray-100 p-2 text-center rounded">
+                      点击查看更多
+                    </button>
+                  </div>
+                  <div class="flex items-center mt-6 justify-between">
+                    <div class="flex items-center gap-2">
+                      <div class="avatar cursor-pointer">
+                        <div class="w-10 rounded-full">
+                          <img src="https://s2.loli.net/2023/04/15/k4IbQGzMZ9v6fYN.jpg" />
+                        </div>
+                      </div>
+                      <div class="flex flex-col gap-1">
+                        <div class="flex gap-2">
+                          <div>xiaou</div>
+                          <div>
+                            <el-tag type="danger" size="small">超级管理员</el-tag>
+                          </div>
+                        </div>
+                        <div class="text-xs">04月17日 20:06</div>
+                      </div>
+                    </div>
+                    <div class="flex gap-2">
+                      <div class="flex items-center gap-1 cursor-pointer">
+                        <svg-icon svg-class="text-lg" name="product-thumbsUp"></svg-icon>
+<!--                        <svg-icon svg-class="text-lg" color="#2563eb" name="product-thumbsUpFill"></svg-icon>-->
+                        100
+                      </div>
+                      <el-tooltip content="关注数">
+                        <div class="flex items-center gap-1 cursor-pointer">
+                          <svg-icon svg-class="text-lg"  name="product-follow"></svg-icon>
+                          100
+                        </div>
+                      </el-tooltip>
+                    </div>
+                  </div>
+                </div>
+                <div class="h-64 rounded-xl shadow p-2  bg-base-100">
+                  <div class="text-xl"></div>
+                </div>
+                <div class="h-64 rounded-xl shadow p-2  bg-base-100">
+                  <div class="text-xl"></div>
+                </div>
+                <div class="h-64 rounded-xl shadow p-2  bg-base-100">
+                  <div class="text-xl"></div>
+                </div>
               </div>
-              <div class="h-64 rounded-xl shadow p-2  bg-base-100">
-                <div class="text-xl"></div>
-              </div>
-              <div class="h-64 rounded-xl shadow p-2  bg-base-100">
-                <div class="text-xl"></div>
-              </div>
-              <div class="h-64 rounded-xl shadow p-2  bg-base-100">
-                <div class="text-xl"></div>
+              <div>
+                <div class="flex-col gap-5 hidden lg:flex">
+                  <!--  个人信息   -->
+                  <div class="card-body w-80 shadow rounded-2xl  card-compact  bg-base-100 p-5">
+                    <div class="flex items-center gap-2">
+                      <div class="avatar cursor-pointer">
+                        <div class="w-10 rounded-full">
+                          <img src="https://s2.loli.net/2023/04/15/k4IbQGzMZ9v6fYN.jpg" />
+                        </div>
+                      </div>
+                      <div>ssss</div>
+                    </div>
+                    <div>
+                      <div class="stats">
+                        <div class="stat">
+                          <div class="stat-title text-center">{{$t('user.issue')}}</div>
+                          <div class="stat-value text-sm">10000</div>
+                        </div>
+                        <div class="stat">
+                          <div class="stat-title text-center">{{$t('user.answer')}}</div>
+                          <div class="stat-value text-sm">10000</div>
+                        </div>
+                        <div class="stat">
+                          <div class="stat-title text-center">{{$t('user.beLiked')}}</div>
+                          <div class="stat-value text-sm">10000</div>
+                        </div>
+                    </div>
+                    </div>
+                  </div>
+                  <div class="card-body shadow rounded-2xl card-compact  bg-base-100 w-full p-5">
+                    <div class="card-title text-sm">产品进度</div>
+                    <div role="tablist" class="tabs tabs-boxed">
+                      <a role="tab" class="tab tab-active">进行中</a>
+                      <a role="tab" class="tab">待规划</a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

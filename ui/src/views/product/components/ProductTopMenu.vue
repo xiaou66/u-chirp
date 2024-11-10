@@ -35,7 +35,7 @@ function handleMenuItemClick(key: string | number) {
             </div>
           </div>
         </div>
-        <ul tabindex="0" class="dropdown-content menu  rounded-box z-[1] w-32 p-2 shadow">
+        <ul tabindex="0" class="dropdown-content bg-base-100 menu rounded-box z-[1] w-32 p-2 shadow">
           <li>
             <a class="flex">
               <svg-icon name="user-logout" />

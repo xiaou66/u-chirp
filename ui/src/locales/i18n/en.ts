@@ -4,11 +4,14 @@ export default {
     email: 'email',
     password: 'password',
     logout: 'logout',
+    answer: 'Answer',
+    beLiked: 'BeLiked',
+    problem: 'Rant',
   },
   product: {
     hot: 'Hot',
     new: 'New',
-    good: 'Gem',
+    goodProblem: 'Gem',
     follow: 'Follow',
     createProblem: 'I want to rant',
   }
