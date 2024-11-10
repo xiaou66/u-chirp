@@ -1,2 +1,2 @@
-export * from './menu';
-export * from './icon';
+export * from './src/menu';
+export * from './src/icon';

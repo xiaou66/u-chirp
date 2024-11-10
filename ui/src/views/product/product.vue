@@ -2,6 +2,7 @@
 import ProductTopMenu from './components/ProductTopMenu.vue'
 import { SvgIcon } from '@u-chirp/components'
 import { onMounted } from 'vue'
+import TagPlus from '@u-chirp/components/src/tags/TagPlus/TagPlus.vue'
 
 function checkOverflow() {
   const container = document.getElementById('contentContainer')!;
@@ -71,68 +72,42 @@ onMounted(() => checkOverflow())
                 <div class="rounded-xl shadow p-4 skeleton bg-base-100">
                   <div class="flex mb-3 justify-between">
                     <div class="flex gap-2">
-                      <el-tag>
-                        <div class="flex gap-1 items-center">
-                          <svg-icon svg-class="animate-spin" name="product-status-loading" />
-                          进行中
-                        </div>
-                      </el-tag>
-                      <el-tag type="success">
-                        <div class="flex gap-1 items-center">
-                          <svg-icon name="product-status-check" />
-                          已处理
-                        </div>
-                      </el-tag>
-                      <el-tag type="warning">
-                        <div class="flex gap-1 items-center">
-                          <svg-icon color="var(--el-tag-text-color)" name="product-status-wait" />
-                          待处理
-                        </div>
-                      </el-tag>
-                      <el-tag type="primary">
-                        <div class="flex gap-1 items-center">
-                          <svg-icon  color="var(--el-tag-text-color)" name="product-status-plan" />
-                          计划中
-                        </div>
-                      </el-tag>
-                      <el-tag type="info">
-                        <div class="flex gap-1 items-center">
-                          <svg-icon  color="var(--el-tag-text-color)" name="product-status-reject" />
-                          不采纳
-                        </div>
-                      </el-tag>
-                      <el-tag type="info">
-                        <div class="flex gap-1 items-center">
-                          <svg-icon color="var(--el-tag-text-color)" name="product-status-repeat" />
-                          重复
-                        </div>
-                      </el-tag>
+                      <tag-plus :icon="{ name: 'product-status-loading', svgClass: 'animate-spin'}"
+                                tag-name="进行中"
+                                type="primary" />
+                      <tag-plus :icon="{ name: 'product-status-check' }"
+                                tag-name="已处理"
+                                type="success" />
+                      <tag-plus :icon="{ name: 'product-status-wait' }"
+                                tag-name="待处理"
+                                type="warning" />
+
+                      <tag-plus :icon="{ name: 'product-status-plan' }"
+                                tag-name="计划中"
+                                type="primary" />
+                      <tag-plus :icon="{ name: 'product-status-reject' }"
+                                tag-name="不采纳"
+                                type="info" />
+                      <tag-plus :icon="{ name: 'product-status-repeat' }"
+                                tag-name="重复"
+                                type="info" />
                     </div>
                     <div class="flex gap-2">
-                      <el-tag type="danger" round>
-                        <div class="flex gap-1 items-center">
-                          <svg-icon color="var(--el-tag-text-color)" name="product-bug" />
-                          缺陷
-                        </div>
-                      </el-tag>
-                      <el-tag type="primary" round>
-                        <div class="flex gap-1 items-center">
-                          <svg-icon color="var(--el-tag-text-color)" name="product-idea" />
-                          需求
-                        </div>
-                      </el-tag>
-                      <el-tag type="primary" round>
-                        <div class="flex gap-1 items-center">
-                          <svg-icon color="var(--el-tag-text-color)" name="default-rocket" />
-                          优化
-                        </div>
-                      </el-tag>
-                      <el-tag effect="plain" round>
-                        <div class="flex gap-1 items-center">
-                          <svg-icon color="var(--el-tag-text-color)" name="product-pin" />
-                          置顶
-                        </div>
-                      </el-tag>
+                      <tag-plus :icon="{ name: 'product-bug' }"
+                                tag-name="缺陷"
+                                type="danger" round />
+                      <tag-plus :icon="{ name: 'product-idea' }"
+                                tag-name="缺陷"
+                                type="primary" round />
+                      <tag-plus :icon="{ name: 'default-rocket' }"
+                                tag-name="优化"
+                                type="primary" round />
+
+                      <tag-plus :icon="{ name: 'product-pin' }"
+                                tag-name="置顶"
+                                type="primary"
+                                effect="plain"
+                                round />
                     </div>
                   </div>
                   <div class="font-bold">

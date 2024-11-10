@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <div class="min-h-screen">
+  <div class="dark min-h-screen">
     <router-view />
   </div>
 </template>
