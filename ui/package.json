@@ -21,6 +21,7 @@
     "@vue/shared": "^3.5.12",
     "element-plus": "^2.8.7",
     "pinia": "^2.2.6",
+    "quill": "^2.0.2",
     "vue": "^3.5.12",
     "vue-i18n": "^10.0.4",
     "vue-router": "^4.4.5"

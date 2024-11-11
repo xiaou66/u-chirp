@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import Editor from "./views/Editor/Editor.vue";
 </script>
 
 <template>
   <div class="dark min-h-screen">
-    <router-view />
+    <Editor />
+<!--    <router-view />-->
   </div>
 </template>
 
