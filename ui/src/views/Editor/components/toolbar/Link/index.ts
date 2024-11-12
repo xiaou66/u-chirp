@@ -1,10 +1,25 @@
-import type Quill from 'quill'
-import type Toolbar from 'quill/modules/toolbar'
+import Quill from 'quill'
 import { h, render } from 'vue'
-import Link from './Link.vue'
+import LinkPlus from './LinkPlus.vue'
 
+const Inline = Quill.import('blots/inline')  as any;
 
+class LinkBlot extends Inline {
+  static blotName = 'link';
+  static tagName = 'a';
+  static create(url: string) {
+    const node = super.create();
+    // Sanitize url if desired
+    node.setAttribute('href', url);
+    // Okay to set other non-format related attributes
+    node.setAttribute('target', '_blank');
+    return node;
+  }
 
+  static formats(node: any) {
+    return node.getAttribute('href');
+  }
+}
 class LinkTool {
   __quill: Quill;
   constructor(quill: Quill) {
@@ -19,7 +34,7 @@ class LinkTool {
     const container = document.createElement('div');
     container.className = 'custom-container';
     this.quill.addContainer(container);
-    render(h(Link, { quill: this.quill }), container);
+    render(h(LinkPlus, { quill: this.quill }), container);
   }
 }
 

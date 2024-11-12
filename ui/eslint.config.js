@@ -18,7 +18,8 @@ export default [
   ...tseslint.config({
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
-      'vue/multi-word-component-names': 'off'
+      'vue/multi-word-component-names': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off'
     }
   }),
   // oxlint.configs['flat/recommended'],
