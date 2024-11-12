@@ -1,21 +1,29 @@
 import type Quill from 'quill'
 import type Toolbar from 'quill/modules/toolbar'
 import { h, render } from 'vue'
-import Link from './Link'
+import Link from './Link.vue'
 
-function handleLinkClick(value: string) {
-  const range = quill.getSelection()!;
-  console.log(quill.getBounds(range.index));
-  const contents = quill.getContents(range.index);
-  console.log(contents)
-  return;
+
+
+class LinkTool {
+  __quill: Quill;
+  constructor(quill: Quill) {
+    this.__quill = quill;
+  }
+
+  get quill() {
+    return this.__quill;
+  }
+
+  public install() {
+    const container = document.createElement('div');
+    container.className = 'custom-container';
+    this.quill.addContainer(container);
+    render(h(Link, { quill: this.quill }), container);
+  }
 }
-// function
-export function useLinkTool(quill: Quill) {
-  const toolbar = quill.getModule('toolbar') as Toolbar;
-  toolbar.addHandler('link', handleLinkClick);
-  const container = document.createElement('div');
-  container.className = 'custom-container';
-  quill.addContainer(container);
-  render(h(Link, {}), container);
+
+export function installLinkTool(quill: Quill) {
+  new LinkTool(quill)
+    .install();
 }

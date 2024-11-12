@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { h, onMounted, render } from 'vue'
+import { onMounted } from 'vue'
 import Quill from "quill";
 import 'quill/dist/quill.snow.css';
-import Link from './components/toolbar/Link/Link' // 引入样式
+import { installLinkTool } from './components' // 引入样式
 let quill: Quill;
 onMounted(() => {
-   quill = new Quill("#editor", {
+  quill = new Quill("#editor", {
     theme: "snow",
     modules: {
       toolbar: '#toolbar'
     }
   });
+  installLinkTool(quill);
 })
 </script>
 
