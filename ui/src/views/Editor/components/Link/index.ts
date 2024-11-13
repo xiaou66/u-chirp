@@ -7,6 +7,7 @@ const Module = Quill.import('core/module')
 class Link extends Module {
   constructor(quill: Quill, options: any) {
     super(quill, options);
+    Quill.register('formats/link', LinkBlot, true);
     new Tooltip(quill, document.createElement('div'));
     console.log('link--constructor')
     document.getElementById('u-link')!

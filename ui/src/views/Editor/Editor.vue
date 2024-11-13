@@ -2,16 +2,10 @@
 import { onMounted } from 'vue'
 import Quill from "quill";
 import 'quill/dist/quill.snow.css';
-import { installLinkTool } from './components'
 import Link from './components/Link'
-import LinkBlot from "./components/Link/formats/link";
-import { SvgIcon } from '@u-chirp/components' // 引入样式
 let quill: Quill;
 onMounted(() => {
-  Quill.register('formats/link', LinkBlot, true);
   Quill.register('modules/link', Link, true);
-
-
   quill = new Quill("#editor", {
     theme: "snow",
     modules: {
@@ -30,7 +24,11 @@ onMounted(() => {
         <div class="ql-formats">
           <button class="ql-image"></button>
           <button class="u-link" id="u-link">
-            <svg viewBox="0 0 18 18"><line class="ql-stroke" x1="7" x2="11" y1="7" y2="11"></line><path class="ql-even ql-stroke" d="M8.9,4.577a3.476,3.476,0,0,1,.36,4.679A3.476,3.476,0,0,1,4.577,8.9C3.185,7.5,2.035,6.4,4.217,4.217S7.5,3.185,8.9,4.577Z"></path><path class="ql-even ql-stroke" d="M13.423,9.1a3.476,3.476,0,0,0-4.679-.36,3.476,3.476,0,0,0,.36,4.679c1.392,1.392,2.5,2.542,4.679.36S14.815,10.5,13.423,9.1Z"></path></svg>
+            <svg viewBox="0 0 18 18">
+              <line class="ql-stroke" x1="7" x2="11" y1="7" y2="11"></line>
+              <path class="ql-even ql-stroke" d="M8.9,4.577a3.476,3.476,0,0,1,.36,4.679A3.476,3.476,0,0,1,4.577,8.9C3.185,7.5,2.035,6.4,4.217,4.217S7.5,3.185,8.9,4.577Z"></path>
+              <path class="ql-even ql-stroke" d="M13.423,9.1a3.476,3.476,0,0,0-4.679-.36,3.476,3.476,0,0,0,.36,4.679c1.392,1.392,2.5,2.542,4.679.36S14.815,10.5,13.423,9.1Z"></path>
+            </svg>
           </button>
           <button class="ql-code"></button>
         </div>
