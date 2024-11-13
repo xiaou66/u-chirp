@@ -3,10 +3,9 @@ import { onMounted } from 'vue'
 import Quill from "quill";
 import 'quill/dist/quill.snow.css';
 import Link from './components/Link'
-let quill: Quill;
 onMounted(() => {
   Quill.register('modules/link', Link, true);
-  quill = new Quill("#editor", {
+  const quill = new Quill("#editor", {
     theme: "snow",
     modules: {
       toolbar: '#toolbar',
@@ -17,8 +16,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="light" style="width: 100%; height: 100%;">
-    <div id="editor"></div>
+  <div class="light" style="width: 100%; height: 200px;">
+    <div id="editor" class="h-full"></div>
     <div id="toolbar" class="flex items-center justify-between">
       <div class="flex-1">
         <div class="ql-formats">
@@ -63,7 +62,7 @@ onMounted(() => {
 .light {
   position: relative;
   display: grid;
-  grid-template-rows: 1fr 33px ;
+  grid-template-rows: calc(100% - 33px) 33px ;
   .ql-snow {
     padding: 4px;
   }

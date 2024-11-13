@@ -7,6 +7,7 @@ import { render, h, ref } from 'vue'
 import QLink from "./QLink.vue";
 
 class Link extends Module {
+  public readonly __qLinkTooltip: Tooltip;
   constructor(quill: Quill, options: any) {
     super(quill, options);
     Quill.register('formats/link', LinkBlot, true);
@@ -15,11 +16,12 @@ class Link extends Module {
     const divElement = document.createElement('div');
     const qlinkRef = ref(null);
     const vNode = h(QLink, { quill });
-    console.log('vNode', vNode)
     render(vNode, divElement);
+    // vNode.component!.exposed;
+    console.log(vNode)
     // 加入容器
     quill.addContainer(divElement);
-    new Tooltip(quill, divElement);
+    this.__qLinkTooltip = new Tooltip(quill, vNode);
     setTimeout(() => {
       console.log(qlinkRef.value)
     }, 3000)
