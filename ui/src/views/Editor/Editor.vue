@@ -23,7 +23,7 @@ onMounted(() => {
       <div class="flex-1">
         <div class="ql-formats">
           <button class="ql-image"></button>
-          <button class="u-link" id="u-link">
+          <button class="ql-link" id="u-link">
             <svg viewBox="0 0 18 18">
               <line class="ql-stroke" x1="7" x2="11" y1="7" y2="11"></line>
               <path class="ql-even ql-stroke" d="M8.9,4.577a3.476,3.476,0,0,1,.36,4.679A3.476,3.476,0,0,1,4.577,8.9C3.185,7.5,2.035,6.4,4.217,4.217S7.5,3.185,8.9,4.577Z"></path>
