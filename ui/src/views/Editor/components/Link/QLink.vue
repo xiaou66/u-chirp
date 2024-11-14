@@ -7,7 +7,7 @@ import type { QLinkInstance } from './types'
 import Link from './index'
 
 
-const props = defineProps({ quill: Quill });
+const props = defineProps<{ quill: Quill }>();
 
 const linkRef = ref<HTMLDivElement>();
 const inputRef = ref<HTMLInputElement>();
@@ -24,7 +24,10 @@ function handleInputEnterEvent(e: Event) {
   const module = props.quill.getModule('link') as Link;
   module.__qLinkTooltip.save();
 }
-
+function handleInputBlurEvent() {
+  const module = props.quill.getModule('link') as Link;
+  module.__qLinkTooltip.save();
+}
 defineExpose<QLinkInstance>({
   href: hrefValue,
   show
@@ -41,7 +44,8 @@ defineExpose<QLinkInstance>({
       <input autofocus ref="inputRef" v-model="hrefValue"
              class="pl-1 w-60"
              placeholder="粘贴链接"
-             @keydown.enter.stop="handleInputEnterEvent">
+             @keydown.enter.stop="handleInputEnterEvent"
+             @blur="handleInputBlurEvent">
     </div>
   </div>
 </template>

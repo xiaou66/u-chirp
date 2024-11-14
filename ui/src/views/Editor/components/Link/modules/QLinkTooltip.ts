@@ -6,6 +6,7 @@ import Tooltip from 'quill/ui/tooltip'
 import type Toolbar from 'quill/modules/toolbar'
 import Emitter from 'quill/core/emitter'
 import type { Range } from 'quill'
+import Link from '../index'
 
 
 export default class QLinkTooltip extends Tooltip {
@@ -26,38 +27,58 @@ export default class QLinkTooltip extends Tooltip {
 
   handleToolBarClick(value: string) {
     if (value) {
-      this.show()
+      this.edit()
     }
   }
 
   listen() {
     this.root.addEventListener('mouseleave', () => {
-      // this.save();
+      this.save();
     });
 
-    this.boundsContainer.addEventListener('click', () => {
-      // this.save()
-    });
+    // this.boundsContainer.addEventListener('click', () => {
+    //   if (this.__selection) {
+    //     this.save()
+    //   }
+    // });
     this.quill.on('selection-change', (range, oldRange, source) => {
       console.log(range, oldRange, source);
-      this.show();
+      debugger
+      if (!range) {
+        return;
+      }
+      let link = '';
+      const leaf = this.quill.getLine(range.index);
+      console.log(leaf)
+      console.log(this.quill.getIndex(leaf[0]!))
+      // const [blot, index] = leaf;
+      // if (blot && blot.parent) {
+      //   console.log('aaa')
+      // }
+      const contents = this.quill.getContents(range.index, 1);
+
+      if (contents.length()) {
+        const ops = contents
+          .filter(item => !!item.attributes && item.attributes.hasOwnProperty('link'));
+        if (ops.length) {
+          link = ops[0].attributes &&  ops[0].attributes.link as string || '';
+        }
+      }
+      console.log(contents);
+     if (link) {
+       this.edit(link);
+     }
     });
   }
 
-  show() {
-    if (!isSelectText(this.quill)) {
-      this.hide()
-      return
-    }
-    console.log('show........')
+  edit(link?: string) {
     const selection = this.quill.getSelection()
-    console.log(selection)
     if (selection) {
       this.position(this.quill.getBounds(selection.index)!)
       super.show()
       console.log(this.quill.getText(selection))
       this.__selection = selection;
-      this.__qLinkInstance.show(this.quill.getText(selection))
+      this.__qLinkInstance.show(link || this.quill.getText(selection))
     }
   }
 
@@ -66,11 +87,13 @@ export default class QLinkTooltip extends Tooltip {
     super.hide();
     if (this.__selection) {
       const { href } = this.__qLinkInstance;
+      console.log(href)
       if (href.value) {
         this.quill.formatText(this.__selection, 'link' , href.value,  Emitter.sources.USER);
       } else {
-        this.quill.formatText(this.__selection, '' , href.value,  Emitter.sources.USER);
+        this.quill.formatText(this.__selection.index, this.__selection.length, { link: false });
       }
+      delete this.__selection;
     }
   }
 }
