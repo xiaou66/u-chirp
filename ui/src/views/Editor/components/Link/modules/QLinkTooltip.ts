@@ -5,12 +5,13 @@ import { isSelectText } from '../../../utils'
 import Tooltip from 'quill/ui/tooltip'
 import type Toolbar from 'quill/modules/toolbar'
 import Emitter from 'quill/core/emitter'
+import type { Range } from 'quill'
 
 
 export default class QLinkTooltip extends Tooltip {
   private readonly __qLinkInstance: QLinkInstance
 
-  private __selection;
+  private __selection?: Range;
 
   constructor(quill: Quill, vNode: VNode) {
     super(quill, quill.root)
@@ -32,10 +33,14 @@ export default class QLinkTooltip extends Tooltip {
   listen() {
     this.root.addEventListener('mouseleave', () => {
       this.save()
-    })
+    });
 
     this.boundsContainer.addEventListener('click', () => {
       this.save()
+    });
+    this.quill.on('selection-change', (range, oldRange, source) => {
+      console.log(range, oldRange, source);
+      this.show();
     })
   }
 
@@ -45,6 +50,7 @@ export default class QLinkTooltip extends Tooltip {
       return
     }
     const selection = this.quill.getSelection()
+    console.log(selection)
     if (selection) {
       this.position(this.quill.getBounds(selection.index)!)
       super.show()
