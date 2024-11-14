@@ -32,16 +32,16 @@ export default class QLinkTooltip extends Tooltip {
 
   listen() {
     this.root.addEventListener('mouseleave', () => {
-      this.save()
+      // this.save();
     });
 
     this.boundsContainer.addEventListener('click', () => {
-      this.save()
+      // this.save()
     });
     this.quill.on('selection-change', (range, oldRange, source) => {
       console.log(range, oldRange, source);
       this.show();
-    })
+    });
   }
 
   show() {
@@ -49,6 +49,7 @@ export default class QLinkTooltip extends Tooltip {
       this.hide()
       return
     }
+    console.log('show........')
     const selection = this.quill.getSelection()
     console.log(selection)
     if (selection) {
