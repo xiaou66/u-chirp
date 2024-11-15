@@ -3,6 +3,7 @@ import ProductTopMenu from './components/ProductTopMenu.vue'
 import { SvgIcon } from '@u-chirp/components'
 import { onMounted } from 'vue'
 import TagPlus from '@u-chirp/components/src/tags/TagPlus/TagPlus.vue'
+import { Button, Input, Tabs, TabsList, TabsTrigger } from '@u-chirp/shadcn'
 
 function checkOverflow() {
   const container = document.getElementById('contentContainer')!;
@@ -47,21 +48,13 @@ onMounted(() => checkOverflow())
               </button>
             </div>
             <div class="flex gap-3">
-              <label class="input input-bordered flex items-center gap-2 hidden lg:flex">
-                <input type="text" class="grow" placeholder="Search" />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 16 16"
-                  fill="currentColor"
-                  class="h-4 w-4 opacity-70">
-                  <path
-                    fill-rule="evenodd"
-                    d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                    clip-rule="evenodd" />
-                </svg>
-              </label>
-              <button class="btn btn-primary hidden lg:block">{{$t('product.createProblem')}}</button>
-              <button class="btn btn-sm btn-primary lg:hidden">+</button>
+              <div class="relative w-72 max-w-sm items-center hidden lg:block">
+                <Input id="search" type="text" placeholder="搜索..." class="!pl-7" />
+                <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
+                  <svg-icon name="default-search"></svg-icon>
+                </span>
+              </div>
+              <Button>{{$t('product.createProblem')}}</Button>
             </div>
           </div>
           <!--  主体区域  -->
@@ -135,7 +128,7 @@ onMounted(() => checkOverflow())
                     <p>1.我要吐槽</p>
                     <p>1.我要吐槽</p>
                     <button id="showMoreBtn"
-                            class=" hover:bg-gray-200 absolute bottom-0 left-0 right-0 bg-gray-100 p-2 text-center rounded">
+                            class="text-sm hover:bg-gray-200 absolute bottom-0 left-0 right-0 bg-gray-100 p-2 text-center rounded">
                       点击查看更多
                     </button>
                   </div>
@@ -212,10 +205,16 @@ onMounted(() => checkOverflow())
                   </div>
                   <div class="card-body shadow rounded-2xl card-compact  bg-base-100 w-full p-5">
                     <div class="card-title text-sm">产品进度</div>
-                    <div role="tablist" class="tabs tabs-boxed">
-                      <a role="tab" class="tab tab-active">进行中</a>
-                      <a role="tab" class="tab">待规划</a>
-                    </div>
+                    <Tabs default-value="account">
+                      <TabsList class="grid w-full grid-cols-2">
+                        <TabsTrigger class="w-full" value="account">
+                          进行中
+                        </TabsTrigger>
+                        <TabsTrigger class="w-full" value="password">
+                          待规划
+                        </TabsTrigger>
+                      </TabsList>
+                    </Tabs>
                   </div>
                 </div>
               </div>
@@ -227,4 +226,5 @@ onMounted(() => checkOverflow())
   </div>
 
 </template>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+</style>

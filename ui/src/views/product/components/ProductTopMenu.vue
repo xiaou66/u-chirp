@@ -2,6 +2,7 @@
 import { TopMenu, SvgIcon } from '@u-chirp/components'
 import type { MenuItem } from '@u-chirp/components'
 import { ref } from 'vue'
+import { NavigationMenu } from '@u-chirp/shadcn'
 const menuItems = ref<MenuItem[]>([
   {
     key: '1',
