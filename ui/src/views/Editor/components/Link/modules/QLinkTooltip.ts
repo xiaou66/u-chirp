@@ -1,18 +1,17 @@
 import Quill from 'quill'
 import type { QLinkInstance } from '../types'
 import type { VNode } from 'vue'
-import { isSelectText } from '../../../utils'
 import Tooltip from 'quill/ui/tooltip'
 import type Toolbar from 'quill/modules/toolbar'
-import Emitter from 'quill/core/emitter'
-import type { Range } from 'quill'
-import Link from '../index'
+import Emitter  from 'quill/core/emitter'
+import  { Range } from 'quill'
+import { isSelectText } from '../../../utils'
 
 
 export default class QLinkTooltip extends Tooltip {
   private readonly __qLinkInstance: QLinkInstance
 
-  private __selection?: Range;
+  private __selectRange?: Range;
 
   constructor(quill: Quill, vNode: VNode) {
     super(quill, quill.root)
@@ -27,34 +26,23 @@ export default class QLinkTooltip extends Tooltip {
 
   handleToolBarClick(value: string) {
     if (value) {
-      this.edit()
+      if (isSelectText(this.quill)) {
+        this.edit();
+      }
     }
   }
 
   listen() {
-    this.root.addEventListener('mouseleave', () => {
-      this.save();
-    });
-
-    // this.boundsContainer.addEventListener('click', () => {
-    //   if (this.__selection) {
-    //     this.save()
-    //   }
-    // });
     this.quill.on('selection-change', (range, oldRange, source) => {
+      if (source === Emitter.sources.API) {
+        return;
+      }
       console.log(range, oldRange, source);
       debugger
       if (!range) {
         return;
       }
       let link = '';
-      const leaf = this.quill.getLine(range.index);
-      console.log(leaf)
-      console.log(this.quill.getIndex(leaf[0]!))
-      // const [blot, index] = leaf;
-      // if (blot && blot.parent) {
-      //   console.log('aaa')
-      // }
       const contents = this.quill.getContents(range.index, 1);
 
       if (contents.length()) {
@@ -64,36 +52,37 @@ export default class QLinkTooltip extends Tooltip {
           link = ops[0].attributes &&  ops[0].attributes.link as string || '';
         }
       }
-      console.log(contents);
      if (link) {
-       this.edit(link);
+       const [leafBlot, index] = this.quill.getLeaf(range.index);
+       const editRange = leafBlot && new Range(range.index - index, leafBlot!.value().toString().length);
+       this.edit(link, editRange);
      }
     });
   }
 
-  edit(link?: string) {
-    const selection = this.quill.getSelection()
-    if (selection) {
-      this.position(this.quill.getBounds(selection.index)!)
+  edit(link?: string, range? : Range | null) {
+     range = range || this.quill.getSelection()!;
+    if (range) {
+      this.position(this.quill.getBounds(range.index)!)
       super.show()
-      console.log(this.quill.getText(selection))
-      this.__selection = selection;
-      this.__qLinkInstance.show(link || this.quill.getText(selection))
+      console.log(this.quill.getText(range))
+      this.__selectRange = range;
+      this.__qLinkInstance.show(link || this.quill.getText(range))
     }
   }
 
 
   save() {
     super.hide();
-    if (this.__selection) {
+    if (this.__selectRange) {
       const { href } = this.__qLinkInstance;
       console.log(href)
       if (href.value) {
-        this.quill.formatText(this.__selection, 'link' , href.value,  Emitter.sources.USER);
+        this.quill.formatText(this.__selectRange, 'link' , href.value,  Emitter.sources.USER);
       } else {
-        this.quill.formatText(this.__selection.index, this.__selection.length, { link: false });
+        this.quill.formatText(this.__selectRange.index, this.__selectRange.length, { link: false });
       }
-      delete this.__selection;
+      delete this.__selectRange;
     }
   }
 }
