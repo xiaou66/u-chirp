@@ -2,16 +2,33 @@
 import { onMounted } from 'vue'
 import Quill from "quill";
 import 'quill/dist/quill.snow.css';
-import Link from './components/Link'
+import Link from './components/Link';
 onMounted(() => {
   Quill.register('modules/link', Link, true);
   const quill = new Quill("#editor", {
     theme: "snow",
     modules: {
       toolbar: '#toolbar',
-      link: true
+      link: true,
+      clipboard: false
     },
   });
+
+  // 自定义粘贴图片功能
+  quill.root.addEventListener(
+    "paste",
+    evt => {
+      if (
+        evt.clipboardData &&
+        evt.clipboardData.files &&
+        evt.clipboardData.files.length
+      ) {
+        evt.preventDefault();
+        //上传服务器并拿到返回的图片地址，插入到富文本中
+      }
+    },
+    true //注意
+  );
 })
 </script>
 
@@ -42,8 +59,6 @@ onMounted(() => {
         </div>
         <div class="ql-formats">
           <button class="ql-bold"></button>
-          <button class="ql-underline"></button>
-          <button class="ql-italic"></button>
           <button class="ql-strike"></button>
         </div>
       </div>

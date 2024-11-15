@@ -1,9 +1,8 @@
 import Quill from 'quill'
 import LinkBlot from './formats/link'
 import Tooltip from './modules/QLinkTooltip'
-import SnowTheme from 'quill/themes/snow'
 const Module = Quill.import('core/module')
-import { render, h, ref } from 'vue'
+import { render, h } from 'vue'
 import QLink from "./QLink.vue";
 
 class Link extends Module {
@@ -13,8 +12,8 @@ class Link extends Module {
     Quill.register('formats/link', LinkBlot, true);
 
 
+
     const divElement = document.createElement('div');
-    const qlinkRef = ref(null);
     const vNode = h(QLink, { quill });
     render(vNode, divElement);
     // vNode.component!.exposed;
@@ -22,13 +21,6 @@ class Link extends Module {
     // 加入容器
     quill.addContainer(divElement);
     this.__qLinkTooltip = new Tooltip(quill, vNode);
-    setTimeout(() => {
-      console.log(qlinkRef.value)
-    }, 3000)
-    // document.getElementById('u-link')!
-    //   .addEventListener('click', () => {
-    //     console.log('13213123123')
-    //   })
   }
 
   static register() {

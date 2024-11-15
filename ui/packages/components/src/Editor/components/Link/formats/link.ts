@@ -11,7 +11,6 @@ export default class Link extends Inline {
   static autoProtocol: string = ''
 
   static create(value: string): HTMLElement {
-    console.log('dsndjasjkdaskdjaskdjaskd')
     const node = super.create()
     let href: string = value
 
@@ -23,9 +22,9 @@ export default class Link extends Inline {
     href = Link.sanitize(href)
 
     // 设置超链接基本属性
-    node.setAttribute('href', href)
-    node.setAttribute('target', '_blank')
-    return node
+    node.setAttribute('href', href);
+    node.setAttribute('target', '_blank');
+    return node;
   }
 
   /**
