@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Editor from "./views/Editor/Editor.vue";
+import '@u-chirp/shadcn/dist/style.css'
 </script>
 
 <template>
