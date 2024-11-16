@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build:um": "run-p type-check \"build-only --mode $npm_config_mode --config vite.um.config.ts\" --",
+    "build:um": "run-p type-check \"build-only --mode $npm_config_mode --config vite.pm.config.ts\" --",
     "build:main": "run-p type-check \"build-only --mode $npm_config_mode \" --",
     "build": "run-p build:um build:main",
     "build:prod": "npm_config_mode=prod run-p build:um build:main",
@@ -13,7 +13,7 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/"
+    "format": "prettier --write pages/src/"
   },
   "dependencies": {
     "@u-chirp/components": "workspace:^",

@@ -9,8 +9,7 @@ const tagColors = ['tag-cyan', 'tag-urple', 'tag-pinkpurple', 'tag-gold', 'tag-o
 </script>
 
 <template>
-  <el-tag :class="tagColors.includes(color) ? color?.replace('tag-', '') : ''"
-          v-bind="props">
+  <el-tag :class="tagColors.includes(color) ? color?.replace('tag-', '') : ''" :type="type">
     <div class="flex gap-1 items-center">
       <slot v-if="icon?.name" name="icon">
         <svg-icon v-bind="icon" color="var(--el-tag-text-color)" />

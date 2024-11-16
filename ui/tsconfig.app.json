@@ -4,14 +4,14 @@
     "env.d.ts",
     "packages/**/*",
     "packages/**/*.vue",
-    "src/**/*",
-    "src/**/*.vue",
-    "um-src/**/*",
-    "um-src/**/*.vue",
+    "pages/src/**/*",
+    "pages/src/**/*.vue",
+    "pages/pm-src/**/*",
+    "pages/pm-src/**/*.vue"
   ],
   "exclude": [
-    "src/**/__tests__/*",
-    "um-src/**/__tests__/*"
+    "pages/src/**/__tests__/*",
+    "pages/pm-src/**/__tests__/*"
   ],
   "compilerOptions": {
     "composite": true,

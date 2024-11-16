@@ -4,3 +4,8 @@ export * from './navigation-menu';
 export * from './input';
 export * from './dialog';
 export * from './drawer';
+export * from './sidebar';
+export * from './badge';
+export * from './dropdown-menu';
+export * from './collapsible';
+export * from './separator';
