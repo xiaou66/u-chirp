@@ -9,6 +9,14 @@ export default {
     "./src/**/*.{vue,ts,tsx}",
   ],
   theme: {
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+      'mobile': '360px'
+    },
     extend: {},
   },
   plugins: [

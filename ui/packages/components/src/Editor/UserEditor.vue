@@ -33,7 +33,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="light" style="width: 100%; height: 200px;">
+  <div class="light w-full h-full" >
     <div id="editor" class="h-full"></div>
     <div id="toolbar" class="flex items-center justify-between">
       <div class="flex-1">

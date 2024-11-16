@@ -4,6 +4,7 @@ import { SvgIcon } from '@u-chirp/components'
 import { onMounted } from 'vue'
 import TagPlus from '@u-chirp/components/src/tags/TagPlus/TagPlus.vue'
 import { Button, Input, Tabs, TabsList, TabsTrigger } from '@u-chirp/shadcn'
+import ProductProblemIssue from './components/ProductProblemIssue.vue'
 
 function checkOverflow() {
   const container = document.getElementById('contentContainer')!;
@@ -54,7 +55,11 @@ onMounted(() => checkOverflow())
                   <svg-icon name="default-search"></svg-icon>
                 </span>
               </div>
-              <Button>{{$t('product.createProblem')}}</Button>
+              <ProductProblemIssue>
+                <template #trigger>
+                  <Button>{{$t('product.createProblem')}}</Button>
+                </template>
+              </ProductProblemIssue>
             </div>
           </div>
           <!--  主体区域  -->
