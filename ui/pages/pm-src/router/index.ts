@@ -1,12 +1,19 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHashHistory} from 'vue-router'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       name: 'managerHome',
-      path: '/pm',
-      component: () => import('../views/managerHome/managerHome.vue')
+      path: '/',
+      component: () => import('../views/managerHome/managerHome.vue'),
+      children: [
+        {
+          name: 'overview',
+          path: 'overview',
+          component: () => import('../views/productOverview/productOverview.vue')
+        }
+      ]
     }
   ],
 })

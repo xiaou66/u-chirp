@@ -14,6 +14,7 @@ ext {
     resilience4jVersion = "2.2.0"
     mapstruct = "1.6.2"
     saToken = '1.38.0'
+    lucene = "9.12.0"
 }
 
 javaPlatform {
@@ -45,6 +46,13 @@ dependencies {
         api "cn.dev33:sa-token-spring-boot3-starter:$saToken"
         api "cn.dev33:sa-token-redis:$saToken"
         api "cn.dev33:sa-token-redis-jackson:$saToken"
+
+        // Apache Lucene
+        api "org.apache.lucene:lucene-core:$lucene"
+        api "org.apache.lucene:lucene-queryparser:$lucene"
+        api "org.apache.lucene:lucene-highlighter:$lucene"
+        api "org.apache.lucene:lucene-backward-codecs:$lucene"
+        api "org.apache.lucene:lucene-analysis-common:$lucene"
     }
 }
 

@@ -192,18 +192,14 @@ onMounted(() => checkOverflow())
                       <div>ssss</div>
                     </div>
                     <div>
-                      <div class="stats">
+                      <div class="stats flex items-center gap-2">
                         <div class="stat">
                           <div class="stat-title text-center">{{$t('user.issue')}}</div>
-                          <div class="stat-value text-sm">10000</div>
-                        </div>
-                        <div class="stat">
-                          <div class="stat-title text-center">{{$t('user.answer')}}</div>
-                          <div class="stat-value text-sm">10000</div>
+                          <div class="stat-value text-sm text-center">10000</div>
                         </div>
                         <div class="stat">
                           <div class="stat-title text-center">{{$t('user.beLiked')}}</div>
-                          <div class="stat-value text-sm">10000</div>
+                          <div class="stat-value text-sm text-center">10000</div>
                         </div>
                     </div>
                     </div>
