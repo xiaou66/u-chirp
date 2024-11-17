@@ -2,13 +2,14 @@
 import {
   SidebarProvider, Sidebar, SidebarHeader, SidebarMenuItem,
   SidebarMenu, SidebarMenuButton,  SidebarContent, SidebarGroup,
-  SidebarFooter, SidebarInset,
+  SidebarFooter, SidebarInset, SidebarTrigger,
   DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenu,
   DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem,
-  Separator,
-  SidebarTrigger
+  Breadcrumb, BreadcrumbList, BreadcrumbItem,
+  BreadcrumbLink,
+  Separator
 } from "@u-chirp/shadcn";
-import {SvgIcon} from "@u-chirp/components";
+import { SvgIcon } from "@u-chirp/components";
 </script>
 <template>
   <SidebarProvider>
@@ -20,7 +21,7 @@ import {SvgIcon} from "@u-chirp/components";
               <DropdownMenuTrigger as-child>
                 <SidebarMenuButton
                   size="lg"
-                  class="hover:tw-text-accent-foreground hover:tw-bg-accent"
+                  class="hover:tw-text-accent-foreground hover:tw-bg-accent min-icon"
                 >
                   <div class="flex aspect-square size-8 items-center justify-center rounded-lg">
                     <img src="https://s21.ax1x.com/2024/11/08/pAyzY7j.png">
@@ -119,17 +120,17 @@ import {SvgIcon} from "@u-chirp/components";
               <DropdownMenuTrigger as-child>
                 <SidebarMenuButton
                   size="lg"
-                  class="hover:tw-text-accent-foreground hover:tw-bg-accent">
-                  <div class="w-10 rounded-xl overflow-hidden">
+                  class="hover:tw-bg-accent min-icon">
+                  <div class="w-10 rounded-xl overflow-hidden group-data-[collapsible=icon]:w-full">
                     <img  src="https://s2.loli.net/2023/04/15/k4IbQGzMZ9v6fYN.jpg" alt="">
                   </div>
-                  <div class="grid flex-1 text-left text-sm leading-tight">
+                  <div class="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:tw-hidden">
                     <span class="truncate font-semibold">xiaou</span>
                     <span class="truncate text-xs">
                       <el-tag size="small">超级管理员</el-tag>
                     </span>
                   </div>
-                  <div>
+                  <div class="group-data-[collapsible=icon]:tw-hidden">
                     <svg-icon name="default-upDown" />
                   </div>
                 </SidebarMenuButton>
@@ -148,9 +149,29 @@ import {SvgIcon} from "@u-chirp/components";
       </SidebarFooter>
     </Sidebar>
     <SidebarInset>
-      <SidebarTrigger class="-ml-1" />
+      <div class="flex items-center gap-2 px-4 mt-1">
+        <SidebarTrigger class="!-ml-1 !w-7 !h-6" />
+        <Separator orientation="vertical" class="!mr-2 !h-4" />
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem class="hidden md:block">
+              <BreadcrumbLink href="#">
+                全部吐槽
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
     </SidebarInset>
   </SidebarProvider>
 </template>
 <style lang="less" scoped>
+.tw-group[data-collapsible=icon]  {
+  .min-icon {
+    padding: 0;
+    &:hover {
+      background: transparent;
+    }
+  }
+}
 </style>
