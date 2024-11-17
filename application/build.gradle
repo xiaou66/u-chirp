@@ -20,9 +20,11 @@ repositories {
 dependencies {
     // 导入约束依赖
     implementation platform(project(':dependencies'))
-    implementation "org.projectlombok:lombok"
-    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation project(':framework:boot-start-db')
+    implementation project(':framework:boot-start-web')
+    implementation project(':framework:boot-start-common')
 
+    implementation "org.projectlombok:lombok"
     // 测试
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // 数据库

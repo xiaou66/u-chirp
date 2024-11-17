@@ -1,0 +1,9 @@
+plugins {
+}
+
+group = 'com.yu.cloud'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}

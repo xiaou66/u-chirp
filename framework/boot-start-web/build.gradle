@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+    id "io.freefair.lombok"
+}
+
+group = 'com.yu.cloud'
+version = 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // 导入约束依赖
+    implementation platform(project(':dependencies'))
+    implementation "org.projectlombok:lombok"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+}
+
+test {
+    useJUnitPlatform()
+}

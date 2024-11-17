@@ -1,4 +1,4 @@
-package u.chirp.application.core.dal;
+package u.boot.start.db.mysql;
 
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;

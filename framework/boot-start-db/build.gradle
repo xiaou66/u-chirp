@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.yu.cloud'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // 导入约束依赖
+    implementation platform(project(':dependencies'))
+    implementation "com.baomidou:mybatis-plus-spring-boot3-starter"
+    implementation "org.projectlombok:lombok"
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+    id "io.freefair.lombok"
+}
+
+group = 'com.yu.cloud'
+version = 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation platform(project(':dependencies'))
+    annotationProcessor "org.projectlombok:lombok"
+    compileOnly "org.springframework:spring-core"
+    compileOnly "org.springframework:spring-web"
+    compileOnly "org.springframework:spring-expression"
+    compileOnly "org.slf4j:slf4j-api"
+    compileOnly "com.fasterxml.jackson.core:jackson-core"
+    compileOnly "com.fasterxml.jackson.core:jackson-databind"
+    compileOnly "jakarta.validation:jakarta.validation-api"
+}
+
+test {
+    useJUnitPlatform()
+}
