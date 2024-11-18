@@ -42,7 +42,7 @@ public class ChirpProductDO extends BaseDO<ChirpProductDO> {
      * 产品状态
      */
     @TableField("product_status")
-    private Byte productStatus;
+    private Integer productStatus;
 
     /**
      * 产品 appKey
