@@ -12,9 +12,9 @@ repositories {
 
 dependencies {
     // 导入约束依赖
-    implementation platform(project(':dependencies'))
-    implementation "org.projectlombok:lombok"
-    implementation "org.springframework.boot:spring-boot-starter-web"
+    compileOnly platform(project(':dependencies'))
+    compileOnly "org.projectlombok:lombok"
+    compileOnly "org.springframework.boot:spring-boot-starter-web"
 }
 
 test {

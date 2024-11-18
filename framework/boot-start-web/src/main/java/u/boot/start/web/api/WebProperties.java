@@ -1,5 +1,6 @@
 package u.boot.start.web.api;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -7,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2024/11/17
  */
 @ConfigurationProperties(prefix = "web")
+@Data
 public class WebProperties {
     private Api appApi = new Api("/app", "**.controller.app.**");
 

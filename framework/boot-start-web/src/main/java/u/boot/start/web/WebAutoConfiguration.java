@@ -1,5 +1,6 @@
 package u.boot.start.web;
 
+import jakarta.annotation.Resource;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -33,6 +34,14 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     @Value("${spring.application.name}")
     private String applicationName;
 
+    @Resource
+    private WebProperties webProperties;
+
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        configurePathMatch(configurer, webProperties.getAdminApi());
+        configurePathMatch(configurer, webProperties.getAppApi());
+    }
 
     /**
      * 设置 API 前缀，仅仅匹配 controller 包下的

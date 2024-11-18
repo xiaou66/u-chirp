@@ -1,11 +1,50 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     id 'java'
     id 'org.springframework.boot'
     id 'io.freefair.lombok'
+    id 'com.github.johnrengelman.shadow'
 }
 
+
+
 group = 'com.u.chirp'
-version = '1.0-SNAPSHOT'
+version = '1.0'
+
+jar.enabled = true
+bootJar.enabled = true
+
+
+
+bootJar {
+    manifestContentCharset 'utf-8'
+    metadataCharset 'utf-8'
+    archiveBaseName = 'u-chirp'
+    archiveVersion = ''
+}
+
+shadowJar {
+    mergeServiceFiles()
+    append 'META-INF/spring.handlers'
+    append 'META-INF/spring.schemas'
+    append 'META-INF/spring.tooling'
+    append("META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports")
+    transform(PropertiesFileTransformer) {
+        paths = ['META-INF/spring.factories']
+        mergeStrategy = "append"
+    }
+    manifest {
+        attributes (
+            "Main-Class": "u.chirp.application.ChirpApplication"
+        )
+    }
+
+    manifestContentCharset 'utf-8'
+    metadataCharset 'utf-8'
+    archiveFileName = 'u-chirp.jar'
+}
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -19,25 +58,31 @@ repositories {
 
 dependencies {
     // 导入约束依赖
-    implementation platform(project(':dependencies'))
+    compileOnly platform(project(':dependencies'))
     implementation project(':framework:boot-start-db')
     implementation project(':framework:boot-start-web')
     implementation project(':framework:boot-start-common')
 
-    implementation "org.projectlombok:lombok"
+    compileOnly "org.projectlombok:lombok"
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // 测试
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // 数据库
     implementation "com.mysql:mysql-connector-j"
     implementation "com.baomidou:mybatis-plus-spring-boot3-starter"
     implementation "org.springframework.boot:spring-boot-starter-data-redis"
-    // 转换
-    implementation "org.mapstruct:mapstruct"
-    implementation "org.mapstruct:mapstruct-processor"
+
+    implementation "org.springframework.boot:spring-boot-starter-web"
 
     // sa-token
     implementation "cn.dev33:sa-token-spring-boot3-starter"
     implementation "cn.dev33:sa-token-redis-jackson"
+
+
+    // 转换
+    compileOnly "org.mapstruct:mapstruct"
+    compileOnly "org.mapstruct:mapstruct-processor"
 }
 
 configurations {
@@ -45,6 +90,7 @@ configurations {
         exclude group: "commons-logging", module: "commons-logging"
     }
 }
+
 
 test {
     useJUnitPlatform()

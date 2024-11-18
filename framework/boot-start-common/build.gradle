@@ -12,14 +12,31 @@ repositories {
 
 dependencies {
     implementation platform(project(':dependencies'))
-    annotationProcessor "org.projectlombok:lombok"
-    compileOnly "org.springframework:spring-core"
-    compileOnly "org.springframework:spring-web"
-    compileOnly "org.springframework:spring-expression"
-    compileOnly "org.slf4j:slf4j-api"
-    compileOnly "com.fasterxml.jackson.core:jackson-core"
-    compileOnly "com.fasterxml.jackson.core:jackson-databind"
-    compileOnly "jakarta.validation:jakarta.validation-api"
+    compileOnly ("org.projectlombok:lombok") {
+        transitive(false)
+    }
+    compileOnly ("org.springframework:spring-core") {
+        transitive(false)
+    }
+    compileOnly ("org.springframework:spring-web") {
+        transitive(false)
+    }
+    compileOnly ("org.springframework:spring-expression") {
+        transitive(false)
+    }
+    compileOnly ("org.slf4j:slf4j-api") {
+        transitive(false)
+    }
+    compileOnly ("com.fasterxml.jackson.core:jackson-core") {
+        transitive(false)
+    }
+    compileOnly ("com.fasterxml.jackson.core:jackson-databind") {
+//        transitive(false)
+    }
+
+    compileOnly ("jakarta.validation:jakarta.validation-api") {
+        transitive(false)
+    }
 }
 
 test {

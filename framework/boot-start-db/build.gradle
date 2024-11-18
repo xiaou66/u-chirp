@@ -11,9 +11,11 @@ repositories {
 
 dependencies {
     // 导入约束依赖
-    implementation platform(project(':dependencies'))
-    implementation "com.baomidou:mybatis-plus-spring-boot3-starter"
-    implementation "org.projectlombok:lombok"
+    compileOnly platform(project(':dependencies'))
+    compileOnly "com.baomidou:mybatis-plus-spring-boot3-starter"
+    compileOnly("org.projectlombok:lombok") {
+        transitive(false)
+    }
 }
 
 test {
