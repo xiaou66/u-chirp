@@ -37,7 +37,8 @@ shadowJar {
     }
     manifest {
         attributes (
-            "Main-Class": "u.chirp.application.ChirpApplication"
+            "Main-Class": "u.chirp.application.ChirpApplication",
+            "version": version
         )
     }
 
