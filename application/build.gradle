@@ -60,9 +60,11 @@ repositories {
 dependencies {
     // 导入约束依赖
     implementation platform(project(':dependencies'))
+    implementation project(":auth")
     implementation project(':framework:boot-start-db')
     implementation project(':framework:boot-start-web')
     implementation project(':framework:boot-start-common')
+
 
     compileOnly "org.projectlombok:lombok"
 

@@ -9,4 +9,5 @@ include 'framework:boot-start-web'
 findProject(':framework:boot-start-web')?.name = 'boot-start-web'
 include 'framework:boot-start-common'
 findProject(':framework:boot-start-common')?.name = 'boot-start-common'
+include 'auth'
 
