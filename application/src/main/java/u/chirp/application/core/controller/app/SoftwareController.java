@@ -29,8 +29,7 @@ public class SoftwareController {
     public R<SoftwareInfoGetRespVO> getSoftwareInfo() {
         URL jarUrl = SoftwareController.class.getProtectionDomain().getCodeSource().getLocation();
         SoftwareInfoGetRespVO respVO = new SoftwareInfoGetRespVO();
-        try {
-            JarFile jarFile = new JarFile(jarUrl.getPath());
+        try(JarFile jarFile = new JarFile(jarUrl.getPath())) {
             Manifest manifest = jarFile.getManifest();
             Attributes mainAttributes = manifest.getMainAttributes();
             respVO.setVersion(mainAttributes.getValue("version"));
