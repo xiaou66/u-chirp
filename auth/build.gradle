@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'io.freefair.lombok'
 }
 
 group = 'com.yu.cloud'
@@ -9,8 +10,21 @@ repositories {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    // 导入约束依赖
+    implementation platform(project(':dependencies'))
+    implementation project(':framework:boot-start-common')
+    implementation project(':framework:boot-start-web')
+
+    implementation "org.springframework.boot:spring-boot-starter-web"
+
+    // sa-token
+    implementation "cn.dev33:sa-token-spring-boot3-starter"
+    implementation "cn.dev33:sa-token-redis-jackson"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+
+    implementation("com.google.guava:guava")
+
+    compileOnly "org.projectlombok:lombok"
 }
 
 test {

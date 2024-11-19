@@ -7,7 +7,7 @@ import lombok.Data;
  * @date 2024/11/18
  */
 @Data
-public class SoftwareInfoGetRespVO {
+public class SystemInfoGetRespVO {
     /**
      * 版本号
      */
