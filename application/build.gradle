@@ -11,7 +11,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 
 group = 'com.u.chirp'
-version = '1.0'
+version = '1.0.0'
 
 //jar.enabled = true
 //bootJar.enabled = true
