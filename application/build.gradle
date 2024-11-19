@@ -81,7 +81,7 @@ dependencies {
     // sa-token
     implementation "cn.dev33:sa-token-spring-boot3-starter"
     implementation "cn.dev33:sa-token-redis-jackson"
-
+    implementation "org.springframework.boot:spring-boot-starter-validation"
 
     // 转换
     compileOnly "org.mapstruct:mapstruct"
