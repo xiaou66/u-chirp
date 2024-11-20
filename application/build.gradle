@@ -67,6 +67,7 @@ dependencies {
     implementation project(':framework:boot-start-common')
 
     implementation "cn.hutool:hutool-core"
+    implementation("com.google.guava:guava")
 
     compileOnly "org.projectlombok:lombok"
 

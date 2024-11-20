@@ -23,26 +23,20 @@ public class ChirpMemberDO extends BaseDO<ChirpMemberDO> {
     /**
      * 会员名称
      */
-    @TableField("number_nickname")
-    private String numberNickname;
+    @TableField("member_nickname")
+    private String memberNickname;
 
     /**
      * 用户头像
      */
-    @TableField("number_avatar")
-    private String numberAvatar;
-
-    /**
-     * 会员用户名
-     */
-    @TableField("number_username")
-    private String numberUsername;
+    @TableField("member_avatar")
+    private String memberAvatar;
 
     /**
      * 会员密码
      */
-    @TableField("number_password")
-    private String numberPassword;
+    @TableField("member_password")
+    private String memberPassword;
 
     /**
      * 手机号
@@ -50,9 +44,12 @@ public class ChirpMemberDO extends BaseDO<ChirpMemberDO> {
     @TableField("mobile")
     private String mobile;
 
+    @TableField("email")
+    private String email;
+
     /**
      * 会员状态
      */
-    @TableField("number_status")
-    private Byte numberStatus;
+    @TableField("member_status")
+    private Integer memberStatus;
 }
