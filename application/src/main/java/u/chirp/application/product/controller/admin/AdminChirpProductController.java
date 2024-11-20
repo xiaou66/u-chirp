@@ -2,6 +2,8 @@ package u.chirp.application.product.controller.admin;
 
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import u.boot.start.common.pojo.R;
@@ -26,9 +28,9 @@ public class AdminChirpProductController {
      * @param reqVo
      * @tags v1.0.0
      */
-    @RequestMapping("/create")
-    public R<ChirpProductCreateRespVO> create(@Validated ChirpProductCreateReqVO reqVo) {
-
-        return R.success(null);
+    @PostMapping("/create")
+    public R<Long> create(@Validated @RequestBody ChirpProductCreateReqVO reqVo) {
+        Long productId =  chirpProductService.create(reqVo);
+        return R.success(productId);
     }
 }
