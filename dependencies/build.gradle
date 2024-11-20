@@ -46,6 +46,7 @@ dependencies {
         api "cn.dev33:sa-token-spring-boot3-starter:$saToken"
         api "cn.dev33:sa-token-redis:$saToken"
         api "cn.dev33:sa-token-redis-jackson:$saToken"
+        api "cn.dev33:sa-token-core:$saToken"
 
         // Apache Lucene
         api "org.apache.lucene:lucene-core:$lucene"

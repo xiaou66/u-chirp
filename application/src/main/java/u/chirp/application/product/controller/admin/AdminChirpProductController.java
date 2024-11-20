@@ -22,6 +22,7 @@ public class AdminChirpProductController {
      */
     @RequestMapping("/create")
     public R<ChirpProductCreateRespVO> create(@Validated ChirpProductCreateReqVO reqVo) {
+
         return R.success(null);
     }
 }

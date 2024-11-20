@@ -13,10 +13,14 @@ repositories {
 dependencies {
     // 导入约束依赖
     compileOnly platform(project(':dependencies'))
+    implementation project(":framework:boot-start-common")
     compileOnly "org.projectlombok:lombok"
-    compileOnly "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation ("cn.dev33:sa-token-core") {
+        transitive(false)
+    }
 }
-
 test {
     useJUnitPlatform()
 }

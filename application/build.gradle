@@ -63,6 +63,7 @@ dependencies {
     implementation project(":auth")
     implementation project(':framework:boot-start-db')
     implementation project(':framework:boot-start-web')
+
     implementation project(':framework:boot-start-common')
 
 
