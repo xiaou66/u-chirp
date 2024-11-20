@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import u.boot.start.common.pojo.R;
+import u.chirp.application.product.controller.app.vo.AppProductPostActionReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
 import u.chirp.application.product.service.IChirpProductMemberService;
 import u.chirp.application.product.service.IChirpProductPostService;
+import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
 
 import java.util.Objects;
 
@@ -20,9 +22,9 @@ import java.util.Objects;
  * @author xiaou
  * @date 2024/11/20
  */
-@RequestMapping("product/member")
+@RequestMapping("product/post")
 @RestController
-public class ChirpProductMemberController {
+public class ChirpProductPostController {
 
     @Resource
     private IChirpProductPostService chirpProductPostService;
@@ -35,7 +37,7 @@ public class ChirpProductMemberController {
      * @return
      * @tags v1.1.0
      */
-    @PostMapping("/savePost")
+    @PostMapping("/save")
     @SaCheckLogin
     @Transactional
     public R<Long> savePost(@Validated @RequestBody AppProductPostSaveReqVO reqVo) {
@@ -46,5 +48,17 @@ public class ChirpProductMemberController {
         }
 
         return R.success(postId);
+    }
+
+    /**
+     * 点赞/取消点赞
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("thumbsUp")
+    public R<ProductPostBaseInfoBO> thumbsUp(@Validated @RequestBody AppProductPostActionReqVO reqVo) {
+        chirpProductPostService.thumbsUp(reqVo);
+        ProductPostBaseInfoBO productPost = chirpProductPostService.getPostBaseInfo(reqVo.getPostId());
+        return R.success(productPost);
     }
 }

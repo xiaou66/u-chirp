@@ -6,6 +6,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
 import u.chirp.application.product.dal.dataobject.ChirpProductPostDO;
+import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
 
 /**
  * @author xiaou
@@ -26,4 +27,6 @@ public interface ChirpProductPostConvert {
     @Mapping(target = "creator", expression = "java(StpUtil.getLoginIdAsLong())")
     @Mapping(target = "createTime", ignore = true)
     ChirpProductPostDO convert(AppProductPostSaveReqVO reqVo);
+
+    ProductPostBaseInfoBO convertProductPostBaseInfoBO(ChirpProductPostDO chirpProductPost);
 }

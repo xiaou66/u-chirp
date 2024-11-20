@@ -8,17 +8,11 @@ import lombok.Data;
  * @date 2024/11/20
  */
 @Data
-public class AppProductPostSaveReqVO {
+public class AppProductPostSaveReqVO extends AppProductPostBaseReqVO {
     /**
      * 帖子 id
      */
     private Long postId;
-
-    /**
-     * 产品 id
-     */
-    @NotNull(message = "产品 id 不能为空")
-    private Long productId;
 
     /**
      * 帖子标题
