@@ -15,7 +15,7 @@ import java.util.Objects;
 public class StpInterfaceImpl implements StpInterface {
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        if (Objects.equals(loginId, AuthConstant.ADMIN_USER_ID)) {
+        if (Objects.equals(loginId, AuthConstant.ADMIN_USER_ID.toString())) {
             return List.of("admin");
         }
         return Collections.emptyList();
