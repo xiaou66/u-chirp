@@ -2,13 +2,15 @@ package u.chirp.application.product.controller.admin;
 
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import u.boot.start.common.pojo.R;
+import u.chirp.application.product.controller.admin.vo.ChirpProductItemRespVO;
 import u.chirp.application.product.controller.app.vo.ChirpProductCreateReqVO;
+import u.chirp.application.product.convert.ChirpProductConvert;
+import u.chirp.application.product.dal.dataobject.ChirpProductDO;
 import u.chirp.application.product.service.IChirpProductService;
+
+import java.util.List;
 
 /**
  * @folder admin/产品管理
@@ -30,7 +32,18 @@ public class AdminChirpProductController {
      */
     @PostMapping("/create")
     public R<Long> create(@Validated @RequestBody ChirpProductCreateReqVO reqVo) {
-        Long productId =  chirpProductService.create(reqVo);
+        Long productId = chirpProductService.create(reqVo);
         return R.success(productId);
     }
+
+    /**
+     * 获取产品列表
+     * @tags v1.0.0
+     */
+    @GetMapping("/list")
+    public R<List<ChirpProductItemRespVO>> list() {
+        List<ChirpProductItemRespVO> list = chirpProductService.productList();
+        return R.success(list);
+    }
+
 }
