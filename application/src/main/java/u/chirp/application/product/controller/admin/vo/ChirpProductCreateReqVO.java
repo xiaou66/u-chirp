@@ -1,6 +1,5 @@
-package u.chirp.application.product.controller.app.vo;
+package u.chirp.application.product.controller.admin.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 

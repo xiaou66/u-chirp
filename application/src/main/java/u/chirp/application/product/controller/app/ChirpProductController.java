@@ -2,7 +2,6 @@ package u.chirp.application.product.controller.app;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import u.chirp.application.product.controller.app.vo.ChirpProductCreateReqVO;
 
 /**
  * @author xiaou

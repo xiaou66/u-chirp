@@ -20,6 +20,11 @@ public class ChirpProductPostDO extends BaseDO<ChirpProductPostDO> {
     private Long postId;
 
     /**
+     * 关联产品 id
+     */
+    private Long productId;
+
+    /**
      * 帖子标题
      */
     @TableField("post_title")

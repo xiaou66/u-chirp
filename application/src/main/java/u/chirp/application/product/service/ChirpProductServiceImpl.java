@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import u.chirp.application.product.controller.admin.vo.ChirpProductItemRespVO;
-import u.chirp.application.product.controller.app.vo.ChirpProductCreateReqVO;
+import u.chirp.application.product.controller.admin.vo.ChirpProductCreateReqVO;
 import u.chirp.application.product.convert.ChirpProductConvert;
 import u.chirp.application.product.dal.dataobject.ChirpProductDO;
 import u.chirp.application.product.dal.mysql.ChirpProductMapper;

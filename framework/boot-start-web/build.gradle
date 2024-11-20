@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
     // 导入约束依赖
-    compileOnly platform(project(':dependencies'))
+    implementation platform(project(':dependencies'))
     implementation project(":framework:boot-start-common")
     compileOnly "org.projectlombok:lombok"
     implementation "org.springframework.boot:spring-boot-starter-web"

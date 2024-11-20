@@ -5,9 +5,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import u.boot.start.common.pojo.R;
 import u.chirp.application.product.controller.admin.vo.ChirpProductItemRespVO;
-import u.chirp.application.product.controller.app.vo.ChirpProductCreateReqVO;
-import u.chirp.application.product.convert.ChirpProductConvert;
-import u.chirp.application.product.dal.dataobject.ChirpProductDO;
+import u.chirp.application.product.controller.admin.vo.ChirpProductCreateReqVO;
 import u.chirp.application.product.service.IChirpProductService;
 
 import java.util.List;
@@ -45,5 +43,4 @@ public class AdminChirpProductController {
         List<ChirpProductItemRespVO> list = chirpProductService.productList();
         return R.success(list);
     }
-
 }

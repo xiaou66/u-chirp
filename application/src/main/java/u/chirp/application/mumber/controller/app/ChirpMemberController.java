@@ -1,6 +1,5 @@
 package u.chirp.application.mumber.controller.app;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,4 +10,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("member")
 @RestController
 public class ChirpMemberController {
+
 }
