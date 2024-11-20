@@ -19,6 +19,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
         registry.addInterceptor(new SaInterceptor(handle -> {
                     StpUtil.checkLogin();
                     StpUtil.checkPermission("admin");
-                })).addPathPatterns("/admin/**");
+                })).addPathPatterns("/admin/**")
+                .excludePathPatterns("/admin/system/login", "/admin/system/init");
     }
 }
