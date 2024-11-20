@@ -43,4 +43,10 @@ public class ProductPostBaseInfoBO {
      * 帖子处理进度
      */
     private Integer postHandleProgress;
+
+
+    /**
+     * 创建人
+     */
+    private Long creator;
 }

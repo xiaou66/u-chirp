@@ -31,6 +31,16 @@ public class ChirpProductMemberServiceImpl extends ServiceImpl<ChirpProductMembe
         saveOrUpdate(chirpProductMemberDO);
     }
 
+    @Override
+    public void addThumbsUpCount(Long productId, Long memberId) {
+        baseMapper.addThumbsUpCount(productId, memberId);
+    }
+
+    @Override
+    public void subThumbsUpCount(Long productId, Long memberId) {
+        baseMapper.subThumbsUpCount(productId, memberId);
+    }
+
     private ChirpProductMemberDO initChirpProductMember(Long memberId, Long productId) {
         ChirpProductMemberDO chirpProductMemberDO = new ChirpProductMemberDO();
         chirpProductMemberDO.setMemberId(memberId);

@@ -16,4 +16,13 @@ public interface IChirpProductMemberService extends IService<ChirpProductMemberD
      * @param id
      */
     void addPostCount(Long memberId, Long productId);
+
+    /**
+     * 被点赞数
+     * @param productId
+     * @param creator
+     */
+    void addThumbsUpCount(Long productId, Long memberId);
+
+    void subThumbsUpCount(Long productId, Long creator);
 }

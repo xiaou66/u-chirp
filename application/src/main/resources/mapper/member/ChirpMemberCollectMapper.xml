@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="u.chirp.application.mumber.dal.mysql.ChirpMemberCollectMapper">
+
+    <insert id="insertIfNotExists">
+        insert ignore chirp_member_collect  (collect_type, collect_member_id, collect_ref_id)
+        values (#{collectType}, #{collectMember}, #{collectRefId})
+    </insert>
+</mapper>

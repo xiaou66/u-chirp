@@ -22,6 +22,7 @@ public class ChirpProductPostDO extends BaseDO<ChirpProductPostDO> {
     /**
      * 关联产品 id
      */
+    @TableField("product_id")
     private Long productId;
 
     /**

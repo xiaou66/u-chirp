@@ -1,5 +1,6 @@
 package u.chirp.application.product.controller.app.vo;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -11,5 +12,6 @@ public class AppProductPostThumbsUpReqVO extends AppProductPostActionReqVO {
     /**
      * 是否点赞
      */
-    private boolean thumbsUp;
+    @NotNull(message = "是否点赞 不能为 null")
+    private Boolean thumbsUp;
 }

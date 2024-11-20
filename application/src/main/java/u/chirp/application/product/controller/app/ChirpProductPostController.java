@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import u.boot.start.common.pojo.R;
 import u.chirp.application.product.controller.app.vo.AppProductPostActionReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
+import u.chirp.application.product.controller.app.vo.AppProductPostThumbsUpReqVO;
 import u.chirp.application.product.service.IChirpProductMemberService;
 import u.chirp.application.product.service.IChirpProductPostService;
 import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
@@ -53,10 +54,10 @@ public class ChirpProductPostController {
     /**
      * 点赞/取消点赞
      * @param reqVo
-     * @return
+     * @tags v1.0.0
      */
     @PostMapping("thumbsUp")
-    public R<ProductPostBaseInfoBO> thumbsUp(@Validated @RequestBody AppProductPostActionReqVO reqVo) {
+    public R<ProductPostBaseInfoBO> thumbsUp(@Validated @RequestBody AppProductPostThumbsUpReqVO reqVo) {
         chirpProductPostService.thumbsUp(reqVo);
         ProductPostBaseInfoBO productPost = chirpProductPostService.getPostBaseInfo(reqVo.getPostId());
         return R.success(productPost);
