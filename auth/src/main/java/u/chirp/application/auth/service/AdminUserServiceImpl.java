@@ -10,6 +10,7 @@ import u.boot.start.common.exception.ServiceException;
 import u.boot.start.common.exception.enums.GlobalErrorCodeConstants;
 import u.boot.start.common.exception.util.ServiceExceptionUtil;
 import u.boot.start.common.utils.FilePathUtils;
+import u.chirp.application.auth.AuthConstant;
 import u.chirp.application.auth.controller.admin.vo.SystemAdminLoginReqVO;
 import u.chirp.application.auth.controller.admin.vo.SystemInitReqVo;
 
@@ -55,7 +56,7 @@ public class AdminUserServiceImpl implements IAdminUserService {
             if (!userInput.equals(pwd)) {
                 throw ServiceExceptionUtil.exception(GlobalErrorCodeConstants.BAD_REQUEST);
             }
-            StpUtil.login(-99L);
+            StpUtil.login(AuthConstant.ADMIN_USER_ID);
             return StpUtil.getTokenInfo().getTokenValue();
         }catch (Exception e) {
             e.printStackTrace();
