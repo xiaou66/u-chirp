@@ -3,6 +3,7 @@ package u.chirp.application.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import jakarta.validation.constraints.NotNull;
 import u.chirp.application.product.controller.app.vo.AppProductPostActionReqVO;
+import u.chirp.application.product.controller.app.vo.AppProductPostCollectReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostThumbsUpReqVO;
 import u.chirp.application.product.dal.dataobject.ChirpProductPostDO;
@@ -27,4 +28,6 @@ public interface IChirpProductPostService extends IService<ChirpProductPostDO> {
     void thumbsUp(AppProductPostThumbsUpReqVO reqVo);
 
     ProductPostBaseInfoBO getPostBaseInfo(Long postId);
+
+    void collect(AppProductPostCollectReqVO reqVo);
 }
