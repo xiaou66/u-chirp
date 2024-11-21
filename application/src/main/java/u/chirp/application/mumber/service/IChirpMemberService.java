@@ -1,6 +1,7 @@
 package u.chirp.application.mumber.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import u.chirp.application.mumber.controller.app.vo.ChirpMemberAppLoginReqVO;
 import u.chirp.application.mumber.controller.app.vo.ChirpMemberLoginReqVO;
 import u.chirp.application.mumber.dal.dataobject.ChirpMemberDO;
 
@@ -15,4 +16,11 @@ public interface IChirpMemberService extends IService<ChirpMemberDO> {
      * @return
      */
     String login(ChirpMemberLoginReqVO reqVo);
+
+    /**
+     * 应用登录
+     * @param reqVo
+     * @return
+     */
+    String appLogin(ChirpMemberAppLoginReqVO reqVo);
 }

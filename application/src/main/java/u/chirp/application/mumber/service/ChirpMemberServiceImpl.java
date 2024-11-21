@@ -7,6 +7,7 @@ import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import org.springframework.stereotype.Service;
 import u.chirp.application.mumber.MemberErrorCodeConstants;
+import u.chirp.application.mumber.controller.app.vo.ChirpMemberAppLoginReqVO;
 import u.chirp.application.mumber.controller.app.vo.ChirpMemberLoginReqVO;
 import u.chirp.application.mumber.dal.dataobject.ChirpMemberDO;
 import u.chirp.application.mumber.dal.mysql.ChirpMemberMapper;
@@ -46,5 +47,10 @@ public class ChirpMemberServiceImpl extends ServiceImpl<ChirpMemberMapper, Chirp
         StpUtil.login(chirpMember.getMemberId(), "app");
 
         return StpUtil.getTokenValue();
+    }
+
+    @Override
+    public String appLogin(ChirpMemberAppLoginReqVO reqVo) {
+        return "";
     }
 }
