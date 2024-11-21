@@ -13,7 +13,8 @@ public class AppProductPostActionReqVO {
      * 产品 id
      */
     @NotNull(message = "产品 id 不能为空")
-    private Long productId;
+    private String productCode;
+
 
     /**
      * 帖子 id

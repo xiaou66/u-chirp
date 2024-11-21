@@ -25,4 +25,6 @@ public interface IChirpProductService extends IService<ChirpProductDO> {
      * @return
      */
     List<ChirpProductItemRespVO> productList();
+
+    Long getProductIdByCode(String productCode);
 }

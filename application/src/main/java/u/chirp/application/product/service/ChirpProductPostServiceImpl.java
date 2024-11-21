@@ -1,7 +1,6 @@
 package u.chirp.application.product.service;
 
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.util.ReflectUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import u.chirp.application.mumber.enums.CollectType;
 import u.chirp.application.mumber.service.IChirpMemberCollectService;
-import u.chirp.application.product.controller.app.vo.AppProductPostActionReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostCollectReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostThumbsUpReqVO;
@@ -38,8 +36,9 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
 
 
     @Override
-    public Long savePost(AppProductPostSaveReqVO reqVo) {
+    public Long savePost(AppProductPostSaveReqVO reqVo, Long productId) {
         ChirpProductPostDO productPost = ChirpProductPostConvert.INSTANCE.convert(reqVo);
+        productPost.setProductId(productId);
         saveOrUpdate(productPost);
         return productPost.getPostId();
     }
@@ -48,10 +47,11 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
      * 点赞
      *
      * @param reqVo
+     * @param productId
      */
     @Override
     @Transactional
-    public void thumbsUp(AppProductPostThumbsUpReqVO reqVo) {
+    public void thumbsUp(AppProductPostThumbsUpReqVO reqVo, Long productId) {
         long loginMemberId = StpUtil.getLoginIdAsLong();
         try {
             verifyThumbsUp(reqVo);
@@ -62,12 +62,12 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
         // 帖子的发布者点赞数 +/- 1
         ProductPostBaseInfoBO postBaseInfo = getPostBaseInfo(reqVo.getPostId());
         if (Boolean.TRUE.equals(reqVo.getThumbsUp())) {
-            baseMapper.thumbsUp(reqVo.getProductId(), reqVo.getPostId());
+            baseMapper.thumbsUp(productId, reqVo.getPostId());
             chirpProductMemberService.addThumbsUpCount(postBaseInfo.getProductId(), postBaseInfo.getCreator());
             // 帖子点赞要收集到表中
             chirpMemberCollectService.addCollect(CollectType.THUMBS_UP_POST, loginMemberId, reqVo.getPostId());
         } else {
-            baseMapper.unThumbsUp(reqVo.getProductId(), reqVo.getPostId());
+            baseMapper.unThumbsUp(productId, reqVo.getPostId());
             chirpProductMemberService.subThumbsUpCount(postBaseInfo.getProductId(), postBaseInfo.getCreator());
             // 帖子取消点赞要从收集表移除
             chirpMemberCollectService.removeCollect(CollectType.THUMBS_UP_POST, loginMemberId, reqVo.getPostId());
@@ -101,7 +101,7 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
 
     @Override
     @Transactional
-    public void collect(AppProductPostCollectReqVO reqVo) {
+    public void collect(AppProductPostCollectReqVO reqVo, Long productId) {
         long loginMemberId = StpUtil.getLoginIdAsLong();
         try {
             verifyCollect(reqVo);
@@ -112,12 +112,12 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
         // 帖子的发布者点赞数 +/- 1
         ProductPostBaseInfoBO postBaseInfo = getPostBaseInfo(reqVo.getPostId());
         if (Boolean.TRUE.equals(reqVo.getCollect())) {
-            baseMapper.collect(reqVo.getProductId(), reqVo.getPostId(), reqVo.getCollect());
+            baseMapper.collect(productId, reqVo.getPostId(), reqVo.getCollect());
             chirpProductMemberService.addCollectCount(postBaseInfo.getProductId(), postBaseInfo.getCreator());
             // 帖子点赞要收集到表中
             chirpMemberCollectService.addCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId());
         } else {
-            baseMapper.unCollect(reqVo.getProductId(), reqVo.getPostId(), reqVo.getCollect());
+            baseMapper.unCollect(productId, reqVo.getPostId(), reqVo.getCollect());
             chirpProductMemberService.subCollectCount(postBaseInfo.getProductId(), postBaseInfo.getCreator());
             // 帖子取消点赞要从收集表移除
             chirpMemberCollectService.removeCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId());

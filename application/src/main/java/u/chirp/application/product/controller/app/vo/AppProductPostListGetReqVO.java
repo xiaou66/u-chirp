@@ -1,15 +1,14 @@
 package u.chirp.application.product.controller.app.vo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
  * @author xiaou
- * @date 2024/11/20
+ * @date 2024/11/21
  */
 @Data
-public class AppProductPostBaseReqVO {
+public class AppProductPostListGetReqVO {
     /**
      * 产品 code
      */

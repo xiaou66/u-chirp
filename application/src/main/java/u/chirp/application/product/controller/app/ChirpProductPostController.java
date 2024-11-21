@@ -5,17 +5,12 @@ import cn.dev33.satoken.stp.StpUtil;
 import jakarta.annotation.Resource;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import u.boot.start.common.pojo.R;
-import u.chirp.application.product.controller.app.vo.AppProductPostActionReqVO;
-import u.chirp.application.product.controller.app.vo.AppProductPostCollectReqVO;
-import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
-import u.chirp.application.product.controller.app.vo.AppProductPostThumbsUpReqVO;
+import u.chirp.application.product.controller.app.vo.*;
 import u.chirp.application.product.service.IChirpProductMemberService;
 import u.chirp.application.product.service.IChirpProductPostService;
+import u.chirp.application.product.service.IChirpProductService;
 import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
 
 import java.util.Objects;
@@ -34,19 +29,32 @@ public class ChirpProductPostController {
     @Resource
     private IChirpProductMemberService chirpProductMemberService;
 
+    @Resource
+    private IChirpProductService chirpProductService;
+
+
+    /**
+     * 帖子列表
+     * @param reqVo
+     * @return
+     */
+    @GetMapping("/list")
+    public R<String> list(AppProductPostListGetReqVO reqVo) {
+        return R.success("");
+    }
+
     /**
      * 创建帖子
      * @return
      * @tags v1.1.0
      */
     @PostMapping("/save")
-    @SaCheckLogin
     @Transactional
     public R<Long> savePost(@Validated @RequestBody AppProductPostSaveReqVO reqVo) {
-        Long postId = chirpProductPostService.savePost(reqVo);
-
+        Long productId = chirpProductService.getProductIdByCode(reqVo.getProductCode());
+        Long postId = chirpProductPostService.savePost(reqVo, productId);
         if (Objects.isNull(reqVo.getPostId())) {
-            chirpProductMemberService.addPostCount(StpUtil.getLoginIdAsLong(), reqVo.getProductId());
+            chirpProductMemberService.addPostCount(StpUtil.getLoginIdAsLong(), productId);
         }
 
         return R.success(postId);
@@ -59,7 +67,8 @@ public class ChirpProductPostController {
      */
     @PostMapping("thumbsUp")
     public R<ProductPostBaseInfoBO> thumbsUp(@Validated @RequestBody AppProductPostThumbsUpReqVO reqVo) {
-        chirpProductPostService.thumbsUp(reqVo);
+        Long productId = chirpProductService.getProductIdByCode(reqVo.getProductCode());
+        chirpProductPostService.thumbsUp(reqVo, productId);
         ProductPostBaseInfoBO productPost = chirpProductPostService.getPostBaseInfo(reqVo.getPostId());
         return R.success(productPost);
     }
@@ -71,7 +80,8 @@ public class ChirpProductPostController {
      */
     @PostMapping("collect")
     public R<ProductPostBaseInfoBO> collect(@Validated @RequestBody AppProductPostCollectReqVO reqVo) {
-        chirpProductPostService.collect(reqVo);
+        Long productId = chirpProductService.getProductIdByCode(reqVo.getProductCode());
+        chirpProductPostService.collect(reqVo, productId);
         ProductPostBaseInfoBO productPost = chirpProductPostService.getPostBaseInfo(reqVo.getPostId());
         return R.success(productPost);
     }

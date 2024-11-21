@@ -1,8 +1,6 @@
 package u.chirp.application.product.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import jakarta.validation.constraints.NotNull;
-import u.chirp.application.product.controller.app.vo.AppProductPostActionReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostCollectReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostThumbsUpReqVO;
@@ -16,18 +14,22 @@ import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
 public interface IChirpProductPostService extends IService<ChirpProductPostDO> {
     /**
      * 保存帖子
+     *
      * @param reqVo
+     * @param productId
      * @return
      */
-    Long savePost(AppProductPostSaveReqVO reqVo);
+    Long savePost(AppProductPostSaveReqVO reqVo, Long productId);
 
     /**
      * 点赞
+     *
      * @param reqVo
+     * @param productId
      */
-    void thumbsUp(AppProductPostThumbsUpReqVO reqVo);
+    void thumbsUp(AppProductPostThumbsUpReqVO reqVo, Long productId);
 
     ProductPostBaseInfoBO getPostBaseInfo(Long postId);
 
-    void collect(AppProductPostCollectReqVO reqVo);
+    void collect(AppProductPostCollectReqVO reqVo, Long productId);
 }
