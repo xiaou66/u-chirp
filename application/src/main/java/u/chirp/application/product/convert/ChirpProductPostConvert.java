@@ -16,6 +16,7 @@ import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
 public interface ChirpProductPostConvert {
     ChirpProductPostConvert INSTANCE = Mappers.getMapper(ChirpProductPostConvert.class);
 
+    @Mapping(target = "productId", ignore = true)
     @Mapping(target = "updater", ignore = true)
     @Mapping(target = "updateTime", ignore = true)
     @Mapping(target = "postTop", ignore = true)

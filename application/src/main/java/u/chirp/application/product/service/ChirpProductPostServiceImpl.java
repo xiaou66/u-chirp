@@ -54,7 +54,7 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
     public void thumbsUp(AppProductPostThumbsUpReqVO reqVo, Long productId) {
         long loginMemberId = StpUtil.getLoginIdAsLong();
         try {
-            verifyThumbsUp(reqVo);
+            verifyThumbsUp(reqVo, productId);
         } catch (Exception e) {
             return;
         }
@@ -74,7 +74,7 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
         }
     }
 
-    private void verifyThumbsUp(AppProductPostThumbsUpReqVO reqVo) throws Exception {
+    private void verifyThumbsUp(AppProductPostThumbsUpReqVO reqVo, Long productId) throws Exception {
         long loginMemberId = StpUtil.getLoginIdAsLong();
         if (Boolean.FALSE.equals(reqVo.getThumbsUp())) {
             if(!chirpMemberCollectService.hasCollect(CollectType.THUMBS_UP_POST, loginMemberId, reqVo.getPostId())) {
@@ -82,7 +82,7 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
             }
         }
 
-        if (!postExists(reqVo.getProductId(), loginMemberId)) {
+        if (!postExists(productId, loginMemberId)) {
             throw exception(PRODUCT_POST_EXISTENCE);
         }
     }
@@ -104,7 +104,7 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
     public void collect(AppProductPostCollectReqVO reqVo, Long productId) {
         long loginMemberId = StpUtil.getLoginIdAsLong();
         try {
-            verifyCollect(reqVo);
+            verifyCollect(reqVo, productId);
         } catch (Exception e) {
             return;
         }
@@ -126,7 +126,7 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
 
 
 
-    private void verifyCollect(AppProductPostCollectReqVO reqVo) throws Exception {
+    private void verifyCollect(AppProductPostCollectReqVO reqVo, Long productId) throws Exception {
         long loginMemberId = StpUtil.getLoginIdAsLong();
         if (Boolean.FALSE.equals(reqVo.getCollect())) {
             if(!chirpMemberCollectService.hasCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId())) {
@@ -134,7 +134,7 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
             }
         }
 
-        if (!postExists(reqVo.getProductId(), loginMemberId)) {
+        if (!postExists(productId, loginMemberId)) {
             throw exception(PRODUCT_POST_EXISTENCE);
         }
     }
