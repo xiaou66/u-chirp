@@ -4,8 +4,10 @@ import cn.dev33.satoken.stp.StpUtil;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import u.chirp.application.product.controller.app.vo.AppProductPostListGetReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
 import u.chirp.application.product.dal.dataobject.ChirpProductPostDO;
+import u.chirp.application.product.service.bo.AppProductPostListBO;
 import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
 
 /**
@@ -30,4 +32,6 @@ public interface ChirpProductPostConvert {
     ChirpProductPostDO convert(AppProductPostSaveReqVO reqVo);
 
     ProductPostBaseInfoBO convertProductPostBaseInfoBO(ChirpProductPostDO chirpProductPost);
+
+    AppProductPostListBO toAppProductPostListBO(AppProductPostListGetReqVO reqVo);
 }

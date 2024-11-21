@@ -9,12 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 import u.chirp.application.mumber.enums.CollectType;
 import u.chirp.application.mumber.service.IChirpMemberCollectService;
 import u.chirp.application.product.controller.app.vo.AppProductPostCollectReqVO;
+import u.chirp.application.product.controller.app.vo.AppProductPostListGetReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostThumbsUpReqVO;
 import u.chirp.application.product.convert.ChirpProductPostConvert;
 import u.chirp.application.product.dal.dataobject.ChirpProductPostDO;
 import u.chirp.application.product.dal.mysql.ChirpProductPostMapper;
+import u.chirp.application.product.service.bo.AppProductPostListBO;
 import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
+
+import java.util.List;
 
 import static u.boot.start.common.exception.enums.GlobalErrorCodeConstants.REPEATED_REQUESTS;
 import static u.boot.start.common.exception.util.ServiceExceptionUtil.exception;
@@ -124,6 +128,16 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
         }
     }
 
+    @Override
+    public AppProductPostListBO payloadQueryParam(AppProductPostListGetReqVO reqVo) {
+        AppProductPostListBO bo = ChirpProductPostConvert.INSTANCE.toAppProductPostListBO(reqVo);
+        return bo;
+    }
+
+    @Override
+    public List<Long> searchIdList(AppProductPostListBO appProductPostListBO) {
+        return List.of();
+    }
 
 
     private void verifyCollect(AppProductPostCollectReqVO reqVo, Long productId) throws Exception {
