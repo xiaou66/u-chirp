@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import u.boot.start.common.exception.enums.GlobalErrorCodeConstants;
+import u.boot.start.common.exception.util.ServiceExceptionUtil;
 import u.boot.start.common.pojo.R;
-import u.chirp.application.mumber.controller.app.vo.ChirpMemberAppLoginReqVO;
+import u.chirp.application.mumber.controller.app.vo.ChirpMemberThirdPartyLoginReqVO;
 import u.chirp.application.mumber.controller.app.vo.ChirpMemberLoginReqVO;
+import u.chirp.application.mumber.controller.app.vo.ChirpMemberUtoolsLoginReqVO;
 import u.chirp.application.mumber.dal.dataobject.ChirpSocialAccountDO;
 import u.chirp.application.mumber.enums.SocialType;
 import u.chirp.application.mumber.service.IChirpMemberAccountService;
@@ -49,21 +52,42 @@ public class ChirpMemberController {
         return R.success(successInfo.getToken());
     }
 
+
     /**
-     * 产品应用登录
+     * 第三方应用登录
      * @tags v1.0,0
      */
-    @PostMapping("appLogin")
+    @PostMapping("thirdPartyLogin")
     @SaIgnore
-    private R<String> appLogin(@Validated @RequestBody ChirpMemberAppLoginReqVO reqVo) {
+    private R<String> thirdPartyLogin(@Validated @RequestBody ChirpMemberThirdPartyLoginReqVO reqVo) {
         ChirpSocialAccountDO chirpSocialAccount = chirpSocialAccountService.getByClientId(reqVo.getClientId());
-        MemberLoginSuccessInfoBO successInfo = new MemberLoginSuccessInfoBO();
-        if (SocialType.SELF_BUILD.getValue().equals(chirpSocialAccount.getSocialType())) {
-            successInfo = chirpMemberAccountService.thirdPartyLogin(reqVo, chirpSocialAccount);
-        } else {
-//            successInfo = chirpMemberAccountService.appLogin(reqVo.)
+        if (!SocialType.SELF_BUILD.getValue().equals(chirpSocialAccount.getSocialType())) {
+            throw ServiceExceptionUtil.exception(GlobalErrorCodeConstants.BAD_REQUEST,
+                    "clientId 对应客户端类型错误请掉对应接口");
         }
 
+        MemberLoginSuccessInfoBO successInfo = chirpMemberAccountService
+                .thirdPartyLogin(reqVo, chirpSocialAccount);
+        chirpMemberService.loginAfter(successInfo.getMemberId());
+        return R.success(successInfo.getToken());
+    }
+
+    /**
+     * utools 登录
+     * @param reqVo
+     * @return
+     */
+    @PostMapping("utoolsLogin")
+    @SaIgnore
+    private R<String> utoolsLogin(@Validated @RequestBody ChirpMemberUtoolsLoginReqVO reqVo) {
+        ChirpSocialAccountDO chirpSocialAccount = chirpSocialAccountService.getByClientId(reqVo.getClientId());
+        if (!SocialType.SELF_BUILD.getValue().equals(chirpSocialAccount.getSocialType())) {
+            throw ServiceExceptionUtil.exception(GlobalErrorCodeConstants.BAD_REQUEST,
+                    "clientId 对应客户端类型错误请掉对应接口");
+        }
+
+        MemberLoginSuccessInfoBO successInfo = chirpMemberAccountService
+                .utoolsLogin(reqVo, chirpSocialAccount);
         chirpMemberService.loginAfter(successInfo.getMemberId());
         return R.success(successInfo.getToken());
     }

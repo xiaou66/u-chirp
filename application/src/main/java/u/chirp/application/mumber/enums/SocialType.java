@@ -13,7 +13,11 @@ public enum SocialType {
     /**
      * 自建
      */
-    SELF_BUILD(1),
+    SELF_BUILD("selfBuild"),
+    /**
+     * utools
+     */
+    UTOOLS("utools"),
     ;
-    private final Integer value;
+    private final String value;
 }

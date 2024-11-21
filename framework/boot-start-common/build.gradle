@@ -37,6 +37,15 @@ dependencies {
     compileOnly ("jakarta.validation:jakarta.validation-api") {
         transitive(false)
     }
+    implementation("com.fasterxml.jackson.core:jackson-core") {
+        transitive(false)
+    }
+    implementation("com.fasterxml.jackson.core:jackson-databind") {
+        transitive(false)
+    }
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310") {
+        transitive(false)
+    }
 }
 
 test {

@@ -27,7 +27,7 @@ public class ChirpSocialAccountDO extends BaseDO<ChirpSocialAccountDO> {
      * 社交平台的类型
      */
     @TableField("social_type")
-    private Integer socialType;
+    private String socialType;
 
     /**
      * 客户端 clientId

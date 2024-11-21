@@ -63,8 +63,9 @@ dependencies {
     implementation project(":auth")
     implementation project(':framework:boot-start-db')
     implementation project(':framework:boot-start-web')
-
     implementation project(':framework:boot-start-common')
+    implementation "io.github.xiaou66:u-sdk-stater"
+    implementation project(':framework:boot-start-utools')
 
     implementation "cn.hutool:hutool-core"
     implementation("com.google.guava:guava")

@@ -14,7 +14,7 @@ import u.chirp.application.mumber.dal.mysql.ChirpSocialAccountMapper;
 public class ChirpSocialAccountServiceImpl extends ServiceImpl<ChirpSocialAccountMapper, ChirpSocialAccountDO>
         implements IChirpSocialAccountService{
     @Override
-    public ChirpSocialAccountDO getByClientId(Long clientId) {
+    public ChirpSocialAccountDO getByClientId(String clientId) {
         return baseMapper.selectOne(Wrappers.lambdaQuery(ChirpSocialAccountDO.class)
                 .eq(ChirpSocialAccountDO::getSocialClientId, clientId)
                 .last("limit 1"));

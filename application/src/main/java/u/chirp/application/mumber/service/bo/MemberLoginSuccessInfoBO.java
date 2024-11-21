@@ -10,6 +10,12 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class MemberLoginSuccessInfoBO {
+    /**
+     * 会员 id
+     */
     private Long memberId;
+    /**
+     * token 字符串
+     */
     private String token;
 }

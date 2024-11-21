@@ -10,5 +10,5 @@ import u.chirp.application.mumber.dal.dataobject.ChirpSocialAccountDO;
 public interface IChirpSocialAccountService extends IService<ChirpSocialAccountDO> {
 
 
-    ChirpSocialAccountDO getByClientId(Long clientId);
+    ChirpSocialAccountDO getByClientId(String clientId);
 }

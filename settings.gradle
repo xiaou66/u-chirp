@@ -12,4 +12,5 @@ findProject(':framework:boot-start-common')?.name = 'boot-start-common'
 include 'auth'
 include 'framework:boot-start-utools'
 findProject(':framework:boot-start-utools')?.name = 'boot-start-utools'
+include 'api'
 
