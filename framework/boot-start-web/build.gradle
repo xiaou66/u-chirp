@@ -21,6 +21,3 @@ dependencies {
         transitive(false)
     }
 }
-test {
-    useJUnitPlatform()
-}

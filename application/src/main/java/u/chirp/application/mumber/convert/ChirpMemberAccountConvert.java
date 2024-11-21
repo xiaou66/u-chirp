@@ -28,5 +28,6 @@ public interface ChirpMemberAccountConvert {
     @Mapping(target = "accountName", source = "username")
     @Mapping(target = "accountAvatar", source = "avatar")
     @Mapping(target = "socialId", source = "clientId")
+    @Mapping(target = "bindMemberId", ignore = true)
     void convert(ChirpMemberAppLoginReqVO reqVo, @MappingTarget ChirpMemberAccountDO memberAccount);
 }

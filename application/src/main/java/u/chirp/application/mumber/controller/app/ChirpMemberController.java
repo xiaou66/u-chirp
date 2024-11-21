@@ -60,6 +60,8 @@ public class ChirpMemberController {
         MemberLoginSuccessInfoBO successInfo = new MemberLoginSuccessInfoBO();
         if (SocialType.SELF_BUILD.getValue().equals(chirpSocialAccount.getSocialType())) {
             successInfo = chirpMemberAccountService.thirdPartyLogin(reqVo, chirpSocialAccount);
+        } else {
+//            successInfo = chirpMemberAccountService.appLogin(reqVo.)
         }
 
         chirpMemberService.loginAfter(successInfo.getMemberId());

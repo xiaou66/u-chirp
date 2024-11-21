@@ -14,7 +14,6 @@ dependencies {
     implementation platform(project(':dependencies'))
     implementation project(':framework:boot-start-common')
     implementation project(':framework:boot-start-web')
-    implementation platform(":framework:boot-start-utools")
 
     implementation "org.springframework.boot:spring-boot-starter-web"
 
