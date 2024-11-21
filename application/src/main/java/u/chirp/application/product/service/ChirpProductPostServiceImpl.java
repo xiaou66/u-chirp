@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import u.chirp.application.mumber.enums.CollectType;
 import u.chirp.application.mumber.service.IChirpMemberCollectService;
 import u.chirp.application.product.controller.app.vo.AppProductPostActionReqVO;
+import u.chirp.application.product.controller.app.vo.AppProductPostCollectReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostThumbsUpReqVO;
 import u.chirp.application.product.convert.ChirpProductPostConvert;
@@ -54,19 +55,15 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
             return;
         }
 
-        Integer updateCount = baseMapper.thumbsUp(reqVo.getProductId(), reqVo.getPostId(), reqVo.getThumbsUp());
-        if (updateCount == 0) {
-            // 点赞失败
-            return;
-        }
-
         // 帖子的发布者点赞数 +/- 1
         ProductPostBaseInfoBO postBaseInfo = getPostBaseInfo(reqVo.getPostId());
         if (Boolean.TRUE.equals(reqVo.getThumbsUp())) {
+            baseMapper.thumbsUp(reqVo.getProductId(), reqVo.getPostId());
             chirpProductMemberService.addThumbsUpCount(postBaseInfo.getProductId(), postBaseInfo.getCreator());
             // 帖子点赞要收集到表中
             chirpMemberCollectService.addCollect(CollectType.THUMBS_UP_POST, loginMemberId, reqVo.getPostId());
         } else {
+            baseMapper.unThumbsUp(reqVo.getProductId(), reqVo.getPostId());
             chirpProductMemberService.subThumbsUpCount(postBaseInfo.getProductId(), postBaseInfo.getCreator());
             // 帖子取消点赞要从收集表移除
             chirpMemberCollectService.removeCollect(CollectType.THUMBS_UP_POST, loginMemberId, reqVo.getPostId());
@@ -80,6 +77,10 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
                 throw new Exception();
             }
         }
+
+        if (!postExists(reqVo.getProductId(), loginMemberId)) {
+            throw new Exception();
+        }
     }
 
 
@@ -92,6 +93,52 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
                 .eq(ChirpProductPostDO::getPostId, postId)
                 .last("limit 1"));
         return ChirpProductPostConvert.INSTANCE.convertProductPostBaseInfoBO(chirpProductPost);
+    }
+
+    @Override
+    @Transactional
+    public void collect(AppProductPostCollectReqVO reqVo) {
+        long loginMemberId = StpUtil.getLoginIdAsLong();
+        try {
+            verifyCollect(reqVo);
+        } catch (Exception e) {
+            return;
+        }
+
+        // 帖子的发布者点赞数 +/- 1
+        ProductPostBaseInfoBO postBaseInfo = getPostBaseInfo(reqVo.getPostId());
+        if (Boolean.TRUE.equals(reqVo.getCollect())) {
+            baseMapper.collect(reqVo.getProductId(), reqVo.getPostId(), reqVo.getCollect());
+            chirpProductMemberService.addCollectCount(postBaseInfo.getProductId(), postBaseInfo.getCreator());
+            // 帖子点赞要收集到表中
+            chirpMemberCollectService.addCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId());
+        } else {
+            baseMapper.unCollect(reqVo.getProductId(), reqVo.getPostId(), reqVo.getCollect());
+            chirpProductMemberService.subCollectCount(postBaseInfo.getProductId(), postBaseInfo.getCreator());
+            // 帖子取消点赞要从收集表移除
+            chirpMemberCollectService.removeCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId());
+        }
+    }
+
+
+
+    private void verifyCollect(AppProductPostCollectReqVO reqVo) throws Exception {
+        long loginMemberId = StpUtil.getLoginIdAsLong();
+        if (Boolean.FALSE.equals(reqVo.getCollect())) {
+            if(!chirpMemberCollectService.hasCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId())) {
+                throw new Exception();
+            }
+        }
+
+        if (!postExists(reqVo.getProductId(), loginMemberId)) {
+            throw new Exception();
+        }
+    }
+
+    private boolean postExists(Long productId, Long memberId) {
+        return exists(Wrappers.lambdaQuery(ChirpProductPostDO.class)
+                .eq(ChirpProductPostDO::getPostId, memberId)
+                .eq(ChirpProductPostDO::getProductId, productId));
     }
 
 

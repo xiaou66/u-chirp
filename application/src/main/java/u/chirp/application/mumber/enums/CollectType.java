@@ -16,8 +16,12 @@ public enum CollectType {
      * 点赞帖子
      */
     THUMBS_UP_POST(1),
+    /**
+     * 收藏帖子
+     */
+    COLLECT_POST(2),
     ;
 
     @EnumValue
-    private final int value;
+    private final Integer value;
 }
