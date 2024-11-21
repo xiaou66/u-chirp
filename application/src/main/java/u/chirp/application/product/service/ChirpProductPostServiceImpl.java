@@ -18,6 +18,10 @@ import u.chirp.application.product.dal.dataobject.ChirpProductPostDO;
 import u.chirp.application.product.dal.mysql.ChirpProductPostMapper;
 import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
 
+import static u.boot.start.common.exception.enums.GlobalErrorCodeConstants.REPEATED_REQUESTS;
+import static u.boot.start.common.exception.util.ServiceExceptionUtil.exception;
+import static u.chirp.application.product.ProductErrorCodeConstants.PRODUCT_POST_EXISTENCE;
+
 /**
  * @author xiaou
  * @date 2024/11/18
@@ -74,12 +78,12 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
         long loginMemberId = StpUtil.getLoginIdAsLong();
         if (Boolean.FALSE.equals(reqVo.getThumbsUp())) {
             if(!chirpMemberCollectService.hasCollect(CollectType.THUMBS_UP_POST, loginMemberId, reqVo.getPostId())) {
-                throw new Exception();
+                throw exception(REPEATED_REQUESTS);
             }
         }
 
         if (!postExists(reqVo.getProductId(), loginMemberId)) {
-            throw new Exception();
+            throw exception(PRODUCT_POST_EXISTENCE);
         }
     }
 
@@ -126,12 +130,12 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
         long loginMemberId = StpUtil.getLoginIdAsLong();
         if (Boolean.FALSE.equals(reqVo.getCollect())) {
             if(!chirpMemberCollectService.hasCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId())) {
-                throw new Exception();
+                throw exception(REPEATED_REQUESTS);
             }
         }
 
         if (!postExists(reqVo.getProductId(), loginMemberId)) {
-            throw new Exception();
+            throw exception(PRODUCT_POST_EXISTENCE);
         }
     }
 
