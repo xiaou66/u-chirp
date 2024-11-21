@@ -81,7 +81,7 @@ public class ChirpMemberController {
     @SaIgnore
     private R<String> utoolsLogin(@Validated @RequestBody ChirpMemberUtoolsLoginReqVO reqVo) {
         ChirpSocialAccountDO chirpSocialAccount = chirpSocialAccountService.getByClientId(reqVo.getClientId());
-        if (!SocialType.SELF_BUILD.getValue().equals(chirpSocialAccount.getSocialType())) {
+        if (!SocialType.UTOOLS.getValue().equals(chirpSocialAccount.getSocialType())) {
             throw ServiceExceptionUtil.exception(GlobalErrorCodeConstants.BAD_REQUEST,
                     "clientId 对应客户端类型错误请掉对应接口");
         }
