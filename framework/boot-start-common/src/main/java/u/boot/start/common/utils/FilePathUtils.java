@@ -30,4 +30,17 @@ public class FilePathUtils {
         String jarDir = FilePathUtils.getJarPath().getParent();
         return new File(jarDir, "data");
     }
+
+    /**
+     * 获取数据存储位置 <br/>
+     * 尽可能使用 {@link FilePathUtils#getData()} <br/>
+     * 这个会将异常处理成运行时异常
+     */
+    public static File getData0()  {
+        try {
+            return FilePathUtils.getData();
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

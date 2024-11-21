@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import u.boot.start.db.mysql.BaseDO;
+import u.chirp.application.mumber.enums.CollectType;
 
 /**
  * @author xiaou
@@ -25,6 +26,7 @@ public class ChirpMemberCollectDO extends BaseDO<ChirpMemberCollectDO> {
 
     /**
      * 收集类型
+     * @see CollectType
      */
     @TableField("collect_type")
     private Integer collectType;

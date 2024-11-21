@@ -1,10 +1,10 @@
-package u.chirp.application.core.controller.app;
+package u.chirp.application.core.sys.controller.app;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import u.boot.start.common.pojo.R;
-import u.chirp.application.core.controller.app.vo.SystemInfoGetRespVO;
+import u.chirp.application.core.sys.controller.app.vo.SystemInfoGetRespVO;
 
 import java.net.URL;
 import java.util.jar.Attributes;

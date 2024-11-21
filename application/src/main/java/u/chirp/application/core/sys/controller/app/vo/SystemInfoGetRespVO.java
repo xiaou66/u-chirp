@@ -1,4 +1,4 @@
-package u.chirp.application.core.controller.app.vo;
+package u.chirp.application.core.sys.controller.app.vo;
 
 import lombok.Data;
 
