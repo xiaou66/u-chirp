@@ -26,8 +26,8 @@ onMounted(() => checkOverflow())
       <ProductTopMenu />
     </div>
     <div class="flex-1 bg-opacity-60 bg-base-200 flex justify-center">
-      <div class="mt-6  min-w-full place-items-center">
-        <div class="w-11/12 grid grid-rows-[auto_1fr] h-full">
+      <div class="mt-6  min-w-full flex justify-center">
+        <div class="w-10/12 grid grid-rows-[auto_1fr] h-full">
           <!-- 检索区域  -->
           <div class="flex justify-between items-center">
             <div class="flex gap-3">
