@@ -1,7 +1,6 @@
 package u.chirp.application.product.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import jakarta.validation.constraints.NotNull;
 import u.chirp.application.product.dal.dataobject.ChirpProductMemberDO;
 
 /**
@@ -41,4 +40,6 @@ public interface IChirpProductMemberService extends IService<ChirpProductMemberD
      * @param memberId
      */
     void subCollectCount(Long productId, Long memberId);
+
+    void createMemberAccount(Long memberId, Long productId);
 }

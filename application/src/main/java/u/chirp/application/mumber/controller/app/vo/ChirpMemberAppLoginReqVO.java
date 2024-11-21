@@ -14,6 +14,11 @@ public class ChirpMemberAppLoginReqVO {
     private String username;
 
     /**
+     * 登录客户端
+     */
+    private Long clientId;
+
+    /**
      * 头像
      */
     private String avatar;

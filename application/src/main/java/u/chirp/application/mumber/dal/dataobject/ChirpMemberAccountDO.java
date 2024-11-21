@@ -33,6 +33,12 @@ public class ChirpMemberAccountDO extends BaseDO<ChirpMemberAccountDO> {
     private String openId;
 
     /**
+     * 绑定 id
+     */
+    @TableField("bind_member_id")
+    private Long bindMemberId;
+
+    /**
      * 账号名称
      */
     @TableField("account_name")

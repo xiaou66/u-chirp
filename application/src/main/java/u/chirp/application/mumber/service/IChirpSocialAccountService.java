@@ -8,4 +8,7 @@ import u.chirp.application.mumber.dal.dataobject.ChirpSocialAccountDO;
  * @date 2024/11/20
  */
 public interface IChirpSocialAccountService extends IService<ChirpSocialAccountDO> {
+
+
+    ChirpSocialAccountDO getByClientId(Long clientId);
 }

@@ -20,11 +20,14 @@ public class ChirpSocialAccountDO extends BaseDO<ChirpSocialAccountDO> {
     @TableId(value = "social_id", type = IdType.ASSIGN_ID) //
     private Long socialId;
 
+    @TableField("social_product_id")
+    private Long socialProductId;
+
     /**
      * 社交平台的类型
      */
     @TableField("social_type")
-    private Byte socialType;
+    private Integer socialType;
 
     /**
      * 客户端 clientId

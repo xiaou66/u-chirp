@@ -7,11 +7,13 @@ import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import org.springframework.stereotype.Service;
 import u.chirp.application.mumber.MemberErrorCodeConstants;
-import u.chirp.application.mumber.controller.app.vo.ChirpMemberAppLoginReqVO;
 import u.chirp.application.mumber.controller.app.vo.ChirpMemberLoginReqVO;
+import u.chirp.application.mumber.convert.ChirpMemberConvert;
 import u.chirp.application.mumber.dal.dataobject.ChirpMemberDO;
 import u.chirp.application.mumber.dal.mysql.ChirpMemberMapper;
 import u.chirp.application.mumber.enums.MemberStatus;
+import u.chirp.application.mumber.service.bo.GenerateMemberBO;
+import u.chirp.application.mumber.service.bo.MemberLoginSuccessInfoBO;
 
 import java.util.Objects;
 
@@ -24,12 +26,11 @@ import static u.boot.start.common.exception.util.ServiceExceptionUtil.exception;
  */
 @Service
 public class ChirpMemberServiceImpl extends ServiceImpl<ChirpMemberMapper, ChirpMemberDO>
-        implements IChirpMemberService{
-
+        implements IChirpMemberService {
 
 
     @Override
-    public String login(ChirpMemberLoginReqVO reqVo) {
+    public MemberLoginSuccessInfoBO login(ChirpMemberLoginReqVO reqVo) {
         String hashPassword = Hashing.sha256()
                 .hashString(reqVo.getPassword(), Charsets.UTF_8)
                 .toString();
@@ -46,11 +47,21 @@ public class ChirpMemberServiceImpl extends ServiceImpl<ChirpMemberMapper, Chirp
 
         StpUtil.login(chirpMember.getMemberId(), "app");
 
-        return StpUtil.getTokenValue();
+        MemberLoginSuccessInfoBO successInfo = new MemberLoginSuccessInfoBO();
+        successInfo.setMemberId(chirpMember.getMemberId());
+        successInfo.setToken(StpUtil.getTokenValue());
+        return successInfo;
     }
 
     @Override
-    public String appLogin(ChirpMemberAppLoginReqVO reqVo) {
-        return "";
+    public void loginAfter(Long memberId) {
+
+    }
+
+    @Override
+    public Long generateUser(GenerateMemberBO generateMemberBO) {
+        ChirpMemberDO chirpMemberDO = ChirpMemberConvert.INSTANCE.convert(generateMemberBO);
+        baseMapper.insert(chirpMemberDO);
+        return chirpMemberDO.getMemberId();
     }
 }

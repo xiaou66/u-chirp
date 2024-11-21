@@ -10,7 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 import u.boot.start.common.pojo.R;
 import u.chirp.application.mumber.controller.app.vo.ChirpMemberAppLoginReqVO;
 import u.chirp.application.mumber.controller.app.vo.ChirpMemberLoginReqVO;
+import u.chirp.application.mumber.dal.dataobject.ChirpSocialAccountDO;
+import u.chirp.application.mumber.enums.SocialType;
+import u.chirp.application.mumber.service.IChirpMemberAccountService;
 import u.chirp.application.mumber.service.IChirpMemberService;
+import u.chirp.application.mumber.service.IChirpSocialAccountService;
+import u.chirp.application.mumber.service.bo.MemberLoginSuccessInfoBO;
 
 /**
  * @folder app/会员
@@ -25,6 +30,13 @@ public class ChirpMemberController {
     @Resource
     private IChirpMemberService chirpMemberService;
 
+
+    @Resource
+    private IChirpMemberAccountService chirpMemberAccountService;
+
+    @Resource
+    private IChirpSocialAccountService chirpSocialAccountService;
+
     /**
      * 会员登录
      * @tags v1.0,0
@@ -32,18 +44,25 @@ public class ChirpMemberController {
     @PostMapping("login")
     @SaIgnore
     public R<String> login(@Validated @RequestBody ChirpMemberLoginReqVO reqVo) {
-        String token = chirpMemberService.login(reqVo);
-        return R.success(token);
+        MemberLoginSuccessInfoBO successInfo = chirpMemberService.login(reqVo);
+        chirpMemberService.loginAfter(successInfo.getMemberId());
+        return R.success(successInfo.getToken());
     }
 
     /**
-     * 应用登录
+     * 产品应用登录
      * @tags v1.0,0
      */
     @PostMapping("appLogin")
     @SaIgnore
     private R<String> appLogin(@Validated @RequestBody ChirpMemberAppLoginReqVO reqVo) {
-        String token = chirpMemberService.appLogin(reqVo);
-        return R.success(token);
+        ChirpSocialAccountDO chirpSocialAccount = chirpSocialAccountService.getByClientId(reqVo.getClientId());
+        MemberLoginSuccessInfoBO successInfo = new MemberLoginSuccessInfoBO();
+        if (SocialType.SELF_BUILD.getValue().equals(chirpSocialAccount.getSocialType())) {
+            successInfo = chirpMemberAccountService.thirdPartyLogin(reqVo, chirpSocialAccount);
+        }
+
+        chirpMemberService.loginAfter(successInfo.getMemberId());
+        return R.success(successInfo.getToken());
     }
 }

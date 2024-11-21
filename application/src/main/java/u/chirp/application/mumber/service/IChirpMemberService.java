@@ -1,9 +1,10 @@
 package u.chirp.application.mumber.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import u.chirp.application.mumber.controller.app.vo.ChirpMemberAppLoginReqVO;
 import u.chirp.application.mumber.controller.app.vo.ChirpMemberLoginReqVO;
 import u.chirp.application.mumber.dal.dataobject.ChirpMemberDO;
+import u.chirp.application.mumber.service.bo.GenerateMemberBO;
+import u.chirp.application.mumber.service.bo.MemberLoginSuccessInfoBO;
 
 /**
  * @author xiaou
@@ -12,15 +13,13 @@ import u.chirp.application.mumber.dal.dataobject.ChirpMemberDO;
 public interface IChirpMemberService extends IService<ChirpMemberDO> {
     /**
      * 登录
+     *
      * @param reqVo
      * @return
      */
-    String login(ChirpMemberLoginReqVO reqVo);
+    MemberLoginSuccessInfoBO login(ChirpMemberLoginReqVO reqVo);
 
-    /**
-     * 应用登录
-     * @param reqVo
-     * @return
-     */
-    String appLogin(ChirpMemberAppLoginReqVO reqVo);
+    Long generateUser(GenerateMemberBO generateMemberBO);
+
+    void loginAfter(Long memberId);
 }

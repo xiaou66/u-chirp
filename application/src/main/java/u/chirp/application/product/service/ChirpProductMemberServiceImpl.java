@@ -51,6 +51,14 @@ public class ChirpProductMemberServiceImpl extends ServiceImpl<ChirpProductMembe
         baseMapper.subCollectCount(productId, memberId);
     }
 
+    @Override
+    public void createMemberAccount(Long memberId, Long productId) {
+        ChirpProductMemberDO productMemberDO = new ChirpProductMemberDO();
+        productMemberDO.setMemberId(memberId);
+        productMemberDO.setProductId(productId);
+        baseMapper.insert(productMemberDO);
+    }
+
     private ChirpProductMemberDO initChirpProductMember(Long memberId, Long productId) {
         ChirpProductMemberDO chirpProductMemberDO = new ChirpProductMemberDO();
         chirpProductMemberDO.setMemberId(memberId);
