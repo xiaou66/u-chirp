@@ -12,15 +12,14 @@ import u.chirp.application.product.enums.AppProductPostListTab;
 public class AppProductPostListBO {
 
     /**
-     * 产品 code
+     * 产品 id
      */
-    @NotBlank(message = "产品 code 不能为空")
-    private String productCode;
+    private Long productId;
 
     /**
      * 帖子名称
      */
-    private String postName;
+    private String postTitle;
 
     /**
      * tab

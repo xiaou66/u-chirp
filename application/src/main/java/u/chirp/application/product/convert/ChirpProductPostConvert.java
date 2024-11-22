@@ -6,9 +6,13 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import u.chirp.application.product.controller.app.vo.AppProductPostListGetReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
+import u.chirp.application.product.controller.app.vo.ChirpProductPostListRespVO;
 import u.chirp.application.product.dal.dataobject.ChirpProductPostDO;
 import u.chirp.application.product.service.bo.AppProductPostListBO;
+import u.chirp.application.product.service.bo.ChirpProductPostListBO;
 import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
+
+import java.util.List;
 
 /**
  * @author xiaou
@@ -33,5 +37,13 @@ public interface ChirpProductPostConvert {
 
     ProductPostBaseInfoBO convertProductPostBaseInfoBO(ChirpProductPostDO chirpProductPost);
 
+    @Mapping(target = "productId", ignore = true)
     AppProductPostListBO toAppProductPostListBO(AppProductPostListGetReqVO reqVo);
+
+    List<ChirpProductPostListRespVO> toChirpProductPostListRespDO(List<ChirpProductPostListBO> res);
+
+    ChirpProductPostListRespVO toChirpProductPostListRespDO(ChirpProductPostListBO res);
+
+    List<ChirpProductPostListBO> toChirpProductPostListBO(List<ChirpProductPostDO> productPostList);
+    ChirpProductPostListBO toChirpProductPostListBO(ChirpProductPostDO productPostList);
 }

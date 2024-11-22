@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="u.chirp.application.product.dal.mysql.ChirpProductPostMapper">
+
+    <select id="searchIdList" resultType="java.lang.Long">
+        select cpp.post_id
+        from chirp_product_post cpp
+        <where>
+            and cpp.product_id = #{cpp.productId}
+            <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(bo.postTitle)">
+                and cpp.post_title like concat('%',#{bo.postTitle,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+        group by cpp.post_id
+    </select>
+</mapper>

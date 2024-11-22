@@ -1,6 +1,7 @@
 package u.chirp.application.product.service;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
@@ -16,6 +17,7 @@ import u.chirp.application.product.convert.ChirpProductPostConvert;
 import u.chirp.application.product.dal.dataobject.ChirpProductPostDO;
 import u.chirp.application.product.dal.mysql.ChirpProductPostMapper;
 import u.chirp.application.product.service.bo.AppProductPostListBO;
+import u.chirp.application.product.service.bo.ChirpProductPostListBO;
 import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
 
 import java.util.List;
@@ -37,6 +39,9 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
 
     @Resource
     private IChirpMemberCollectService chirpMemberCollectService;
+
+    @Resource
+    private IChirpProductService chirpProductService;
 
 
     @Override
@@ -131,12 +136,21 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
     @Override
     public AppProductPostListBO payloadQueryParam(AppProductPostListGetReqVO reqVo) {
         AppProductPostListBO bo = ChirpProductPostConvert.INSTANCE.toAppProductPostListBO(reqVo);
+        bo.setProductId(chirpProductService.getProductIdByCode(reqVo.getProductCode()));
         return bo;
     }
 
     @Override
-    public List<Long> searchIdList(AppProductPostListBO appProductPostListBO) {
-        return List.of();
+    public List<Long> searchIdList(IPage<?> page, AppProductPostListBO bo) {
+        return baseMapper.searchIdList(page, bo);
+    }
+
+    @Override
+    public List<ChirpProductPostListBO> payloadResult(List<Long> ids) {
+        List<ChirpProductPostDO> productPostList = baseMapper.selectByIds(ids);
+        List<ChirpProductPostListBO> result = ChirpProductPostConvert.INSTANCE
+                .toChirpProductPostListBO(productPostList);
+        return result;
     }
 
 

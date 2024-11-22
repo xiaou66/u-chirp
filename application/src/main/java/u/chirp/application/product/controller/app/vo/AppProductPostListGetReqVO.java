@@ -20,7 +20,7 @@ public class AppProductPostListGetReqVO extends PageParam {
     /**
      * 帖子名称
      */
-    private String postName;
+    private String postTitle;
 
     /**
      * tab

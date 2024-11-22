@@ -1,11 +1,15 @@
 package u.chirp.application.product.dal.mysql;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.validation.constraints.NotNull;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 import u.chirp.application.product.dal.dataobject.ChirpProductPostDO;
+import u.chirp.application.product.service.bo.AppProductPostListBO;
+
+import java.util.List;
 
 /**
  * @author xiaou
@@ -24,4 +28,6 @@ public interface ChirpProductPostMapper extends BaseMapper<ChirpProductPostDO> {
 
     @Update("update chirp_product_post set post_collect_count = post_collect_count - 1 where product_id = #{productId} and post_id = #{postId}")
     void unCollect(@Param("productId") Long productId, @Param("postId") Long postId, @Param("collect") Boolean collect);
+
+    List<Long> searchIdList(@Param("page") IPage<?> page, @Param("bo") AppProductPostListBO bo);
 }
