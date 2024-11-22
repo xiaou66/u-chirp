@@ -22,6 +22,7 @@ import java.util.List;
 public interface ChirpProductPostConvert {
     ChirpProductPostConvert INSTANCE = Mappers.getMapper(ChirpProductPostConvert.class);
 
+    @Mapping(target = "postFollowCount", ignore = true)
     @Mapping(target = "productId", ignore = true)
     @Mapping(target = "updater", ignore = true)
     @Mapping(target = "updateTime", ignore = true)
@@ -30,7 +31,6 @@ public interface ChirpProductPostConvert {
     @Mapping(target = "postHot", ignore = true)
     @Mapping(target = "postHandleProgress", ignore = true)
     @Mapping(target = "postGood", ignore = true)
-    @Mapping(target = "postCollectCount", ignore = true)
     @Mapping(target = "creator", expression = "java(StpUtil.getLoginIdAsLong())")
     @Mapping(target = "createTime", ignore = true)
     ChirpProductPostDO convert(AppProductPostSaveReqVO reqVo);

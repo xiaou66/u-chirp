@@ -27,7 +27,7 @@ public class ProductPostBaseInfoBO {
     /**
      * 收藏数
      */
-    private Long postCollectCount;
+    private Long postFollowCount;
 
     /**
      * 是否置顶
