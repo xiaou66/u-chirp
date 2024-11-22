@@ -13,5 +13,6 @@
             </if>
         </where>
         group by cpp.post_id
+        order by cpp.post_top desc
     </select>
 </mapper>

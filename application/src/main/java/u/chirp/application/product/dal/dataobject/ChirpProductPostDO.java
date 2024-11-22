@@ -50,7 +50,7 @@ public class ChirpProductPostDO extends BaseDO<ChirpProductPostDO> {
     private Boolean postGood;
 
     /**
-     * 基础热点值
+     * 热点值
      */
     @TableField("post_hot")
     private Integer postHot;
