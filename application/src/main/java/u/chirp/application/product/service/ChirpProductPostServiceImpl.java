@@ -16,6 +16,7 @@ import u.chirp.application.product.controller.app.vo.AppProductPostThumbsUpReqVO
 import u.chirp.application.product.convert.ChirpProductPostConvert;
 import u.chirp.application.product.dal.dataobject.ChirpProductPostDO;
 import u.chirp.application.product.dal.mysql.ChirpProductPostMapper;
+import u.chirp.application.product.enums.AppProductPostListTab;
 import u.chirp.application.product.service.bo.AppProductPostListBO;
 import u.chirp.application.product.service.bo.ChirpProductPostListBO;
 import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
@@ -137,6 +138,10 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
     public AppProductPostListBO payloadQueryParam(AppProductPostListGetReqVO reqVo) {
         AppProductPostListBO bo = ChirpProductPostConvert.INSTANCE.toAppProductPostListBO(reqVo);
         bo.setProductId(chirpProductService.getProductIdByCode(reqVo.getProductCode()));
+        bo.setMemberId(StpUtil.getLoginIdAsLong());
+        if (AppProductPostListTab.FOLLOW.equals(reqVo.getTab())) {
+            bo.setJoinCollectTable(true);
+        }
         return bo;
     }
 

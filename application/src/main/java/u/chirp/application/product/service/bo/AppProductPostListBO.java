@@ -25,4 +25,11 @@ public class AppProductPostListBO {
      * tab
      */
     private AppProductPostListTab tab;
+
+    /**
+     * 会员 id
+     */
+    private Long memberId;
+
+    private Boolean joinCollectTable = false;
 }

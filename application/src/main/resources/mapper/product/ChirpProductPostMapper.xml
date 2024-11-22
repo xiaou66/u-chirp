@@ -6,13 +6,25 @@
     <select id="searchIdList" resultType="java.lang.Long">
         select cpp.post_id
         from chirp_product_post cpp
+        <if test="bo.joinCollectTable">
+            inner join chirp_member_collect cmc
+                on cpp.post_id = cmc.collect_ref_id and cmc.collect_member_id = #{bo.memberId}
+        </if>
         <where>
             and cpp.product_id = #{cpp.productId}
             <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(bo.postTitle)">
                 and cpp.post_title like concat('%',#{bo.postTitle,jdbcType=VARCHAR},'%')
             </if>
+            <if test='"GOOD_PROBLEM".equals(ebo.tab.name())'>
+                and cpp.post_good = 1
+            </if>
+            <if test='"FOLLOW".equals(ebo.tab.name())'>
+                and cpp.collect_type = 2
+            </if>
         </where>
         group by cpp.post_id
         order by cpp.post_top desc
+          <if test='"HOT".equals(ebo.tab.name())'>, cpp.post_hot desc</if>
+          <if test='"NEW".equals(ebo.tab.name())'>, cpp.create_time desc</if>
     </select>
 </mapper>
