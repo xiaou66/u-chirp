@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import u.chirp.application.mumber.enums.CollectType;
 import u.chirp.application.mumber.service.IChirpMemberCollectService;
-import u.chirp.application.product.controller.app.vo.AppProductPostCollectReqVO;
+import u.chirp.application.product.controller.app.vo.AppProductPostFollowReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostListGetReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostThumbsUpReqVO;
@@ -101,7 +101,7 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
     public ProductPostBaseInfoBO getPostBaseInfo(Long postId) {
         ChirpProductPostDO chirpProductPost = getOne(Wrappers.lambdaQuery(ChirpProductPostDO.class)
                 .select(ChirpProductPostDO::getPostId, ChirpProductPostDO::getProductId, ChirpProductPostDO::getPostThumbsUpCount,
-                        ChirpProductPostDO::getPostCollectCount, ChirpProductPostDO::getPostTop, ChirpProductPostDO::getPostType,
+                        ChirpProductPostDO::getPostFollowCount, ChirpProductPostDO::getPostTop, ChirpProductPostDO::getPostType,
                         ChirpProductPostDO::getPostHandleProgress, ChirpProductPostDO::getCreator)
                 .eq(ChirpProductPostDO::getPostId, postId)
                 .last("limit 1"));
@@ -110,7 +110,7 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
 
     @Override
     @Transactional
-    public void collect(AppProductPostCollectReqVO reqVo, Long productId) {
+    public void follow(AppProductPostFollowReqVO reqVo, Long productId) {
         long loginMemberId = StpUtil.getLoginIdAsLong();
         try {
             verifyCollect(reqVo, productId);
@@ -121,13 +121,13 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
         // 帖子的发布者点赞数 +/- 1
         ProductPostBaseInfoBO postBaseInfo = getPostBaseInfo(reqVo.getPostId());
         if (Boolean.TRUE.equals(reqVo.getCollect())) {
-            baseMapper.collect(productId, reqVo.getPostId(), reqVo.getCollect());
-            chirpProductMemberService.addCollectCount(postBaseInfo.getProductId(), postBaseInfo.getCreator());
+            baseMapper.follow(productId, reqVo.getPostId(), reqVo.getCollect());
+            chirpProductMemberService.addFollowCount(postBaseInfo.getProductId(), postBaseInfo.getCreator());
             // 帖子点赞要收集到表中
             chirpMemberCollectService.addCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId());
         } else {
-            baseMapper.unCollect(productId, reqVo.getPostId(), reqVo.getCollect());
-            chirpProductMemberService.subCollectCount(postBaseInfo.getProductId(), postBaseInfo.getCreator());
+            baseMapper.unFollow(productId, reqVo.getPostId(), reqVo.getCollect());
+            chirpProductMemberService.subFollowCount(postBaseInfo.getProductId(), postBaseInfo.getCreator());
             // 帖子取消点赞要从收集表移除
             chirpMemberCollectService.removeCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId());
         }
@@ -154,7 +154,7 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
     }
 
 
-    private void verifyCollect(AppProductPostCollectReqVO reqVo, Long productId) throws Exception {
+    private void verifyCollect(AppProductPostFollowReqVO reqVo, Long productId) throws Exception {
         long loginMemberId = StpUtil.getLoginIdAsLong();
         if (Boolean.FALSE.equals(reqVo.getCollect())) {
             if(!chirpMemberCollectService.hasCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId())) {

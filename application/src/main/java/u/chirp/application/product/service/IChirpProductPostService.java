@@ -2,7 +2,7 @@ package u.chirp.application.product.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import u.chirp.application.product.controller.app.vo.AppProductPostCollectReqVO;
+import u.chirp.application.product.controller.app.vo.AppProductPostFollowReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostListGetReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostThumbsUpReqVO;
@@ -37,7 +37,7 @@ public interface IChirpProductPostService extends IService<ChirpProductPostDO> {
 
     ProductPostBaseInfoBO getPostBaseInfo(Long postId);
 
-    void collect(AppProductPostCollectReqVO reqVo, Long productId);
+    void follow(AppProductPostFollowReqVO reqVo, Long productId);
 
     AppProductPostListBO payloadQueryParam(AppProductPostListGetReqVO reqVo);
 

@@ -8,7 +8,7 @@ import lombok.Data;
  * @date 2024/11/21
  */
 @Data
-public class AppProductPostCollectReqVO extends AppProductPostActionReqVO {
+public class AppProductPostFollowReqVO extends AppProductPostActionReqVO {
     /**
      * 是否收集
      */

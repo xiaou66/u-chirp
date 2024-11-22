@@ -65,7 +65,7 @@ public class ChirpProductPostDO extends BaseDO<ChirpProductPostDO> {
      * 收藏数
      */
     @TableField("post_collect_count")
-    private Long postCollectCount;
+    private Long postFollowCount;
 
     /**
      * 是否置顶

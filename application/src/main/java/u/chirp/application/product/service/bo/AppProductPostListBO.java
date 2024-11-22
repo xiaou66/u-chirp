@@ -25,6 +25,4 @@ public class AppProductPostListBO {
      * tab
      */
     private AppProductPostListTab tab;
-
-
 }

@@ -88,7 +88,8 @@ public class FileLocalStorageStrategy implements IFileStorageStrategy {
             Tika tika = new Tika();
             String mimeType = tika.detect(file);
             if (mimeType == null) {
-                mimeType = MediaType.APPLICATION_OCTET_STREAM_VALUE; // 默认 MIME 类型
+                // 默认 MIME 类型
+                mimeType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
             }
 
             // 设置响应头
@@ -99,7 +100,7 @@ public class FileLocalStorageStrategy implements IFileStorageStrategy {
             // 返回文件内容
             return ResponseEntity.ok()
                     .headers(headers)
-                    .body(Files.newReader(file, Charsets.UTF_8)); // 读取文件内容并返回
+                    .body(Files.newReader(file, Charsets.UTF_8));
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("文件预览失败");
         }

@@ -18,8 +18,8 @@ public interface ChirpProductMemberMapper extends BaseMapper<ChirpProductMemberD
     @Update("update chirp_product_member set thumbs_up_count = thumbs_up_count - 1 where product_id = #{productId} and member_id = #{memberId}")
     void subThumbsUpCount(@Param("productId") Long productId, @Param("memberId") Long memberId);
 
-    @Update("update chirp_product_member set collect_count = collect_count - 1 where product_id = #{productId} and member_id = #{memberId}")
-    void subCollectCount(Long productId, Long memberId);
-    @Update("update chirp_product_member set collect_count = collect_count + 1 where product_id = #{productId} and member_id = #{memberId}")
-    void addCollectCount(Long productId, Long memberId);
+    @Update("update chirp_product_member set follow_count = follow_count - 1 where product_id = #{productId} and member_id = #{memberId}")
+    void subFollowCount(Long productId, Long memberId);
+    @Update("update chirp_product_member set follow_count = follow_count + 1 where product_id = #{productId} and member_id = #{memberId}")
+    void addFollowCount(Long productId, Long memberId);
 }

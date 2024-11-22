@@ -33,13 +33,13 @@ public interface IChirpProductMemberService extends IService<ChirpProductMemberD
      * @param productId
      * @param memberId
      */
-    void addCollectCount(Long productId, Long memberId);
+    void addFollowCount(Long productId, Long memberId);
     /**
      * 减少收集数
      * @param productId
      * @param memberId
      */
-    void subCollectCount(Long productId, Long memberId);
+    void subFollowCount(Long productId, Long memberId);
 
     void createMemberAccount(Long memberId, Long productId);
 }

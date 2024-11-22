@@ -2,7 +2,6 @@ package u.chirp.application.product.service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import u.chirp.application.product.dal.dataobject.ChirpProductMemberDO;
 import u.chirp.application.product.dal.mysql.ChirpProductMemberMapper;
@@ -42,13 +41,13 @@ public class ChirpProductMemberServiceImpl extends ServiceImpl<ChirpProductMembe
     }
 
     @Override
-    public void addCollectCount(Long productId, Long memberId) {
-        baseMapper.addCollectCount(productId, memberId);
+    public void addFollowCount(Long productId, Long memberId) {
+        baseMapper.addFollowCount(productId, memberId);
     }
 
     @Override
-    public void subCollectCount(Long productId, Long memberId) {
-        baseMapper.subCollectCount(productId, memberId);
+    public void subFollowCount(Long productId, Long memberId) {
+        baseMapper.subFollowCount(productId, memberId);
     }
 
     @Override

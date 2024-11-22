@@ -1,6 +1,5 @@
 package u.chirp.application.product.service.bo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 /**
@@ -37,7 +36,7 @@ public class ChirpProductPostListBO {
     /**
      * 收藏数
      */
-    private Long postCollectCount;
+    private Long postFollowCount;
 
     /**
      * 是否置顶

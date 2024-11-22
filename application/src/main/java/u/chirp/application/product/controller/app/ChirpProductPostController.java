@@ -86,14 +86,14 @@ public class ChirpProductPostController {
     }
 
     /**
-     * 收藏
+     * 关注
      * @tags v1.0.0
      * @param reqVo
      */
-    @PostMapping("collect")
-    public R<ProductPostBaseInfoBO> collect(@Validated @RequestBody AppProductPostCollectReqVO reqVo) {
+    @PostMapping("follow")
+    public R<ProductPostBaseInfoBO> follow(@Validated @RequestBody AppProductPostFollowReqVO reqVo) {
         Long productId = chirpProductService.getProductIdByCode(reqVo.getProductCode());
-        chirpProductPostService.collect(reqVo, productId);
+        chirpProductPostService.follow(reqVo, productId);
         ProductPostBaseInfoBO productPost = chirpProductPostService.getPostBaseInfo(reqVo.getPostId());
         return R.success(productPost);
     }
