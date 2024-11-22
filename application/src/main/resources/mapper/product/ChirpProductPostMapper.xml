@@ -15,7 +15,7 @@
             <if test="@org.apache.commons.lang3.StringUtils@isNotEmpty(bo.postTitle)">
                 and cpp.post_title like concat('%',#{bo.postTitle,jdbcType=VARCHAR},'%')
             </if>
-            <if test='"GOOD_PROBLEM".equals(ebo.tab.name())'>
+            <if test='"GOOD_PROBLEM".equals(bo.tab.name())'>
                 and cpp.post_good = 1
             </if>
             <if test='"FOLLOW".equals(ebo.tab.name())'>
