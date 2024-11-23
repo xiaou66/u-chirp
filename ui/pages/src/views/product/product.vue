@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import ProductTopMenu from './components/ProductTopMenu.vue'
 import { SvgIcon } from '@u-chirp/components'
-import { onMounted } from 'vue'
+import {onMounted, ref} from 'vue'
 import TagPlus from '@u-chirp/components/src/tags/TagPlus/TagPlus.vue'
 import { Button, Input, Tabs, TabsList, TabsTrigger } from '@u-chirp/shadcn'
 import ProductProblemIssue from './components/ProductProblemIssue.vue'
-import {useMemberStore} from "../../stores/userStore";
 import MemberInfoCard from "./components/MemberInfoCard.vue";
+import {useI18n} from "vue-i18n";
 
 function checkOverflow() {
   const container = document.getElementById('contentContainer')!;
@@ -20,7 +20,36 @@ function checkOverflow() {
   }
 }
 onMounted(() => checkOverflow())
+const { t } = useI18n();
+const tabs = [
+  {
+    key: 'HOT',
+    name: t('product.hot'),
+    icon: 'product-hot'
+  },
+  {
+    key: 'NEW',
+    name: t('product.new'),
+    icon: 'product-new'
+  },
+  {
+    key: 'GOOD_PROBLEM',
+    name: t('product.goodProblem'),
+    icon: 'product-goodProblem'
+  },
+  {
+    key: 'FOLLOW',
+    name: t('product.follow'),
+    icon: 'product-follow'
+  },
+]
+const searchQueryParams = ref({
+  tab: 'HOT'
+})
 
+function handleTabChange(key: string) {
+  searchQueryParams.value.tab = key;
+}
 </script>
 <template>
   <div class="grid grid-rows-[auto_1fr] min-h-screen">
@@ -33,21 +62,12 @@ onMounted(() => checkOverflow())
           <!-- 检索区域  -->
           <div class="flex justify-between items-center">
             <div class="flex gap-3">
-              <button class="btn btn-sm">
-                <svg-icon name="product-hot"></svg-icon>
-                {{$t('product.hot')}}
-              </button>
-              <button class="btn btn-sm">
-                <svg-icon name="product-new"></svg-icon>
-                {{$t('product.new')}}
-              </button>
-              <button class="btn btn-sm">
-                <svg-icon :size="16" name="product-goodProblem"></svg-icon>
-                {{$t('product.goodProblem')}}
-              </button>
-              <button class="btn btn-sm">
-                <svg-icon name="product-follow"></svg-icon>
-                {{$t('product.follow')}}
+              <button v-for="tab in tabs" :key="tab.key"
+                      class="btn btn-sm"
+                      :class="searchQueryParams.tab === tab.key ? 'btn-active' : ''"
+                      @click="handleTabChange(tab.key)">
+                <svg-icon :name="tab.icon"></svg-icon>
+                {{tab.name}}
               </button>
             </div>
             <div class="flex gap-3">
