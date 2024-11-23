@@ -3,7 +3,7 @@ import { Toaster } from "@u-chirp/shadcn";
 </script>
 
 <template>
-    <toaster />
+    <toaster  />
     <div class="dark min-h-screen">
       <router-view />
     </div>

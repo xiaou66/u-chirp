@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {type AxiosRequestConfig} from "axios";
 import type {AxiosInstance, AxiosResponse, InternalAxiosRequestConfig} from 'axios';
 
 console.log( import.meta.env)
@@ -35,26 +35,49 @@ function handleResponseInterceptor(response: AxiosResponse<any, any>) {
   if (response.headers['content-type']
     && (response.headers['content-type'].toString().includes('text/plain;')
       || response.headers['content-type'].toString().includes('application/json'))) {
-    const { data, code, msg } = response.data as ApiResult<string>;
+    const { data, code } = response.data as ApiResult<string>;
     if (code === 0) {
-      return data;
-    }
-    const { toast } = useToast();
-    if (code === 401) {
-      toast({
-        title: '登录失效, 请重新登录或授权'
-      });
-    } else {
-      if (!msg.includes("hide:")) {
-        toast({
-          title: msg
-        });
-      }
+      return Promise.resolve(data);
     }
     // 登录失败
-    return Promise.reject(response);
+    return Promise.reject(response.data);
   }
 }
 // @ts-ignore
 instance.interceptors.response.use(handleResponseInterceptor)
-export default instance;
+
+
+interface RequestOptions extends AxiosRequestConfig {
+  autoShowToast?: boolean;
+}
+
+
+export async function request<T>(method: 'GET' | 'POST',
+                                 url: string,
+                                 options: RequestOptions = { autoShowToast: true }): Promise<T> {
+  return new Promise((resolve, reject) => {
+    instance.request<T>({
+      method,
+      url,
+      ...options
+    }).then((res) => resolve(res as T))
+      .catch(e => {
+      if (Object.hasOwn(e, 'code')) {
+        const { toast } = useToast();
+        const {code, msg} = e as ApiResult<T>;
+        if (code === 401) {
+          toast({
+            title: '登录失效, 请重新登录或授权'
+          });
+        } else {
+          if (options.autoShowToast && !msg.includes("hide:")) {
+            toast({
+              title: msg
+            });
+          }
+        }
+      }
+      reject(e);
+    })
+  });
+}

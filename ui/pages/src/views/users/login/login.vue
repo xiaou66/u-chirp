@@ -13,7 +13,7 @@ import UserPassword from "./components/UserPassword.vue";
       </div>
       <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
         <form class="card-body">
-          <div class="avatar justify-center pb-8">
+          <div class="avatar justify-center pb-4">
             <div class="w-16 rounded-xl gap-10 flex">
               <img src="https://s21.ax1x.com/2024/11/08/pAyzY7j.png" />
             </div>

@@ -1,4 +1,4 @@
-import instance from "./appService";
+import { request } from "./appService";
 
 
 export interface UserPasswordLoginReq {
@@ -15,9 +15,11 @@ export interface UserPasswordLoginReq {
 /**
  * 用户密码登录
  */
-export async function userPasswordLogin(req: UserPasswordLoginReq) {
-  return await instance.post('/member/login', {
-    ...req
-  });
+export async function userPasswordLogin(req: UserPasswordLoginReq): Promise<string> {
+  return await request<string>('POST', '/member/login', {
+    data: req,
+    autoShowToast: false
+  }).then((res => res));
 }
+
 
