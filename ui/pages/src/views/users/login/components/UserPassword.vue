@@ -12,7 +12,7 @@ async function handleLogin(e: Event) {
   e.stopPropagation();
   e.preventDefault();
   if (loginInfo.value.email && loginInfo.value.password
-    && loginInfo.value.email.includes('@')) {
+    && !loginInfo.value.email.includes('@')) {
     return;
   }
   try {
@@ -26,7 +26,7 @@ async function handleLogin(e: Event) {
 <template>
   <div>
     <el-form>
-      <div>
+      <div class="color-warning-500">
         登录信息填写存在错误
       </div>
       <el-form-item :label="$t('user.email')">
