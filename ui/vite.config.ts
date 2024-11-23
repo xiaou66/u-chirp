@@ -8,6 +8,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import path from "path";
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import {fileURLToPath} from "node:url";
+import { codeInspectorPlugin } from 'code-inspector-plugin'
 // https://vite.dev/config/
 export default defineConfig({
   build: {
@@ -29,7 +30,10 @@ export default defineConfig({
       iconDirs: [path.resolve(process.cwd(), 'pages/common/assets/icons')],
       // 指定symbolId格式
       symbolId: 'icon-[dir]-[name]',
-    })
+    }),
+    codeInspectorPlugin({
+      bundler: 'vite',
+    }),
   ],
   resolve: {
     alias: {
