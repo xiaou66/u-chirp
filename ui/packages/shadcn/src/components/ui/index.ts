@@ -10,3 +10,4 @@ export * from './dropdown-menu';
 export * from './collapsible';
 export * from './separator';
 export * from './breadcrumb';
+export * from './toast';

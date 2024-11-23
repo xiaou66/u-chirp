@@ -37,7 +37,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@common': fileURLToPath(new URL('./pages/common', import.meta.url))
+      '@common': fileURLToPath(new URL('./pages/common', import.meta.url)),
+      '@app': fileURLToPath(new URL('./pages/src', import.meta.url))
     }
   },
 })
