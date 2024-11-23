@@ -55,10 +55,7 @@ function handleMenuItemClick(key: string | number) {
       </div>
       <a class="btn btn-ghost text-xl">
         <div class="flex items-center gap-2">
-          <div class="w-9 rounded-xl">
-            <img src="https://s21.ax1x.com/2024/11/08/pAyzY7j.png" />
-          </div>
-          <div>槽小圈</div>
+          <slot name="logo"></slot>
         </div>
       </a>
       <div v-if="menuPosition === 'left'"  class="navbar-start hidden lg:flex w-1/2">

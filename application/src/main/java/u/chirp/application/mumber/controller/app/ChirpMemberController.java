@@ -1,18 +1,19 @@
 package u.chirp.application.mumber.controller.app;
 
 import cn.dev33.satoken.annotation.SaIgnore;
+import cn.dev33.satoken.stp.StpUtil;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import u.boot.start.common.exception.enums.GlobalErrorCodeConstants;
 import u.boot.start.common.exception.util.ServiceExceptionUtil;
 import u.boot.start.common.pojo.R;
 import u.chirp.application.mumber.controller.app.vo.ChirpMemberThirdPartyLoginReqVO;
 import u.chirp.application.mumber.controller.app.vo.ChirpMemberLoginReqVO;
 import u.chirp.application.mumber.controller.app.vo.ChirpMemberUtoolsLoginReqVO;
+import u.chirp.application.mumber.controller.app.vo.MemberInfoGetRespVO;
+import u.chirp.application.mumber.convert.ChirpMemberConvert;
+import u.chirp.application.mumber.dal.dataobject.ChirpMemberDO;
 import u.chirp.application.mumber.dal.dataobject.ChirpSocialAccountDO;
 import u.chirp.application.mumber.enums.SocialType;
 import u.chirp.application.mumber.service.IChirpMemberAccountService;
@@ -52,7 +53,6 @@ public class ChirpMemberController {
         return R.success(successInfo.getToken());
     }
 
-
     /**
      * 第三方应用登录
      * @tags v1.0,0
@@ -90,5 +90,17 @@ public class ChirpMemberController {
                 .utoolsLogin(reqVo, chirpSocialAccount);
         chirpMemberService.loginAfter(successInfo.getMemberId());
         return R.success(successInfo.getToken());
+    }
+
+
+    /**
+     * 当前登录会员信息
+     * @tags v1.0.0
+     */
+    @GetMapping("/info")
+    public R<MemberInfoGetRespVO> memberInfo() {
+        ChirpMemberDO chirpMember = chirpMemberService.getById(StpUtil.getLoginIdAsLong());
+        MemberInfoGetRespVO respVo = ChirpMemberConvert.INSTANCE.toProductMemberInfoGetReqVO(chirpMember);
+        return R.success(respVo);
     }
 }

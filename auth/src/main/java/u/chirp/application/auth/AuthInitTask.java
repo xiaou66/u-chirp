@@ -27,7 +27,7 @@ public class AuthInitTask implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         // 获取当前类的 JAR 文件路径
         File data = FilePathUtils.getData();
-        File initFile = new File(data, "init.lock");
+        File initFile = new File(data, "init.identity");
         if (initFile.exists()) {
             return;
         }

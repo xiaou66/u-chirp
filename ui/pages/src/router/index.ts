@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import welcome from "../views/welcome/welcome.vue";
 
 const router = createRouter({
@@ -6,7 +6,7 @@ const router = createRouter({
   routes: [
     { path: '/', name: 'welcome', component: welcome },
     { path: '/login', name: 'userLogin', component: () => import('../views/users/login/login.vue') },
-    { path: '/product', name: 'product', component: () =>  import('../views/product/product.vue')}
+    { path: '/product/:productCode', name: 'product', component: () =>  import('../views/product/product.vue')}
   ],
 })
 export default router

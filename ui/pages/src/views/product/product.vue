@@ -5,6 +5,8 @@ import { onMounted } from 'vue'
 import TagPlus from '@u-chirp/components/src/tags/TagPlus/TagPlus.vue'
 import { Button, Input, Tabs, TabsList, TabsTrigger } from '@u-chirp/shadcn'
 import ProductProblemIssue from './components/ProductProblemIssue.vue'
+import {useMemberStore} from "../../stores/userStore";
+import MemberInfoCard from "./components/MemberInfoCard.vue";
 
 function checkOverflow() {
   const container = document.getElementById('contentContainer')!;
@@ -182,28 +184,7 @@ onMounted(() => checkOverflow())
               <div>
                 <div class="flex-col gap-5 hidden lg:flex">
                   <!--  个人信息   -->
-                  <div class="card-body w-80 shadow rounded-2xl  card-compact  bg-base-100 p-5">
-                    <div class="flex items-center gap-2">
-                      <div class="avatar cursor-pointer">
-                        <div class="w-10 rounded-full">
-                          <img src="https://s2.loli.net/2023/04/15/k4IbQGzMZ9v6fYN.jpg" />
-                        </div>
-                      </div>
-                      <div>ssss</div>
-                    </div>
-                    <div>
-                      <div class="stats flex items-center gap-2">
-                        <div class="stat">
-                          <div class="stat-title text-center">{{$t('user.issue')}}</div>
-                          <div class="stat-value text-sm text-center">10000</div>
-                        </div>
-                        <div class="stat">
-                          <div class="stat-title text-center">{{$t('user.beLiked')}}</div>
-                          <div class="stat-value text-sm text-center">10000</div>
-                        </div>
-                    </div>
-                    </div>
-                  </div>
+                  <MemberInfoCard />
                   <div class="card-body shadow rounded-2xl card-compact  bg-base-100 w-full p-5">
                     <div class="card-title text-sm">产品进度</div>
                     <Tabs default-value="account">

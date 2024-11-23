@@ -3,6 +3,7 @@ import type {AxiosInstance, AxiosResponse, InternalAxiosRequestConfig} from 'axi
 
 console.log( import.meta.env)
 import {useToast} from "@u-chirp/shadcn";
+import {useMemberStore} from "../stores/userStore";
 const instance = axios.create({
   timeout: 5000,    //超时配置
   withCredentials: true,  //跨域携带cookie
@@ -24,6 +25,8 @@ export interface ApiResult<T> {
    */
   msg: string;
 }
+
+
 
 
 /**
@@ -55,11 +58,20 @@ interface RequestOptions extends AxiosRequestConfig {
 export async function request<T>(method: 'GET' | 'POST',
                                  url: string,
                                  options: RequestOptions = { autoShowToast: true }): Promise<T> {
+  const { token } = useMemberStore();
+  if (token) {
+    options = {...options, ...{
+      headers: {
+        ...options.headers,
+        'chirp-token': token
+      }
+    }}
+  }
   return new Promise((resolve, reject) => {
     instance.request<T>({
       method,
       url,
-      ...options
+      ...options,
     }).then((res) => resolve(res as T))
       .catch(e => {
       if (Object.hasOwn(e, 'code')) {

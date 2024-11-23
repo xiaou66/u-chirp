@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { Input } from '@u-chirp/shadcn'
-import { userPasswordLogin } from '../../../../api'
+import { memberPasswordLoginApi } from '../../../../api'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '../../../../stores/userStore'
+import {useMemberStore, useProductStore} from '../../../../stores'
 
 const loginInfo = ref({
   email: '',
@@ -12,22 +12,28 @@ const loginInfo = ref({
 const error = ref<boolean>(false)
 
 const router = useRouter()
-const { setToken } = useUserStore()
+const { setToken } = useMemberStore();
+const { loadProductMemberInfo, loadProductInfo } = useProductStore();
 async function handleLogin(e: Event) {
   e.stopPropagation()
   e.preventDefault()
   if (!loginInfo.value.email
-    || loginInfo.value.password
+    || !loginInfo.value.password
     || !loginInfo.value.email.includes('@')) {
     error.value = true
     return
   }
   try {
-    const data = await userPasswordLogin(loginInfo.value)
+    const data = await memberPasswordLoginApi(loginInfo.value)
     error.value = false
     setToken(data).then(() => {});
-    router.replace({ name: 'product' })
-      .then(() => {});
+    // TODO productCode 参数暂时写死
+    const productCode = 'hrf7YE3v4Ue3'
+    router.replace({ name: 'product', params: { productCode }  })
+      .then(() => {
+        loadProductMemberInfo(productCode);
+        loadProductInfo(productCode);
+      });
   } catch {
     error.value = true
   }

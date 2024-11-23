@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * @folder app/帖子
  * @author xiaou
  * @date 2024/11/20
  */
