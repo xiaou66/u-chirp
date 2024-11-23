@@ -16,7 +16,9 @@ const { setToken } = useUserStore()
 async function handleLogin(e: Event) {
   e.stopPropagation()
   e.preventDefault()
-  if (loginInfo.value.email && loginInfo.value.password && !loginInfo.value.email.includes('@')) {
+  if (!loginInfo.value.email
+    || loginInfo.value.password
+    || !loginInfo.value.email.includes('@')) {
     error.value = true
     return
   }
@@ -26,9 +28,7 @@ async function handleLogin(e: Event) {
     setToken(data).then(() => {});
     router.replace({ name: 'product' })
       .then(() => {});
-    console.log(data)
   } catch {
-    console.log('error')
     error.value = true
   }
 }
