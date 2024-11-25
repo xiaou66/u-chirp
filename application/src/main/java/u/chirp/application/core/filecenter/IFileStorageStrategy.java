@@ -12,9 +12,13 @@ public interface IFileStorageStrategy {
 
     /**
      * 上传文件
+     *
      * @param file 文件
+     * @return
      */
-    default void uploadFile(MultipartFile file) {}
+    default FileUrlBO uploadFile(MultipartFile file) {
+        return null;
+    }
 
     /**
      * 生成文件链接
