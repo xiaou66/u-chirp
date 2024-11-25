@@ -1,7 +1,7 @@
 package u.chirp.application.core.filecenter;
 
 import org.springframework.web.multipart.MultipartFile;
-import u.chirp.application.core.filecenter.local.vo.FileUrlVO;
+import u.chirp.application.core.filecenter.service.bo.FileUrlBO;
 
 /**
  * @author xiaou
@@ -18,10 +18,11 @@ public interface IFileStorageStrategy {
 
     /**
      * 生成文件链接
+     *
      * @param fileId 文件 id
      * @return
      */
-    FileUrlVO generateUrl(String fileId);
+    FileUrlBO generateUrl(Long fileId);
 
 
     /**

@@ -18,8 +18,8 @@ import u.boot.start.common.utils.FilePathUtils;
 import u.chirp.application.core.filecenter.IFileStorageStrategy;
 import u.chirp.application.core.filecenter.dal.dataobejct.ChirpFileLibraryDO;
 import u.chirp.application.core.filecenter.local.vo.FilePreviewReqVO;
-import u.chirp.application.core.filecenter.local.vo.FileUrlVO;
 import u.chirp.application.core.filecenter.service.IChirpFileLibraryService;
+import u.chirp.application.core.filecenter.service.bo.FileUrlBO;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,12 +67,13 @@ public class FileLocalStorageStrategy implements IFileStorageStrategy {
     }
 
     @Override
-    public FileUrlVO generateUrl(String fileId) {
+    public FileUrlBO generateUrl(Long fileId) {
         ChirpFileLibraryDO fileLibrary = chirpFileLibraryService.getById(fileId);
-        FileUrlVO fileUrlVO = new FileUrlVO();
-        fileUrlVO.setPreviewUrl(fileLibrary.getOriginFileName());
-        fileUrlVO.setThumbnailUrl(fileLibrary.getUploadFileName());
-        return fileUrlVO;
+        FileUrlBO fileUrlBo = new FileUrlBO();
+        fileUrlBo.setFileId(fileId);
+        fileUrlBo.setPreviewUrl(fileLibrary.getOriginFileName());
+        fileUrlBo.setThumbnailUrl(fileLibrary.getUploadFileName());
+        return fileUrlBo;
     }
 
 
