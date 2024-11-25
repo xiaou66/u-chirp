@@ -37,6 +37,8 @@ public interface ChirpProductPostConvert {
 
     ProductPostBaseInfoBO convertProductPostBaseInfoBO(ChirpProductPostDO chirpProductPost);
 
+    @Mapping(target = "memberId", ignore = true)
+    @Mapping(target = "joinCollectTable", ignore = true)
     @Mapping(target = "productId", ignore = true)
     AppProductPostListBO toAppProductPostListBO(AppProductPostListGetReqVO reqVo);
 
@@ -45,5 +47,7 @@ public interface ChirpProductPostConvert {
     ChirpProductPostListRespVO toChirpProductPostListRespDO(ChirpProductPostListBO res);
 
     List<ChirpProductPostListBO> toChirpProductPostListBO(List<ChirpProductPostDO> productPostList);
+
+    @Mapping(target = "fileList", ignore = true)
     ChirpProductPostListBO toChirpProductPostListBO(ChirpProductPostDO productPostList);
 }
