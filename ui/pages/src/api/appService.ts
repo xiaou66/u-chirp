@@ -3,7 +3,7 @@ import type {AxiosInstance, AxiosResponse, InternalAxiosRequestConfig} from 'axi
 
 console.log( import.meta.env)
 import {useToast} from "@u-chirp/shadcn";
-import {useMemberStore} from "../stores/userStore";
+import {useMemberStore} from "../stores";
 const instance = axios.create({
   timeout: 5000,    //超时配置
   withCredentials: true,  //跨域携带cookie
@@ -92,4 +92,10 @@ export async function request<T>(method: 'GET' | 'POST',
       reject(e);
     })
   });
+}
+
+
+export interface PageResult<T> {
+  total: number;
+  list: T[];
 }

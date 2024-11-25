@@ -16,5 +16,8 @@ export default {
     goodProblem: '秒问',
     follow: '关注',
     createProblem: '我要吐槽',
+    bug: '缺陷',
+    idea: '想法',
+    roast: '优化'
   }
 }

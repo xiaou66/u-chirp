@@ -64,7 +64,7 @@ public class ChirpProductPostDO extends BaseDO<ChirpProductPostDO> {
     /**
      * 收藏数
      */
-    @TableField("post_collect_count")
+    @TableField("post_follow_count")
     private Long postFollowCount;
 
     /**
@@ -77,7 +77,7 @@ public class ChirpProductPostDO extends BaseDO<ChirpProductPostDO> {
      * 帖子类型
      */
     @TableField("post_type")
-    private Integer postType;
+    private String postType;
 
     /**
      * 帖子处理进度

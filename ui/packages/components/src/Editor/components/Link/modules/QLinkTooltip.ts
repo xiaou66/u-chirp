@@ -1,4 +1,4 @@
-import Quill from 'quill'
+import Quill, {type Bounds} from 'quill'
 import type { QLinkInstance } from '../types'
 import type { VNode } from 'vue'
 import Tooltip from 'quill/ui/tooltip'
@@ -11,16 +11,17 @@ import { isSelectText } from '../../../utils'
 export default class QLinkTooltip extends Tooltip {
   private readonly __qLinkInstance: QLinkInstance
 
-  private __selectRange?: Range;
+  private __selectRange?: Range
 
-  private __show: boolean = false;
+  private __show: boolean = false
 
-  private __bind: any;
+  private __bind: any
 
   constructor(quill: Quill, vNode: VNode) {
     super(quill, quill.root)
-    console.log('vNode.el', vNode.el, this.root)
+    console.log('vNode.el', vNode.el, this.root, quill.root)
     this.root = vNode.el as HTMLDivElement
+    this.boundsContainer = quill.root
     this.__qLinkInstance = vNode.component!.exposed as QLinkInstance
     this.hide()
     this.listen()
@@ -60,10 +61,10 @@ export default class QLinkTooltip extends Tooltip {
         const [leafBlot, index] = this.quill.getLeaf(range.index)
         const editRange =
           leafBlot && new Range(range.index - index, leafBlot!.value().toString().length)
-        this.edit(link, editRange, false);
+        this.edit(link, editRange, false)
       } else {
         if (this.__show) {
-          this.save();
+          this.save()
           console.log('link...........')
         }
       }
@@ -76,34 +77,42 @@ export default class QLinkTooltip extends Tooltip {
     if (range) {
       this.position(this.quill.getBounds(range.index)!)
       setTimeout(() => {
-        this.show();
-      });
+        this.show()
+      })
       console.log(this.quill.getText(range))
       this.__selectRange = range
-      this.__qLinkInstance.show(link || this.quill.getText(range), edit);
+      this.__qLinkInstance.show(link || this.quill.getText(range), edit)
     }
   }
 
   save() {
     this.hide()
     if (this.__selectRange && this.__qLinkInstance.edit.value) {
-      const { link } = this.__qLinkInstance;
+      const { link } = this.__qLinkInstance
       if (link.value) {
-        this.quill.formatText(this.__selectRange, 'link', link.value, Emitter.sources.USER);
+        this.quill.formatText(this.__selectRange, 'link', link.value, Emitter.sources.USER)
       } else {
-        this.quill.formatText(this.__selectRange.index, this.__selectRange.length, { link: false });
+        this.quill.formatText(this.__selectRange.index, this.__selectRange.length, { link: false })
       }
     }
-    this.__selectRange = undefined;
+    this.__selectRange = undefined
+  }
+
+  position(reference: Bounds): number {
+    console.log('position', reference)
+    const {left, top} = reference;
+    this.root.style.left = `${left}px`;
+    this.root.style.top = `${top + 24}px`;
+    return reference.left;
   }
 
   show() {
     super.show();
-    this.__show = true;
+    this.__show = true
   }
 
   hide() {
-    super.hide();
-    this.__show = false;
+    super.hide()
+    this.__show = false
   }
 }

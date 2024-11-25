@@ -69,6 +69,7 @@ dependencies {
 
     implementation "cn.hutool:hutool-core"
     implementation("com.google.guava:guava")
+    implementation("org.apache.commons:commons-lang3")
 
     compileOnly "org.projectlombok:lombok"
 

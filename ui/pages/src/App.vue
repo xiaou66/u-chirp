@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import { Toaster } from "@u-chirp/shadcn";
+import {useSystemStore} from "./stores";
+import {onMounted} from "vue";
+
+const systemStore = useSystemStore();
+onMounted(() => {
+  systemStore.loadLanguage('zh');
+})
 </script>
 
 <template>

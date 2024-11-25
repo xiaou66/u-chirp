@@ -18,7 +18,7 @@ public class ChirpProductMemberDO extends BaseDO<ChirpProductMemberDO> {
     /**
      * 会员 id
      */
-    @TableField("member_id")
+    @TableId("member_id")
     private Long memberId;
 
     /**

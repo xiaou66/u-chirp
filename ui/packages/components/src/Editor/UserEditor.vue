@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import {onMounted, ref} from 'vue'
 import Quill from "quill";
 import 'quill/dist/quill.snow.css';
 import Link from './components/Link';
+import type {UserEditorInstance} from "./Editor";
+const editor = ref<Quill>();
 onMounted(() => {
   Quill.register('modules/link', Link, true);
   const quill = new Quill("#editor", {
@@ -13,6 +15,7 @@ onMounted(() => {
       clipboard: false
     },
   });
+  editor.value = quill;
 
   // 自定义粘贴图片功能
   quill.root.addEventListener(
@@ -29,11 +32,14 @@ onMounted(() => {
     },
     true //注意
   );
+});
+defineExpose<UserEditorInstance>({
+  getEditor: () => editor.value!,
 })
 </script>
 
 <template>
-  <div class="light w-full h-full" >
+  <div class="light w-full h-full">
     <div id="editor" class="h-full"></div>
     <div id="toolbar" class="flex items-center justify-between">
       <div class="flex-1">
@@ -72,6 +78,8 @@ onMounted(() => {
 <style lang="less">
 .custom-container {
   position: absolute;
+  top: 0;
+  left: 0;
   z-index: 1000;
 }
 .light {

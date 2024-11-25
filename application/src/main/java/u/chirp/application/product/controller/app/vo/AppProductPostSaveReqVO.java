@@ -32,5 +32,5 @@ public class AppProductPostSaveReqVO extends AppProductPostBaseReqVO {
     /**
      * 帖子类型
      */
-    private Integer postType;
+    private String postType;
 }

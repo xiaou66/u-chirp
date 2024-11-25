@@ -14,6 +14,7 @@ dependencies {
     // 导入约束依赖
     compileOnly platform(project(':dependencies'))
     compileOnly "com.baomidou:mybatis-plus-spring-boot3-starter"
+    implementation "com.baomidou:mybatis-plus-jsqlparser"
     compileOnly("org.projectlombok:lombok") {
         transitive(false)
     }

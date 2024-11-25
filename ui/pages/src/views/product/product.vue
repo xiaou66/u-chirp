@@ -1,25 +1,18 @@
 <script lang="ts" setup>
 import ProductTopMenu from './components/ProductTopMenu.vue'
 import { SvgIcon } from '@u-chirp/components'
-import {onMounted, ref} from 'vue'
+import {nextTick, onMounted, ref} from 'vue'
 import TagPlus from '@u-chirp/components/src/tags/TagPlus/TagPlus.vue'
 import { Button, Input, Tabs, TabsList, TabsTrigger } from '@u-chirp/shadcn'
 import ProductProblemIssue from './components/ProductProblemIssue.vue'
 import MemberInfoCard from "./components/MemberInfoCard.vue";
 import {useI18n} from "vue-i18n";
+import {productPostListApiApi, type ProductPostListResp} from "../../api";
+import {useRoute} from "vue-router";
+import type {PageResult} from "../../api/appService";
+import DictData from "@u-chirp/components/src/dict/DictData.vue";
+import { ProductConstants } from "../../constant";
 
-function checkOverflow() {
-  const container = document.getElementById('contentContainer')!;
-  const button = document.getElementById('showMoreBtn')!;
-
-  // Check if the content overflows the container
-  if (container.scrollHeight > container.clientHeight) {
-    button.style.display = 'block'; // Show the button if overflow
-  } else {
-    button.style.display = 'none'; // Hide the button if no overflow
-  }
-}
-onMounted(() => checkOverflow())
 const { t } = useI18n();
 const tabs = [
   {
@@ -34,7 +27,7 @@ const tabs = [
   },
   {
     key: 'GOOD_PROBLEM',
-    name: t('product.goodProblem'),
+    name: t('product.goodIssue'),
     icon: 'product-goodProblem'
   },
   {
@@ -44,12 +37,47 @@ const tabs = [
   },
 ]
 const searchQueryParams = ref({
+  pageSize: 10,
+  pageNo: 1,
   tab: 'HOT'
 })
 
 function handleTabChange(key: string) {
   searchQueryParams.value.tab = key;
 }
+const route = useRoute();
+const listData = ref<PageResult<ProductPostListResp>>({
+  total: 0,
+  list: [],
+});
+
+
+const itemRefs = ref<HTMLDivElement[]>([]);
+
+function checkOverflow(container: HTMLDivElement) {
+  const button = container.querySelector('.showMoreBtn')! as HTMLButtonElement;
+  if (container.scrollHeight > container.clientHeight) {
+    button.style.display = 'block'; // Show the button if overflow
+  } else {
+    button.style.display = 'none'; // Hide the button if no overflow
+  }
+}
+function requestList() {
+  productPostListApiApi({
+    productCode: route.params.productCode as string,
+    tab: searchQueryParams.value.tab as any,
+  }).then(res => {
+    listData.value = res
+    nextTick(() => {
+      itemRefs.value.map(el => {
+        checkOverflow(el);
+      })
+    });
+  })
+}
+onMounted(() => {
+  requestList()
+})
 </script>
 <template>
   <div class="grid grid-rows-[auto_1fr] min-h-screen">
@@ -79,7 +107,7 @@ function handleTabChange(key: string) {
               </div>
               <ProductProblemIssue>
                 <template #trigger>
-                  <Button>{{$t('product.createProblem')}}</Button>
+                  <Button>{{$t('product.createIssue')}}</Button>
                 </template>
               </ProductProblemIssue>
             </div>
@@ -89,73 +117,42 @@ function handleTabChange(key: string) {
             <div class="h-full grid grid-cols-[1fr_auto] gap-2">
               <div class="flex flex-col gap-5">
                 <!--          skeleton-->
-                <div class="rounded-xl shadow p-4 skeleton bg-base-100">
+                <div v-for="data in listData.list" :key="data.postId"
+                     class="rounded-xl shadow p-4 skeleton bg-base-100">
                   <div class="flex mb-3 justify-between">
                     <div class="flex gap-2">
-                      <tag-plus :icon="{ name: 'product-status-loading', svgClass: 'animate-spin'}"
-                                tag-name="进行中"
-                                type="primary" />
-                      <tag-plus :icon="{ name: 'product-status-check' }"
-                                tag-name="已处理"
-                                type="success" />
-                      <tag-plus :icon="{ name: 'product-status-wait' }"
-                                tag-name="待处理"
-                                type="warning" />
-
-                      <tag-plus :icon="{ name: 'product-status-plan' }"
-                                tag-name="计划中"
-                                type="primary" />
-                      <tag-plus :icon="{ name: 'product-status-reject' }"
-                                tag-name="不采纳"
-                                type="info" />
-                      <tag-plus :icon="{ name: 'product-status-repeat' }"
-                                tag-name="重复"
-                                type="info" />
+                      <!--  产品阶段状态  -->
+                      <DictData :dict-type="ProductConstants.post.post_status"
+                                :value="data.postHandleProgress">
+                        <template #default="{ dict }">
+                          <tag-plus v-bind="dict.meta.tag"
+                                    :tag-name="dict.label" />
+                        </template>
+                      </DictData>
                     </div>
                     <div class="flex gap-2">
-                      <tag-plus :icon="{ name: 'product-bug' }"
-                                tag-name="缺陷"
-                                type="danger" round />
-                      <tag-plus :icon="{ name: 'product-idea' }"
-                                tag-name="缺陷"
-                                type="primary" round />
-                      <tag-plus :icon="{ name: 'default-rocket' }"
-                                tag-name="优化"
-                                type="primary" round />
-
-                      <tag-plus :icon="{ name: 'product-pin' }"
-                                tag-name="置顶"
+                      <!--   帖子类型   -->
+                      <DictData :dict-type="ProductConstants.post.post_type"
+                                :value="data.postType">
+                        <template #default="{ dict }">
+                          <tag-plus v-bind:="dict.meta.tag"
+                                    :tag-name="dict.label" />
+                        </template>
+                      </DictData>
+                      <tag-plus v-if="data.postTop"
+                                :icon="{ name: 'product-pin' }"
+                                :tag-name="t('common.top')"
                                 type="primary"
                                 effect="plain"
                                 round />
                     </div>
                   </div>
-                  <div class="font-bold">
-                    我是一个标题呀呀呀呀呀呀呀呀呀呀呀呀呀呀呀呀呀呀
+                  <div v-if="data.postTitle" class="font-bold">
+                    {{data.postTitle}}
                   </div>
-                  <div id="contentContainer" class="max-h-64 overflow-y-hidden relative">
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <p>1.我要吐槽</p>
-                    <button id="showMoreBtn"
-                            class="text-sm hover:bg-gray-200 absolute bottom-0 left-0 right-0 bg-gray-100 p-2 text-center rounded">
+                  <div ref="itemRefs" class="max-h-64 overflow-y-hidden relative">
+                    <div v-html="data.postRawHtml"></div>
+                    <button class="showMoreBtn text-sm hover:bg-gray-200 absolute bottom-0 left-0 right-0 bg-gray-100 p-2 text-center rounded">
                       点击查看更多
                     </button>
                   </div>
@@ -180,25 +177,16 @@ function handleTabChange(key: string) {
                       <div class="flex items-center gap-1 cursor-pointer">
                         <svg-icon svg-class="text-lg" name="product-thumbsUp"></svg-icon>
 <!--                        <svg-icon svg-class="text-lg" color="#2563eb" name="product-thumbsUpFill"></svg-icon>-->
-                        100
+                        {{ data.postThumbsUpCount }}
                       </div>
-                      <el-tooltip content="关注数">
+                      <el-tooltip :content="t('product.follow')">
                         <div class="flex items-center gap-1 cursor-pointer">
                           <svg-icon svg-class="text-lg"  name="product-follow"></svg-icon>
-                          100
+                          {{ data.postFollowCount }}
                         </div>
                       </el-tooltip>
                     </div>
                   </div>
-                </div>
-                <div class="h-64 rounded-xl shadow p-2  bg-base-100">
-                  <div class="text-xl"></div>
-                </div>
-                <div class="h-64 rounded-xl shadow p-2  bg-base-100">
-                  <div class="text-xl"></div>
-                </div>
-                <div class="h-64 rounded-xl shadow p-2  bg-base-100">
-                  <div class="text-xl"></div>
                 </div>
               </div>
               <div>
@@ -228,5 +216,9 @@ function handleTabChange(key: string) {
   </div>
 
 </template>
+<style lang="less">
+//@import "mdmdt.css";
+</style>
 <style lang="less" scoped>
+//@import "mdmdt.css";
 </style>

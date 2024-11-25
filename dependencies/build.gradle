@@ -40,6 +40,7 @@ dependencies {
 
         // 数据库
         api "com.baomidou:mybatis-plus-spring-boot3-starter:$mybatisPlus"
+        api "com.baomidou:mybatis-plus-jsqlparser:$mybatisPlus"
         // 弹性设计模式的轻量级库: 支持熔断器、限流、重试、隔离和缓存等功能
         api "io.github.resilience4j:resilience4j-spring-boot3:$resilience4jVersion"
         api "io.github.resilience4j:resilience4j-reactor:$resilience4jVersion"
