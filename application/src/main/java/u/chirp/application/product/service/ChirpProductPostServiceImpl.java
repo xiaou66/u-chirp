@@ -25,6 +25,7 @@ import u.chirp.application.product.service.bo.AppProductPostListBO;
 import u.chirp.application.product.service.bo.ChirpProductPostListBO;
 import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -163,6 +164,9 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
         List<ChirpProductPostListBO> result = ChirpProductPostConvert.INSTANCE
                 .toChirpProductPostListBO(productPostList);
         Map<Long, List<FileUrlVO>> refId2FileUrlVO = chirpFileManagerService.batchGetFile(ProductFileManagerCodeConstant.POST_IMAGE, ids);
+        for (ChirpProductPostListBO productPost : result) {
+            productPost.setFileList(refId2FileUrlVO.getOrDefault(productPost.getPostId(), Collections.emptyList()));
+        }
         return result;
     }
 
