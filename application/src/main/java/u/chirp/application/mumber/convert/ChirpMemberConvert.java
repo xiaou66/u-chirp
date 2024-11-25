@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import u.chirp.application.mumber.controller.app.vo.MemberInfoGetRespVO;
 import u.chirp.application.mumber.dal.dataobject.ChirpMemberDO;
+import u.chirp.application.mumber.service.bo.ChirpMemberBaseInfoBO;
 import u.chirp.application.mumber.service.bo.GenerateMemberBO;
 
 /**
@@ -27,4 +28,6 @@ public interface ChirpMemberConvert {
     ChirpMemberDO convert(GenerateMemberBO generateMemberBO);
 
     MemberInfoGetRespVO toProductMemberInfoGetReqVO(ChirpMemberDO chirpMember);
+
+    ChirpMemberBaseInfoBO toChirpMemberBaseInfoBO(ChirpMemberDO chirpMember);
 }

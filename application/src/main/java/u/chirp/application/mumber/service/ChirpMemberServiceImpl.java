@@ -1,9 +1,11 @@
 package u.chirp.application.mumber.service;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
 import com.google.common.hash.Hashing;
 import org.springframework.stereotype.Service;
 import u.chirp.application.mumber.MemberErrorCodeConstants;
@@ -12,10 +14,16 @@ import u.chirp.application.mumber.convert.ChirpMemberConvert;
 import u.chirp.application.mumber.dal.dataobject.ChirpMemberDO;
 import u.chirp.application.mumber.dal.mysql.ChirpMemberMapper;
 import u.chirp.application.mumber.enums.MemberStatus;
+import u.chirp.application.mumber.service.bo.ChirpMemberBaseInfoBO;
 import u.chirp.application.mumber.service.bo.GenerateMemberBO;
 import u.chirp.application.mumber.service.bo.MemberLoginSuccessInfoBO;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static u.boot.start.common.exception.util.ServiceExceptionUtil.exception;
 
@@ -56,6 +64,21 @@ public class ChirpMemberServiceImpl extends ServiceImpl<ChirpMemberMapper, Chirp
     @Override
     public void loginAfter(Long memberId) {
 
+    }
+
+    @Override
+    public Map<Long, ChirpMemberBaseInfoBO> batchGetMemberBaseInfo(Collection<Long> memberIds) {
+        if (CollUtil.isEmpty(memberIds)) {
+            return Map.of();
+        }
+
+        return CollUtil.split(CollUtil.newHashSet(memberIds), 30).stream()
+                .map(memeberIdList -> baseMapper.selectList(Wrappers.lambdaQuery(ChirpMemberDO.class)
+                        .select(ChirpMemberDO::getMemberId, ChirpMemberDO::getMemberNickname, ChirpMemberDO::getMemberAvatar)
+                        .in(ChirpMemberDO::getMemberId, memeberIdList))
+                )
+                .flatMap(Collection::stream)
+                .collect(Collectors.toMap(ChirpMemberDO::getMemberId, ChirpMemberConvert.INSTANCE::toChirpMemberBaseInfoBO));
     }
 
     @Override

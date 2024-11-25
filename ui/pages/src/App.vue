@@ -5,6 +5,7 @@ import {onMounted} from "vue";
 
 const systemStore = useSystemStore();
 onMounted(() => {
+  window.dictDataLock =[]
   systemStore.loadLanguage('zh');
 })
 </script>

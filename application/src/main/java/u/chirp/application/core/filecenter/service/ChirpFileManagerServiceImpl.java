@@ -29,6 +29,7 @@ public class ChirpFileManagerServiceImpl extends ServiceImpl<ChirpFileManagerMap
     @Resource
     @Lazy
     private IChirpFileLibraryService chirpFileLibraryService;
+
     /**
      * 批量获取关联文件
      *

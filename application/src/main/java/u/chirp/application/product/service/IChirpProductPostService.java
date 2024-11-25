@@ -35,8 +35,18 @@ public interface IChirpProductPostService extends IService<ChirpProductPostDO> {
      */
     void thumbsUp(AppProductPostThumbsUpReqVO reqVo, Long productId);
 
+    /**
+     * 获取单个帖子基本信息
+     * @param postId
+     * @return
+     */
     ProductPostBaseInfoBO getPostBaseInfo(Long postId);
 
+    /**
+     * 关注
+     * @param reqVo
+     * @param productId
+     */
     void follow(AppProductPostFollowReqVO reqVo, Long productId);
 
     AppProductPostListBO payloadQueryParam(AppProductPostListGetReqVO reqVo);

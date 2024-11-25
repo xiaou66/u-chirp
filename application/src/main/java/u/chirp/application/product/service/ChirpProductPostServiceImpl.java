@@ -7,11 +7,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import u.chirp.application.core.filecenter.FileStorageStrategyHolder;
 import u.chirp.application.core.filecenter.local.vo.FileUrlVO;
 import u.chirp.application.core.filecenter.service.IChirpFileManagerService;
 import u.chirp.application.mumber.enums.CollectType;
 import u.chirp.application.mumber.service.IChirpMemberCollectService;
+import u.chirp.application.mumber.service.IChirpMemberService;
+import u.chirp.application.mumber.service.bo.ChirpMemberBaseInfoBO;
 import u.chirp.application.product.constant.ProductFileManagerCodeConstant;
 import u.chirp.application.product.controller.app.vo.AppProductPostFollowReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostListGetReqVO;
@@ -25,6 +26,7 @@ import u.chirp.application.product.service.bo.AppProductPostListBO;
 import u.chirp.application.product.service.bo.ChirpProductPostListBO;
 import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +54,9 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
 
     @Resource
     private IChirpFileManagerService chirpFileManagerService;
+
+    @Resource
+    private IChirpMemberService chirpMemberService;
 
     @Override
     public Long savePost(AppProductPostSaveReqVO reqVo, Long productId) {
@@ -161,11 +166,20 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
     @Override
     public List<ChirpProductPostListBO> payloadResult(List<Long> ids) {
         List<ChirpProductPostDO> productPostList = baseMapper.selectByIds(ids);
-        List<ChirpProductPostListBO> result = ChirpProductPostConvert.INSTANCE
-                .toChirpProductPostListBO(productPostList);
+
         Map<Long, List<FileUrlVO>> refId2FileUrlVO = chirpFileManagerService.batchGetFile(ProductFileManagerCodeConstant.POST_IMAGE, ids);
-        for (ChirpProductPostListBO productPost : result) {
-            productPost.setFileList(refId2FileUrlVO.getOrDefault(productPost.getPostId(), Collections.emptyList()));
+        List<Long> memberIds = productPostList.stream()
+                .map(ChirpProductPostDO::getCreator)
+                .distinct()
+                .toList();
+        Map<Long, ChirpMemberBaseInfoBO> memberId2Info = chirpMemberService.batchGetMemberBaseInfo(memberIds);
+        List<ChirpProductPostListBO> result = new ArrayList<>();
+        for (ChirpProductPostDO productPost : productPostList) {
+            ChirpProductPostListBO data = ChirpProductPostConvert.INSTANCE
+                    .toChirpProductPostListBO(productPost);
+            result.add(data);
+            data.setFileList(refId2FileUrlVO.getOrDefault(productPost.getPostId(), Collections.emptyList()));
+            data.setMemberInfo(memberId2Info.get(productPost.getCreator()));
         }
         return result;
     }

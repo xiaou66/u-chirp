@@ -1,4 +1,4 @@
-import {type PageResult, request} from "../appService";
+import {type pageParam, type PageResult, request} from "../appService";
 import type {ProductInfoResp} from "./productApi";
 
 export interface ProductPostSaveReq {
@@ -44,7 +44,7 @@ export async function productPostPostSaveApi(data: ProductPostSaveReq) {
   });
 }
 
-export interface ProductPostListReq {
+export interface ProductPostListReq extends pageParam {
   productCode: string;
   postTitle?: string;
   tab?: 'HOT' | 'NEW' | 'GOOD_PROBLEM' | 'FOLLOW'
@@ -101,7 +101,7 @@ export interface ProductPostListResp {
  * 帖子列表
  * @param params
  */
-export async function productPostListApiApi(params: ProductPostListReq) {
+export async function productPostListApi(params: ProductPostListReq) {
   return await request<PageResult<ProductPostListResp>>('GET', '/product/post/list', {
     params
   });

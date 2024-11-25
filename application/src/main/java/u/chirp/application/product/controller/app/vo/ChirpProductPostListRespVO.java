@@ -1,6 +1,11 @@
 package u.chirp.application.product.controller.app.vo;
 
 import lombok.Data;
+import u.chirp.application.core.filecenter.local.vo.FileUrlVO;
+import u.chirp.application.mumber.controller.app.vo.ChirpMemberBaseInfoVO;
+import u.chirp.application.mumber.service.bo.ChirpMemberBaseInfoBO;
+
+import java.util.List;
 
 /**
  * @author xiaou
@@ -52,4 +57,14 @@ public class ChirpProductPostListRespVO {
      * 帖子处理进度
      */
     private Integer postHandleProgress;
+
+    /**
+     * 文件列表
+     */
+    private List<FileUrlVO> fileList;
+
+    /**
+     * 会员信息
+     */
+    private ChirpMemberBaseInfoVO memberInfo;
 }

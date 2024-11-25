@@ -46,8 +46,8 @@ public interface ChirpProductPostConvert {
 
     ChirpProductPostListRespVO toChirpProductPostListRespDO(ChirpProductPostListBO res);
 
-    List<ChirpProductPostListBO> toChirpProductPostListBO(List<ChirpProductPostDO> productPostList);
 
+    @Mapping(target = "memberInfo", ignore = true)
     @Mapping(target = "fileList", ignore = true)
     ChirpProductPostListBO toChirpProductPostListBO(ChirpProductPostDO productPostList);
 }

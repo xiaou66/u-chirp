@@ -16,7 +16,6 @@ async function initDict() {
   } else {
     dict.value = undefined;
   }
-  console.log(dict.value)
 }
 watch(
   () => props.value,

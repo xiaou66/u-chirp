@@ -99,3 +99,8 @@ export interface PageResult<T> {
   total: number;
   list: T[];
 }
+
+export interface pageParam {
+  page?: number;
+  pageSize?: number;
+}

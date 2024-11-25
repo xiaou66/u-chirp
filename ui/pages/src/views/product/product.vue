@@ -7,7 +7,7 @@ import { Button, Input, Tabs, TabsList, TabsTrigger } from '@u-chirp/shadcn'
 import ProductProblemIssue from './components/ProductProblemIssue.vue'
 import MemberInfoCard from "./components/MemberInfoCard.vue";
 import {useI18n} from "vue-i18n";
-import {productPostListApiApi, type ProductPostListResp} from "../../api";
+import {productPostListApi, type ProductPostListResp} from "../../api";
 import {useRoute} from "vue-router";
 import type {PageResult} from "../../api/appService";
 import DictData from "@u-chirp/components/src/dict/DictData.vue";
@@ -63,7 +63,8 @@ function checkOverflow(container: HTMLDivElement) {
   }
 }
 function requestList() {
-  productPostListApiApi({
+  productPostListApi({
+    pageSize: 100,
     productCode: route.params.productCode as string,
     tab: searchQueryParams.value.tab as any,
   }).then(res => {
@@ -151,7 +152,9 @@ onMounted(() => {
                     {{data.postTitle}}
                   </div>
                   <div ref="itemRefs" class="max-h-64 overflow-y-hidden relative">
-                    <div v-html="data.postRawHtml"></div>
+                    <div class="post-container">
+                      <div v-html="data.postRawHtml"></div>
+                    </div>
                     <button class="showMoreBtn text-sm hover:bg-gray-200 absolute bottom-0 left-0 right-0 bg-gray-100 p-2 text-center rounded">
                       点击查看更多
                     </button>
@@ -217,7 +220,9 @@ onMounted(() => {
 
 </template>
 <style lang="less">
-//@import "mdmdt.css";
+.post-container {
+  @import "@u-chirp/components/src/assets/poststyle";
+}
 </style>
 <style lang="less" scoped>
 //@import "mdmdt.css";

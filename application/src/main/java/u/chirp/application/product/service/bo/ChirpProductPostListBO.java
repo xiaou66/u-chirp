@@ -2,6 +2,7 @@ package u.chirp.application.product.service.bo;
 
 import lombok.Data;
 import u.chirp.application.core.filecenter.local.vo.FileUrlVO;
+import u.chirp.application.mumber.service.bo.ChirpMemberBaseInfoBO;
 
 import java.util.List;
 
@@ -60,4 +61,6 @@ public class ChirpProductPostListBO {
      * 文件列表
      */
     private List<FileUrlVO> fileList;
+
+    private ChirpMemberBaseInfoBO memberInfo;
 }

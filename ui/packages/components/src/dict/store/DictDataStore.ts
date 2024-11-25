@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useI18n } from "vue-i18n";
+import { MutexLock } from "@u-chirp/utils";
 
 export interface DictDataItem {
   sort: number;
@@ -11,11 +12,11 @@ export interface DictDataItem {
   cssClass: string;
   meta: Record<string, any>;
 }
-
+const dictGetLock = new MutexLock();
 export const useDictDataStore = defineStore('DictDataStore', () => {
-  const dictTree = ref<Record<string, DictDataItem[]>>({})
+  const dictTree = ref<Record<string, DictDataItem[]>>({});
 
-  async function getDictData(dictType: string) {
+  async function loadDictData(dictType: string) {
     // TODO 这里要优化
     const data = await fetch(
       `${import.meta.env.VITE_API_BASE_URL}/app/dict/getDictList?dictType=${dictType}`,
@@ -26,14 +27,15 @@ export const useDictDataStore = defineStore('DictDataStore', () => {
           item.meta = JSON.parse(item.meta)
           return item
         })
-      })
-    dictTree.value[dictType] = data
+      });
+    dictTree.value[dictType] = data;
   }
+
 
   const { t } = useI18n();
   async function getDictItemInner(dictType: string, value: any, first = true) {
     const dictTreeValue = dictTree.value
-    if (dictTreeValue[dictType] && dictTreeValue[dictType].length > 0) {
+    if (dictTreeValue[dictType]) {
       const dictItem = dictTreeValue[dictType].find(
         (item) => item.value.toString() === value.toString(),
       )
@@ -50,17 +52,22 @@ export const useDictDataStore = defineStore('DictDataStore', () => {
     if (!first) {
       return undefined
     }
-    await getDictData(dictType)
+    await loadDictData(dictType);
     return await getDictItemInner(dictType, value, false)
-  }
 
+  }
   async function getDictItem(dictType: string, value: any): Promise<DictDataItem | undefined> {
-    return getDictItemInner(dictType, value)
+    const release = await dictGetLock.tryAcquire(dictType);
+    try {
+      return await getDictItemInner(dictType, value);
+    }finally {
+      release();
+    }
   }
 
   return {
     dictTree,
-    getDictData,
+    getDictData: loadDictData,
     getDictItem,
   }
 })

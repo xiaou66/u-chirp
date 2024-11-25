@@ -40,7 +40,7 @@ defineExpose<UserEditorInstance>({
 
 <template>
   <div class="light w-full h-full">
-    <div id="editor" class="h-full"></div>
+    <div id="editor" class="h-full post-edit-container"></div>
     <div id="toolbar" class="flex items-center justify-between">
       <div class="flex-1">
         <div class="ql-formats">
@@ -76,6 +76,15 @@ defineExpose<UserEditorInstance>({
 </template>
 
 <style lang="less">
+.post-edit-container {
+  @import "@u-chirp/components/src/assets/poststyle";
+  ol {
+    padding-left: 10px !important;
+  }
+  ul {
+    padding-left: 12px !important;
+  }
+}
 .custom-container {
   position: absolute;
   top: 0;
@@ -91,6 +100,33 @@ defineExpose<UserEditorInstance>({
   }
   .ql-snow .ql-tooltip {
     z-index: 100;
+  }
+  .ql-editor {
+    padding: 10px;
+  }
+  .ql-editor li.ql-indent-1:not(.ql-direction-rtl) {
+    padding-left: 2rem;
+  }
+  .ql-editor li.ql-indent-2:not(.ql-direction-rtl) {
+    padding-left: 4rem;
+  }
+  .ql-editor li.ql-indent-3:not(.ql-direction-rtl) {
+    padding-left: 6rem;
+  }
+  .ql-editor li.ql-indent-4:not(.ql-direction-rtl) {
+    padding-left: 8rem;
+  }
+  .ql-editor li.ql-indent-5:not(.ql-direction-rtl) {
+    padding-left: 10rem;
+  }
+  .ql-editor li.ql-indent-6:not(.ql-direction-rtl) {
+    padding-left: 12rem;
+  }
+  .ql-editor li.ql-indent-7:not(.ql-direction-rtl) {
+    padding-left: 14rem;
+  }
+  .ql-editor li.ql-indent-8:not(.ql-direction-rtl) {
+    padding-left: 16rem;
   }
   .ql-toolbar {
     position: absolute;
