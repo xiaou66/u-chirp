@@ -18,6 +18,7 @@ ext {
     hutool = "5.8.33"
     uSdk = "0.0.3"
     tika = "2.9.2"
+    thumbnailator="0.4.20"
 }
 
 javaPlatform {
@@ -64,6 +65,9 @@ dependencies {
         api "org.apache.tika:tika-core:$tika"
 
         api "io.github.xiaou66:u-sdk-stater:$uSdk"
+
+        api "net.coobird:thumbnailator:$thumbnailator"
+
     }
 }
 

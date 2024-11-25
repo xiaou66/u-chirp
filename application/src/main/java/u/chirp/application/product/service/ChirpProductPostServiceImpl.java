@@ -7,8 +7,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import u.chirp.application.core.filecenter.FileStorageStrategyHolder;
+import u.chirp.application.core.filecenter.local.vo.FileUrlVO;
+import u.chirp.application.core.filecenter.service.IChirpFileManagerService;
 import u.chirp.application.mumber.enums.CollectType;
 import u.chirp.application.mumber.service.IChirpMemberCollectService;
+import u.chirp.application.product.constant.ProductFileManagerCodeConstant;
 import u.chirp.application.product.controller.app.vo.AppProductPostFollowReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostListGetReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
@@ -22,6 +26,7 @@ import u.chirp.application.product.service.bo.ChirpProductPostListBO;
 import u.chirp.application.product.service.bo.ProductPostBaseInfoBO;
 
 import java.util.List;
+import java.util.Map;
 
 import static u.boot.start.common.exception.enums.GlobalErrorCodeConstants.REPEATED_REQUESTS;
 import static u.boot.start.common.exception.util.ServiceExceptionUtil.exception;
@@ -44,6 +49,8 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
     @Resource
     private IChirpProductService chirpProductService;
 
+    @Resource
+    private IChirpFileManagerService chirpFileManagerService;
 
     @Override
     public Long savePost(AppProductPostSaveReqVO reqVo, Long productId) {
@@ -155,6 +162,7 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
         List<ChirpProductPostDO> productPostList = baseMapper.selectByIds(ids);
         List<ChirpProductPostListBO> result = ChirpProductPostConvert.INSTANCE
                 .toChirpProductPostListBO(productPostList);
+        Map<Long, List<FileUrlVO>> refId2FileUrlVO = chirpFileManagerService.batchGetFile(ProductFileManagerCodeConstant.POST_IMAGE, ids);
         return result;
     }
 

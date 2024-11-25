@@ -8,6 +8,18 @@ import lombok.Data;
  */
 @Data
 public class FileUrlVO {
+    /**
+     * 缩略图
+     */
     private String thumbnailUrl;
+
+    /**
+     * 预览图
+     */
     private String previewUrl;
+
+    /**
+     * 文件类型
+     */
+    private String fileType;
 }

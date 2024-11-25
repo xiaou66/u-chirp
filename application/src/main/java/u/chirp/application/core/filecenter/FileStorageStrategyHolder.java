@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * @date 2024/11/21
  */
 @Component
-public class FileManagerHolder {
+public class FileStorageStrategyHolder {
     @Resource
     private Map<String, IFileStorageStrategy> handlerMap = new HashMap<>();
 
