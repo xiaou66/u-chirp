@@ -13,6 +13,8 @@ import type {PageResult} from "../../api/appService";
 import DictData from "@u-chirp/components/src/dict/DictData.vue";
 import { ProductConstants } from "../../constant";
 import dayjs from "dayjs";
+import {formatUserTime} from "@u-chirp/utils";
+import BackTop from "@u-chirp/components/src/BackTop/BackTop.vue";
 
 const { t } = useI18n();
 const tabs = [
@@ -77,16 +79,20 @@ function requestList() {
     });
   })
 }
+
+function load() {
+  console.log('1111')
+}
 onMounted(() => {
   requestList()
-})
+});
 </script>
 <template>
-  <div class="grid grid-rows-[auto_1fr] min-h-screen">
-    <div>
-      <ProductTopMenu />
-    </div>
-    <div class="flex-1 bg-opacity-60 bg-base-200 flex justify-center">
+  <BackTop />
+  <div v-infinite-scroll="load" class="grid min-h-screen"
+       style="grid-template-rows: 70px calc(100vh - 70px)">
+    <ProductTopMenu />
+    <div class="flex-1 bg-opacity-60 bg-base-200 flex justify-center overflow-y-auto">
       <div class="mt-6  min-w-full flex justify-center">
         <div class="w-10/12 grid grid-rows-[auto_1fr] h-full">
           <!-- 检索区域  -->
@@ -168,13 +174,13 @@ onMounted(() => {
                         </div>
                       </div>
                       <div class="flex flex-col gap-1">
-                        <div class="flex gap-2">
-                          <div>{{data.memberInfo.memberNickname}}</div>
+                        <div class="flex gap-2 text-xs text-base-content">
+                          <div class="font-medium">{{data.memberInfo.memberNickname}}</div>
                           <div>
 <!--                            <el-tag type="danger" size="small">超级管理员</el-tag>-->
                           </div>
                         </div>
-                        <div class="text-xs">{{dayjs(data.createTime).format("YYYY-MM-DD HH:mm")}}</div>
+                        <div class="text-xs text-base-content font-medium">{{formatUserTime(data.createTime)}}</div>
                       </div>
                     </div>
                     <div class="flex gap-2">
