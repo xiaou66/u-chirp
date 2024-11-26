@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { SvgIcon } from "@u-chirp/components";
-import { onMounted, onUnmounted, ref } from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import type { BackTopProps } from "./type";
 
 
@@ -9,14 +9,16 @@ const props = withDefaults(defineProps<BackTopProps>(), {
 });
 
 const show = ref(false);
+const elementTarget = computed<HTMLElement>(() => props.target || document.body);
 
-function handleWheel(e: WheelEvent) {
-  let scrollHeight = window.scrollY || document.documentElement.scrollTop;
+function handleWheel() {
+  const value = elementTarget.value;
+  const scrollHeight = value.scrollTop;
   show.value = scrollHeight > props.visibilityHeight;
 }
 
 onMounted(() => {
-  window.document.addEventListener('wheel', handleWheel);
+  elementTarget.value.addEventListener('wheel', handleWheel);
 });
 
 onUnmounted(() => {
@@ -24,7 +26,7 @@ onUnmounted(() => {
 });
 
 function handleBackTop() {
-  window.scrollTo({
+  elementTarget.value.scrollTo({
     top: 0,
     behavior: 'smooth'
   });

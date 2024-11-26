@@ -79,7 +79,7 @@ function requestList() {
     });
   })
 }
-
+const postContainerRef = ref<HTMLElement>();
 function load() {
   console.log('1111')
 }
@@ -88,11 +88,13 @@ onMounted(() => {
 });
 </script>
 <template>
-  <BackTop />
-  <div v-infinite-scroll="load" class="grid min-h-screen"
+  <BackTop :target="postContainerRef"  />
+  <div class="grid min-h-screen"
        style="grid-template-rows: 70px calc(100vh - 70px)">
     <ProductTopMenu />
-    <div class="flex-1 bg-opacity-60 bg-base-200 flex justify-center overflow-y-auto">
+    <div ref="postContainerRef"
+         v-infinite-scroll="load"
+         class="flex-1 bg-opacity-60 bg-base-200 flex justify-center overflow-y-auto">
       <div class="mt-6  min-w-full flex justify-center">
         <div class="w-10/12 grid grid-rows-[auto_1fr] h-full">
           <!-- 检索区域  -->
