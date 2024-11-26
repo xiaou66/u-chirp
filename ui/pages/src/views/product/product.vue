@@ -12,9 +12,8 @@ import {useRoute} from "vue-router";
 import type {PageResult} from "../../api/appService";
 import DictData from "@u-chirp/components/src/dict/DictData.vue";
 import { ProductConstants } from "../../constant";
-import dayjs from "dayjs";
-import {formatUserTime} from "@u-chirp/utils";
 import BackTop from "@u-chirp/components/src/BackTop/BackTop.vue";
+import {formatUserTime} from "@u-chirp/utils";
 
 const { t } = useI18n();
 const tabs = [
