@@ -95,6 +95,12 @@ export interface ProductPostListResp {
    * 帖子处理进度
    */
   postHandleProgress?: number;
+  createTime: string;
+  memberInfo: {
+    memberId: string;
+    memberNickname: string;
+    memberAvatar: string;
+  }
 }
 
 /**

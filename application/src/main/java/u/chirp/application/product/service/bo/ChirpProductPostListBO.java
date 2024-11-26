@@ -1,9 +1,11 @@
 package u.chirp.application.product.service.bo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import u.chirp.application.core.filecenter.local.vo.FileUrlVO;
 import u.chirp.application.mumber.service.bo.ChirpMemberBaseInfoBO;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -63,4 +65,9 @@ public class ChirpProductPostListBO {
     private List<FileUrlVO> fileList;
 
     private ChirpMemberBaseInfoBO memberInfo;
+
+    /**
+     * 发布时间
+     */
+    private LocalDateTime createTime;
 }

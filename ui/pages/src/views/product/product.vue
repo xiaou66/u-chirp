@@ -12,6 +12,7 @@ import {useRoute} from "vue-router";
 import type {PageResult} from "../../api/appService";
 import DictData from "@u-chirp/components/src/dict/DictData.vue";
 import { ProductConstants } from "../../constant";
+import dayjs from "dayjs";
 
 const { t } = useI18n();
 const tabs = [
@@ -163,17 +164,17 @@ onMounted(() => {
                     <div class="flex items-center gap-2">
                       <div class="avatar cursor-pointer">
                         <div class="w-10 rounded-full">
-                          <img src="https://s2.loli.net/2023/04/15/k4IbQGzMZ9v6fYN.jpg" />
+                          <img :src="data.memberInfo.memberAvatar" />
                         </div>
                       </div>
                       <div class="flex flex-col gap-1">
                         <div class="flex gap-2">
-                          <div>xiaou</div>
+                          <div>{{data.memberInfo.memberNickname}}</div>
                           <div>
-                            <el-tag type="danger" size="small">超级管理员</el-tag>
+<!--                            <el-tag type="danger" size="small">超级管理员</el-tag>-->
                           </div>
                         </div>
-                        <div class="text-xs">04月17日 20:06</div>
+                        <div class="text-xs">{{dayjs(data.createTime).format("YYYY-MM-DD HH:mm")}}</div>
                       </div>
                     </div>
                     <div class="flex gap-2">

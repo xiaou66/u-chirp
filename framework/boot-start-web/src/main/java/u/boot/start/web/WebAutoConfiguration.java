@@ -22,6 +22,7 @@ import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import u.boot.start.web.api.Api;
 import u.boot.start.web.api.WebProperties;
+import u.boot.start.web.config.DateFormatConfig;
 import u.boot.start.web.exception.GlobalExceptionHandler;
 
 import java.util.Arrays;
@@ -33,7 +34,7 @@ import java.util.List;
  */
 @Data
 @AutoConfiguration
-@Import(GlobalExceptionHandler.class)
+@Import({GlobalExceptionHandler.class, DateFormatConfig.class})
 @EnableConfigurationProperties(WebProperties.class)
 public class WebAutoConfiguration implements WebMvcConfigurer {
     /**
