@@ -4,6 +4,7 @@ import Quill from "quill";
 import 'quill/dist/quill.snow.css';
 import Link from './components/Link';
 import type {UserEditorInstance} from "./Editor";
+import {SvgIcon} from "../icon";
 const editor = ref<Quill>();
 onMounted(() => {
   Quill.register('modules/link', Link, true);
@@ -28,53 +29,127 @@ onMounted(() => {
       ) {
         evt.preventDefault();
         //上传服务器并拿到返回的图片地址，插入到富文本中
+
       }
     },
     true //注意
   );
 });
+
+// 文件列表
+const fileList = ref<File[]>([]);
 defineExpose<UserEditorInstance>({
   getEditor: () => editor.value!,
+  getFileList: () => fileList.value,
 })
 </script>
 
 <template>
-  <div class="light w-full h-full">
-    <div id="editor" class="h-full post-edit-container"></div>
-    <div id="toolbar" class="flex items-center justify-between">
-      <div class="flex-1">
-        <div class="ql-formats">
-          <button class="ql-image"></button>
-          <button class="ql-link" id="u-link">
-            <svg viewBox="0 0 18 18">
-              <line class="ql-stroke" x1="7" x2="11" y1="7" y2="11"></line>
-              <path class="ql-even ql-stroke" d="M8.9,4.577a3.476,3.476,0,0,1,.36,4.679A3.476,3.476,0,0,1,4.577,8.9C3.185,7.5,2.035,6.4,4.217,4.217S7.5,3.185,8.9,4.577Z"></path>
-              <path class="ql-even ql-stroke" d="M13.423,9.1a3.476,3.476,0,0,0-4.679-.36,3.476,3.476,0,0,0,.36,4.679c1.392,1.392,2.5,2.542,4.679.36S14.815,10.5,13.423,9.1Z"></path>
-            </svg>
-          </button>
-          <button class="ql-code"></button>
+  <div class="w-full h-full grid" style="grid-template-rows: calc(100% - 90px) 90px">
+    <div class="light w-full h-full">
+      <div id="editor" class="h-full post-edit-container"></div>
+      <div id="toolbar" class="flex items-center justify-between">
+        <div class="flex-1">
+          <div class="ql-formats">
+            <button class="ql-image"></button>
+            <button class="ql-link" id="u-link">
+              <svg viewBox="0 0 18 18">
+                <line class="ql-stroke" x1="7" x2="11" y1="7" y2="11"></line>
+                <path class="ql-even ql-stroke" d="M8.9,4.577a3.476,3.476,0,0,1,.36,4.679A3.476,3.476,0,0,1,4.577,8.9C3.185,7.5,2.035,6.4,4.217,4.217S7.5,3.185,8.9,4.577Z"></path>
+                <path class="ql-even ql-stroke" d="M13.423,9.1a3.476,3.476,0,0,0-4.679-.36,3.476,3.476,0,0,0,.36,4.679c1.392,1.392,2.5,2.542,4.679.36S14.815,10.5,13.423,9.1Z"></path>
+              </svg>
+            </button>
+            <button class="ql-code"></button>
+          </div>
+          <div class="ql-formats">
+            <button class="ql-header" value="1"></button>
+            <button class="ql-header" value="2"></button>
+            <button class="ql-header" value="3"></button>
+          </div>
+          <div class="ql-formats">
+            <button class="ql-list" value="ordered"></button>
+            <button class="ql-list" value="bullet"></button>
+          </div>
+          <div class="ql-formats">
+            <button class="ql-bold"></button>
+            <button class="ql-strike"></button>
+          </div>
         </div>
-        <div class="ql-formats">
-          <button class="ql-header" value="1"></button>
-          <button class="ql-header" value="2"></button>
-          <button class="ql-header" value="3"></button>
-        </div>
-        <div class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </div>
-        <div class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-strike"></button>
+        <div>
+          <slot name="tool-right"></slot>
         </div>
       </div>
-      <div>
-        <slot name="tool-right"></slot>
+    </div>
+    <div class="pt-2 flex overflow-x-auto gap-2">
+      <div class="flex items-center justify-center cursor-pointer h-20 w-20 rounded flex-shrink-0 image-box">
+        <div class="h-20 w-20 cover">
+          <div class="right-action">
+            <div>
+              <svg-icon :size="18"
+                        color="#ffffff"
+                        hover-color="#ec1f22"
+                        name="default-circleClose" />
+            </div>
+          </div>
+          <div class="flex justify-center items-center w-full h-full">
+            <div>
+              <svg-icon :size="24" name="default-see" color="#ffffff"></svg-icon>
+            </div>
+          </div>
+        </div>
+        <img src="https://s2.loli.net/2024/05/19/CY9J4AayzTDMfR3.png">
       </div>
+      <div class="flex items-center justify-center cursor-pointer h-20 w-20 rounded flex-shrink-0 image-box">
+        <div class="h-20 w-20 cover">
+          <div class="right-action">
+            <div>
+              <svg-icon :size="18"
+                        color="#ffffff"
+                        hover-color="#ec1f22"
+                        name="default-circleClose" />
+            </div>
+          </div>
+        </div>
+        <img src="https://s2.loli.net/2023/04/15/k4IbQGzMZ9v6fYN.jpg">
+      </div>
+      <div class="cursor-pointer h-20 w-20 bg-orange-400 rounded flex-shrink-0"></div>
+      <div class="cursor-pointer h-20 w-20 bg-orange-400 rounded flex-shrink-0"></div>
+      <div class="cursor-pointer h-20 w-20 bg-orange-400 rounded flex-shrink-0"></div>
+      <div class="cursor-pointer h-20 w-20 bg-orange-400 rounded flex-shrink-0"></div>
+      <div class="cursor-pointer h-20 w-20 bg-orange-400 rounded flex-shrink-0"></div>
+      <div class="cursor-pointer h-20 w-20 bg-orange-400 rounded flex-shrink-0"></div>
+      <div class="cursor-pointer h-20 w-20 bg-orange-400 rounded flex-shrink-0"></div>
     </div>
   </div>
 </template>
-
+<style lang="less" scoped>
+.image-box {
+  position: relative;
+  &:hover {
+    .cover {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+  .cover {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 250ms linear;
+    .right-action {
+      position: absolute;
+      right: 2px;
+      top: 2px;
+    }
+  }
+}
+</style>
 <style lang="less">
 .post-edit-container {
   @import "@u-chirp/components/src/assets/poststyle";

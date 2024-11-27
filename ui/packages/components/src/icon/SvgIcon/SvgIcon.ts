@@ -10,6 +10,10 @@ export interface SvgIconProps {
    */
   color?: string;
   /**
+   * 鼠标移动上去颜色
+   */
+  hoverColor?: string;
+  /**
    * 图标前缀
    */
   prefix?: string;
@@ -28,5 +32,6 @@ export const svgIconDefaultProps = createDefaultProps<SvgIconProps>({
   color: '#333',
   prefix: 'icon',
   size: 14,
-  svgClass: ''
+  svgClass: '',
+  hoverColor: '',
 });

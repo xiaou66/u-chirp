@@ -160,7 +160,7 @@ function handleFollow(postId: string, follow: boolean) {
          v-infinite-scroll="requestList"
          class="flex-1 bg-opacity-60 bg-base-200 flex justify-center overflow-y-auto pt-10 mobile:pt-2">
       <div class="min-w-full flex justify-center">
-        <div class="w-10/12 2xl:w-8/12 xl:w-9/12 mobile:w-full mobile:p-2 h-full">
+        <div class=" h-full w-10/12 lg:w-10/12 xl:w-9/12 2xl:w-8/12  mobile:w-full mobile:p-2">
           <div v-if="isMobile()" class="flex justify-between mb-3">
             <div class="relative w-64 max-w-sm items-center">
               <Input id="search" type="text" placeholder="搜索..." class="!pl-7" />

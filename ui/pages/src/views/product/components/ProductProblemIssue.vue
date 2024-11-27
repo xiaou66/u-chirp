@@ -71,7 +71,7 @@ function handlePushPost() {
       <UserEditor ref="userEditorRef"></UserEditor>
     </div>
     <template #footer>
-      <Button @click="handlePushPost">
+      <Button class="w-full" @click="handlePushPost">
         <svg-icon color="hsl(var(--primary-foreground))"
                   name="default-publish" />
         发布
