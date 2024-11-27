@@ -9,11 +9,12 @@ import MemberInfoCard from "./components/MemberInfoCard.vue";
 import {useI18n} from "vue-i18n";
 import {productPostListApi, type ProductPostListReq, type ProductPostListResp} from "../../api";
 import {useRoute} from "vue-router";
-import type {PageResult, RollResult} from "../../api/appService";
+import type { RollResult } from "../../api/appService";
 import DictData from "@u-chirp/components/src/dict/DictData.vue";
 import { ProductConstants } from "../../constant";
 import BackTop from "@u-chirp/components/src/BackTop/BackTop.vue";
 import {formatUserTime} from "@u-chirp/utils";
+import DefaultEmpty from "@u-chirp/components/src/empty/DefaultEmpty/DefaultEmpty.vue";
 
 const { t } = useI18n();
 const tabs = [
@@ -49,6 +50,7 @@ const searchQueryParams = ref<ProductPostListReq>({
 
 function handleTabChange(key: string) {
   searchQueryParams.value.tab = key;
+  requestList(0);
 }
 const listData = ref<RollResult<ProductPostListResp>>({
   next: 0,
@@ -80,9 +82,9 @@ function requestList(next = listData.value.next) {
     } else {
       listData.value.list.push(...res.list);
       listData.value.next = res.next;
-      console.log('res.next', res.next)
     }
     nextTick(() => {
+      // 过滤掉已经被计算过的
       itemRefs.value.filter(item => !item.hasAttribute('checkOverflow'))
         .map(el => {
           checkOverflow(el);
@@ -137,80 +139,81 @@ onMounted(() => {
           <div class="pt-5 pb-8">
             <div class="h-full grid grid-cols-[1fr_auto] gap-2">
               <div class="flex flex-col gap-5">
-                <!--          skeleton-->
-                <div v-for="data in listData.list" :key="data.postId"
-                     class="rounded-xl shadow p-4 skeleton bg-base-100">
-                  <div class="flex mb-3 justify-between">
-                    <div class="flex gap-2">
-                      <!--  产品阶段状态  -->
-                      <DictData :dict-type="ProductConstants.post.post_status"
-                                :value="data.postHandleProgress">
-                        <template #default="{ dict }">
-                          <tag-plus v-bind="dict.meta.tag"
-                                    :tag-name="dict.label" />
-                        </template>
-                      </DictData>
-                    </div>
-                    <div class="flex gap-2">
-                      <!--   帖子类型   -->
-                      <DictData :dict-type="ProductConstants.post.post_type"
-                                :value="data.postType">
-                        <template #default="{ dict }">
-                          <tag-plus v-bind:="dict.meta.tag"
-                                    :tag-name="dict.label" />
-                        </template>
-                      </DictData>
-                      <tag-plus v-if="data.postTop"
-                                :icon="{ name: 'product-pin' }"
-                                :tag-name="t('common.top')"
-                                type="primary"
-                                effect="plain"
-                                round />
-                    </div>
-                  </div>
-                  <div v-if="data.postTitle" class="font-bold">
-                    {{data.postTitle}}
-                  </div>
-                  <div ref="itemRefs" class="max-h-64 overflow-y-hidden relative">
-                    <div class="post-container">
-                      <div v-html="data.postRawHtml"></div>
-                    </div>
-                    <button class="showMoreBtn text-sm hover:bg-gray-200 absolute bottom-0 left-0 right-0 bg-gray-100 p-2 text-center rounded">
-                      点击查看更多
-                    </button>
-                  </div>
-                  <div class="flex items-center mt-6 justify-between">
-                    <div class="flex items-center gap-2">
-                      <div class="avatar cursor-pointer">
-                        <div class="w-10 rounded-full">
-                          <img :src="data.memberInfo.memberAvatar" />
-                        </div>
-                      </div>
-                      <div class="flex flex-col gap-1">
-                        <div class="flex gap-2 text-xs text-base-content">
-                          <div class="font-medium">{{data.memberInfo.memberNickname}}</div>
-                          <div>
-<!--                            <el-tag type="danger" size="small">超级管理员</el-tag>-->
-                          </div>
-                        </div>
-                        <div class="text-xs text-base-content font-medium">{{formatUserTime(data.createTime)}}</div>
-                      </div>
-                    </div>
-                    <div class="flex gap-2">
-                      <div class="flex items-center gap-1 cursor-pointer">
-                        <svg-icon svg-class="text-lg" name="product-thumbsUp"></svg-icon>
-<!--                        <svg-icon svg-class="text-lg" color="#2563eb" name="product-thumbsUpFill"></svg-icon>-->
-                        {{ data.postThumbsUpCount }}
-                      </div>
-                      <el-tooltip :content="t('product.follow')">
-                        <div class="flex items-center gap-1 cursor-pointer">
-                          <svg-icon svg-class="text-lg"  name="product-follow"></svg-icon>
-                          {{ data.postFollowCount }}
-                        </div>
-                      </el-tooltip>
-                    </div>
-                  </div>
-                </div>
+                <!-- 列表区域 -->
+<!--                <div v-for="data in listData.list" :key="data.postId"-->
+<!--                     class="rounded-xl shadow p-4 skeleton bg-base-100">-->
+<!--                  <div class="flex mb-3 justify-between">-->
+<!--                    <div class="flex gap-2">-->
+<!--                      &lt;!&ndash;  产品阶段状态  &ndash;&gt;-->
+<!--                      <DictData :dict-type="ProductConstants.post.post_status"-->
+<!--                                :value="data.postHandleProgress">-->
+<!--                        <template #default="{ dict }">-->
+<!--                          <tag-plus v-bind="dict.meta.tag"-->
+<!--                                    :tag-name="dict.label" />-->
+<!--                        </template>-->
+<!--                      </DictData>-->
+<!--                    </div>-->
+<!--                    <div class="flex gap-2">-->
+<!--                      &lt;!&ndash;   帖子类型   &ndash;&gt;-->
+<!--                      <DictData :dict-type="ProductConstants.post.post_type"-->
+<!--                                :value="data.postType">-->
+<!--                        <template #default="{ dict }">-->
+<!--                          <tag-plus v-bind:="dict.meta.tag"-->
+<!--                                    :tag-name="dict.label" />-->
+<!--                        </template>-->
+<!--                      </DictData>-->
+<!--                      <tag-plus v-if="data.postTop"-->
+<!--                                :icon="{ name: 'product-pin' }"-->
+<!--                                :tag-name="t('common.top')"-->
+<!--                                type="primary"-->
+<!--                                effect="plain"-->
+<!--                                round />-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div v-if="data.postTitle" class="font-bold">-->
+<!--                    {{data.postTitle}}-->
+<!--                  </div>-->
+<!--                  <div ref="itemRefs" class="max-h-64 overflow-y-hidden relative">-->
+<!--                    <div class="post-container">-->
+<!--                      <div v-html="data.postRawHtml"></div>-->
+<!--                    </div>-->
+<!--                    <button class="showMoreBtn text-sm hover:bg-gray-200 absolute bottom-0 left-0 right-0 bg-gray-100 p-2 text-center rounded">-->
+<!--                      点击查看更多-->
+<!--                    </button>-->
+<!--                  </div>-->
+<!--                  <div class="flex items-center mt-6 justify-between">-->
+<!--                    <div class="flex items-center gap-2">-->
+<!--                      <div class="avatar cursor-pointer">-->
+<!--                        <div class="w-10 rounded-full">-->
+<!--                          <img :src="data.memberInfo.memberAvatar" />-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                      <div class="flex flex-col gap-1">-->
+<!--                        <div class="flex gap-2 text-xs text-base-content">-->
+<!--                          <div class="font-medium">{{data.memberInfo.memberNickname}}</div>-->
+<!--                          <div>-->
+<!--&lt;!&ndash;                            <el-tag type="danger" size="small">超级管理员</el-tag>&ndash;&gt;-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                        <div class="text-xs text-base-content font-medium">{{formatUserTime(data.createTime)}}</div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="flex gap-2">-->
+<!--                      <div class="flex items-center gap-1 cursor-pointer">-->
+<!--                        <svg-icon svg-class="text-lg" name="product-thumbsUp"></svg-icon>-->
+<!--&lt;!&ndash;                        <svg-icon svg-class="text-lg" color="#2563eb" name="product-thumbsUpFill"></svg-icon>&ndash;&gt;-->
+<!--                        {{ data.postThumbsUpCount }}-->
+<!--                      </div>-->
+<!--                      <el-tooltip :content="t('product.follow')">-->
+<!--                        <div class="flex items-center gap-1 cursor-pointer">-->
+<!--                          <svg-icon svg-class="text-lg"  name="product-follow"></svg-icon>-->
+<!--                          {{ data.postFollowCount }}-->
+<!--                        </div>-->
+<!--                      </el-tooltip>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+                <DefaultEmpty></DefaultEmpty>
               </div>
               <div>
                 <div class="flex-col gap-5 hidden lg:flex">
