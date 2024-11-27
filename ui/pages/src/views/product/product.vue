@@ -7,7 +7,7 @@ import { Button, Input, Tabs, TabsList, TabsTrigger } from '@u-chirp/shadcn'
 import ProductProblemIssue from './components/ProductProblemIssue.vue'
 import MemberInfoCard from "./components/MemberInfoCard.vue";
 import {useI18n} from "vue-i18n";
-import {productPostListApi, type ProductPostListResp} from "../../api";
+import {productPostListApi, type ProductPostListReq, type ProductPostListResp} from "../../api";
 import {useRoute} from "vue-router";
 import type {PageResult} from "../../api/appService";
 import DictData from "@u-chirp/components/src/dict/DictData.vue";
@@ -37,17 +37,19 @@ const tabs = [
     name: t('product.follow'),
     icon: 'product-follow'
   },
-]
-const searchQueryParams = ref({
+];
+
+const route = useRoute();
+const searchQueryParams = ref<ProductPostListReq>({
   pageSize: 10,
-  pageNo: 1,
-  tab: 'HOT'
+  page: 1,
+  tab: 'HOT',
+  productCode: route.params.productCode as string,
 })
 
 function handleTabChange(key: string) {
   searchQueryParams.value.tab = key;
 }
-const route = useRoute();
 const listData = ref<PageResult<ProductPostListResp>>({
   total: 0,
   list: [],
@@ -66,9 +68,7 @@ function checkOverflow(container: HTMLDivElement) {
 }
 function requestList() {
   productPostListApi({
-    pageSize: 100,
-    productCode: route.params.productCode as string,
-    tab: searchQueryParams.value.tab as any,
+    ...searchQueryParams.value,
   }).then(res => {
     listData.value = res
     nextTick(() => {
@@ -80,7 +80,7 @@ function requestList() {
 }
 const postContainerRef = ref<HTMLElement>();
 function load() {
-  console.log('1111')
+
 }
 onMounted(() => {
   requestList()

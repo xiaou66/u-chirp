@@ -47,7 +47,7 @@ export async function productPostPostSaveApi(data: ProductPostSaveReq) {
 export interface ProductPostListReq extends pageParam {
   productCode: string;
   postTitle?: string;
-  tab?: 'HOT' | 'NEW' | 'GOOD_PROBLEM' | 'FOLLOW'
+  tab?: string;
 }
 
 export interface ProductPostListResp {
