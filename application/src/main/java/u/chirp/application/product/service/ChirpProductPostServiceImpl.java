@@ -1,12 +1,15 @@
 package u.chirp.application.product.service;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import u.boot.start.common.exception.NoDataException;
 import u.chirp.application.core.filecenter.local.vo.FileUrlVO;
 import u.chirp.application.core.filecenter.service.IChirpFileManagerService;
 import u.chirp.application.mumber.enums.CollectType;
@@ -159,7 +162,11 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
     }
 
     @Override
-    public List<Long> searchIdList(AppProductPostListBO bo) {
+    public List<Long> searchIdList(AppProductPostListBO bo) throws NoDataException {
+        List<Long> ids = baseMapper.searchIdList(bo);
+        if (CollUtil.isEmpty(ids)) {
+            throw new NoDataException();
+        }
         return baseMapper.searchIdList(bo);
     }
 

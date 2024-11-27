@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,4 +23,8 @@ public class RollResult<T> implements Serializable {
      * 下一个
      */
     private Long next;
+
+    public static<T> RollResult<T> empty() {
+        return new RollResult<T>(Collections.emptyList(), null);
+    }
 }

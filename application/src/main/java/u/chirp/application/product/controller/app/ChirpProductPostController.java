@@ -49,7 +49,12 @@ public class ChirpProductPostController {
     @GetMapping("/list")
     public R<RollResult<ChirpProductPostListRespVO>> list(AppProductPostListGetReqVO reqVo) {
         AppProductPostListBO appProductPostListBO = chirpProductPostService.payloadQueryParam(reqVo);
-        List<Long> ids = chirpProductPostService.searchIdList(appProductPostListBO);
+        List<Long> ids = null;
+        try {
+            ids = chirpProductPostService.searchIdList(appProductPostListBO);
+        }catch (Exception e) {
+            return R.success(RollResult.empty());
+        }
         List<ChirpProductPostListBO> res = chirpProductPostService.payloadResult(ids);
         List<ChirpProductPostListRespVO> respList = ChirpProductPostConvert.INSTANCE
                 .toChirpProductPostListRespDO(res);
