@@ -33,7 +33,7 @@ public class ChirpMemberCollectServiceImpl extends ServiceImpl<ChirpMemberCollec
 
     @Override
     public boolean hasCollect(CollectType collectType, Long collectMember, Long collectRefId) {
-        return Objects.isNull(getOne(Wrappers.lambdaQuery(ChirpMemberCollectDO.class)
+        return Objects.nonNull(getOne(Wrappers.lambdaQuery(ChirpMemberCollectDO.class)
                 .select(ChirpMemberCollectDO::getCollectId)
                 .eq(ChirpMemberCollectDO::getCollectType, collectType)
                 .eq(ChirpMemberCollectDO::getCollectMemberId, collectMember)
