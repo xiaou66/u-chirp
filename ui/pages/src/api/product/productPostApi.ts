@@ -137,3 +137,41 @@ export async function productPostThumbsUpApi(data: ProductPostThumbsUpReq) {
     data
   });
 }
+
+/**
+ * 提取当前用户点赞帖子
+ * @param postIds
+ */
+export async function productPostThumbsUpRecordApi(postIds: string[]): Promise<string[]> {
+  return await request<string[]>('POST', '/product/post/getThumbsUpRecord', {
+    data: {
+      postIds,
+    }
+  });
+}
+export interface ProductPostCollectReq extends ProductPostActionReq {
+  follow: boolean;
+}
+
+/**
+ * 关注
+ * @param req
+ */
+export async function productPostFollowApi(req: ProductPostCollectReq) {
+  return await request('POST', '/product/post/follow', {
+    data: req
+  });
+}
+
+
+/**
+ * 提取当前用户关注帖子
+ * @param req
+ */
+export async function productPostFollowRecord(postIds: string[]) {
+  return await request<string[]>('POST', '/product/post/getFollowRecord', {
+    data: {
+      postIds,
+    }
+  });
+}

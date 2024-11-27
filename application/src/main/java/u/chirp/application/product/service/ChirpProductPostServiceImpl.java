@@ -2,8 +2,6 @@ package u.chirp.application.product.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.Assert;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
@@ -137,13 +135,13 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
 
         // 帖子的发布者点赞数 +/- 1
         ProductPostBaseInfoBO postBaseInfo = getPostBaseInfo(reqVo.getPostId());
-        if (Boolean.TRUE.equals(reqVo.getCollect())) {
-            baseMapper.follow(productId, reqVo.getPostId(), reqVo.getCollect());
+        if (Boolean.TRUE.equals(reqVo.getFollow())) {
+            baseMapper.follow(productId, reqVo.getPostId(), reqVo.getFollow());
             chirpProductMemberService.addFollowCount(postBaseInfo.getProductId(), postBaseInfo.getCreator());
             // 帖子点赞要收集到表中
             chirpMemberCollectService.addCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId());
         } else {
-            baseMapper.unFollow(productId, reqVo.getPostId(), reqVo.getCollect());
+            baseMapper.unFollow(productId, reqVo.getPostId(), reqVo.getFollow());
             chirpProductMemberService.subFollowCount(postBaseInfo.getProductId(), postBaseInfo.getCreator());
             // 帖子取消点赞要从收集表移除
             chirpMemberCollectService.removeCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId());
@@ -194,7 +192,7 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
 
     private void verifyCollect(AppProductPostFollowReqVO reqVo, Long productId) throws Exception {
         long loginMemberId = StpUtil.getLoginIdAsLong();
-        if (Boolean.FALSE.equals(reqVo.getCollect())) {
+        if (Boolean.FALSE.equals(reqVo.getFollow())) {
             if(!chirpMemberCollectService.hasCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId())) {
                 throw exception(REPEATED_REQUESTS);
             }

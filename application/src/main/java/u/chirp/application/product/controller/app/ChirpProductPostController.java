@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import u.boot.start.common.pojo.PageResult;
 import u.boot.start.common.pojo.R;
 import u.boot.start.common.pojo.RollResult;
+import u.chirp.application.mumber.enums.CollectType;
+import u.chirp.application.mumber.service.IChirpMemberCollectService;
 import u.chirp.application.product.controller.app.vo.*;
 import u.chirp.application.product.convert.ChirpProductPostConvert;
 import u.chirp.application.product.service.IChirpProductMemberService;
@@ -40,11 +42,15 @@ public class ChirpProductPostController {
     @Resource
     private IChirpProductService chirpProductService;
 
+    @Resource
+    private IChirpMemberCollectService chirpMemberCollectService;
+
 
     /**
      * 帖子列表
      * @param reqVo
      * @return
+     * @tags v1.0.0
      */
     @GetMapping("/list")
     public R<RollResult<ChirpProductPostListRespVO>> list(AppProductPostListGetReqVO reqVo) {
@@ -65,7 +71,7 @@ public class ChirpProductPostController {
     /**
      * 创建帖子
      * @return
-     * @tags v1.1.0
+     * @tags v1.0.0
      */
     @PostMapping("/save")
     @Transactional
@@ -77,6 +83,18 @@ public class ChirpProductPostController {
         }
 
         return R.success(postId);
+    }
+
+    /**
+     * 提取当前用户点赞帖子
+     * @param reqVo
+     * @return
+     * @tags v1.0.0
+     */
+    @PostMapping("/getThumbsUpRecord")
+    public R<List<Long>>  getThumbsUpRecord(@Validated @RequestBody AppProductThumbsUpRecordGetReqVO reqVo) {
+        List<Long> postIds = chirpMemberCollectService.extractExistCollect(CollectType.THUMBS_UP_POST, StpUtil.getLoginIdAsLong(), reqVo.getPostIds());
+        return R.success(postIds);
     }
 
     /**
@@ -93,11 +111,23 @@ public class ChirpProductPostController {
     }
 
     /**
+     * 提取当前用户点赞帖子
+     * @param reqVo
+     * @return
+     * @tags v1.0.0
+     */
+    @PostMapping("/getFollowRecord")
+    public R<List<Long>> getFollowRecord(@Validated @RequestBody AppProductFollowRecordGetReqVO reqVo) {
+        List<Long> postIds = chirpMemberCollectService.extractExistCollect(CollectType.COLLECT_POST, StpUtil.getLoginIdAsLong(), reqVo.getPostIds());
+        return R.success(postIds);
+    }
+
+    /**
      * 关注
      * @tags v1.0.0
      * @param reqVo
      */
-    @PostMapping("follow")
+    @PostMapping("/follow")
     public R<ProductPostBaseInfoBO> follow(@Validated @RequestBody AppProductPostFollowReqVO reqVo) {
         Long productId = chirpProductService.getProductIdByCode(reqVo.getProductCode());
         chirpProductPostService.follow(reqVo, productId);

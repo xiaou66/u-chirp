@@ -13,5 +13,5 @@ public class AppProductPostFollowReqVO extends AppProductPostActionReqVO {
      * 是否收集
      */
     @NotNull(message = "收集不能为空")
-    private Boolean collect;
+    private Boolean follow;
 }

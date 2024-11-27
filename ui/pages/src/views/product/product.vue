@@ -6,7 +6,13 @@ import { Button, Input, Tabs, TabsList, TabsTrigger } from '@u-chirp/shadcn'
 import ProductProblemIssue from './components/ProductProblemIssue.vue'
 import MemberInfoCard from "./components/MemberInfoCard.vue";
 import {useI18n} from "vue-i18n";
-import {productPostListApi, type ProductPostListReq, type ProductPostListResp, productPostThumbsUpApi} from "../../api";
+import {
+  productPostFollowApi, productPostFollowRecord,
+  productPostListApi,
+  type ProductPostListReq,
+  type ProductPostListResp,
+  productPostThumbsUpApi, productPostThumbsUpRecordApi
+} from "../../api";
 import {useRoute} from "vue-router";
 import type {RollResult} from "../../api/appService";
 import { ProductConstants } from "../../constant";
@@ -66,6 +72,9 @@ function checkOverflow(container: HTMLDivElement) {
   container.setAttribute('checkOverflow', 'true');
 }
 
+const memberFollowPostIds = ref<string[]>([]);
+const memberThumbsUpPostIds = ref<string[]>([]);
+
 function requestList(next = listData.value.next) {
   if (next == null) {
     return;
@@ -80,6 +89,13 @@ function requestList(next = listData.value.next) {
       listData.value.list.push(...res.list);
       listData.value.next = res.next;
     }
+    const postIds = res.list.map(({ postId }) => postId);
+    productPostThumbsUpRecordApi(postIds).then((thumbsUpPostIds) => {
+      memberThumbsUpPostIds.value.push(...thumbsUpPostIds)
+    });
+    productPostFollowRecord(postIds).then((followPostIds) => {
+      memberFollowPostIds.value.push(...followPostIds);
+    });
     nextTick(() => {
       // 过滤掉已经被计算过的
       itemRefs.value.filter(item => !item.hasAttribute('checkOverflow'))
@@ -90,17 +106,15 @@ function requestList(next = listData.value.next) {
   })
 }
 const postContainerRef = ref<HTMLElement>();
-function load() {
-  requestList();
-}
+
 onMounted(() => {
   requestList()
 });
-function handlePostThumbs(postId: string) {
+function handlePostThumbs(postId: string, thumbsUp: boolean) {
   productPostThumbsUpApi({
     productCode: route.params.productCode as string,
     postId,
-    thumbsUp: true
+    thumbsUp
   });
 }
 </script>
@@ -110,7 +124,7 @@ function handlePostThumbs(postId: string) {
        style="grid-template-rows: 70px calc(100vh - 70px)">
     <ProductTopMenu />
     <div ref="postContainerRef"
-         v-infinite-scroll="load"
+         v-infinite-scroll="requestList"
          class="flex-1 bg-opacity-60 bg-base-200 flex justify-center overflow-y-auto">
       <div class="mt-6  min-w-full flex justify-center">
         <div class="w-10/12 grid grid-rows-[auto_1fr] h-full">
@@ -204,9 +218,15 @@ function handlePostThumbs(postId: string) {
                         </div>
                       </div>
                       <div class="flex gap-2">
-                        <div class="flex items-center gap-1 cursor-pointer" @click="handlePostThumbs(data.postId)">
-                          <svg-icon svg-class="text-lg" name="product-thumbsUp"></svg-icon>
-                          <!--                        <svg-icon svg-class="text-lg" color="#2563eb" name="product-thumbsUpFill"></svg-icon>-->
+                        <div class="flex items-center gap-1 cursor-pointer">
+                          <svg-icon v-if="!memberThumbsUpPostIds.includes(data.postId)"
+                                    svg-class="text-lg"
+                                    name="product-thumbsUp"
+                                    @click="handlePostThumbs(data.postId, true)"/>
+                          <svg-icon v-else svg-class="text-lg"
+                                    color="#2563eb"
+                                    name="product-thumbsUpFill"
+                                    @click="handlePostThumbs(data.postId, false)"/>
                           {{ data.postThumbsUpCount }}
                         </div>
                         <el-tooltip :content="t('product.follow')">
