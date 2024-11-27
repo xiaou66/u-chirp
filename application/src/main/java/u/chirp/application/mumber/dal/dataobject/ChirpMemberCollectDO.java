@@ -2,6 +2,7 @@ package u.chirp.application.mumber.dal.dataobject;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import u.boot.start.db.mysql.BaseDO;
 import u.chirp.application.mumber.enums.CollectType;
@@ -11,6 +12,7 @@ import u.chirp.application.mumber.enums.CollectType;
  * @date 2024/11/20
  */
 @Data
+@TableName("chirp_member_collect")
 public class ChirpMemberCollectDO extends BaseDO<ChirpMemberCollectDO> {
     /**
      * 收集 id

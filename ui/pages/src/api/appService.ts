@@ -105,10 +105,10 @@ export interface pageParam {
   pageSize?: number;
 }
 export interface RollParam {
-  next?: number;
+  next?: number | null;
 }
 
 export interface RollResult<T> {
-  next: number;
+  next: number | null;
   list: T[];
 }

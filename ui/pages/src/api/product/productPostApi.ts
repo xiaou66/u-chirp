@@ -11,7 +11,7 @@ export interface ProductPostSaveReq {
   /**
    * 帖子 id
    */
-  postId?: number;
+  postId?: string;
 
   /**
    * 帖子标题
@@ -54,7 +54,7 @@ export interface ProductPostListResp {
   /**
    * 帖子 id
    */
-  postId: number;
+  postId: string;
 
   /**
    * 帖子标题
@@ -110,5 +110,30 @@ export interface ProductPostListResp {
 export async function productPostListApi(params: ProductPostListReq) {
   return await request<RollResult<ProductPostListResp>>('GET', '/product/post/list', {
     params
+  });
+}
+
+export interface ProductPostActionReq {
+  /**
+   * 产品 id
+   */
+  productCode: string;
+  /**
+   * 帖子 id
+   */
+  postId: string;
+}
+
+export interface ProductPostThumbsUpReq extends ProductPostActionReq {
+  thumbsUp: boolean;
+}
+
+/**
+ * 帖子点赞
+ * @param data
+ */
+export async function productPostThumbsUpApi(data: ProductPostThumbsUpReq) {
+  return await request<ProductInfoResp>('POST', '/product/post/thumbsUp', {
+    data
   });
 }

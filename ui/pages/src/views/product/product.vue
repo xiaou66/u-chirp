@@ -6,11 +6,12 @@ import { Button, Input, Tabs, TabsList, TabsTrigger } from '@u-chirp/shadcn'
 import ProductProblemIssue from './components/ProductProblemIssue.vue'
 import MemberInfoCard from "./components/MemberInfoCard.vue";
 import {useI18n} from "vue-i18n";
-import {productPostListApi, type ProductPostListReq, type ProductPostListResp} from "../../api";
+import {productPostListApi, type ProductPostListReq, type ProductPostListResp, productPostThumbsUpApi} from "../../api";
 import {useRoute} from "vue-router";
 import type {RollResult} from "../../api/appService";
 import { ProductConstants } from "../../constant";
 import {formatUserTime} from "@u-chirp/utils";
+import DefaultEmpty from "@u-chirp/components/src/empty/DefaultEmpty/DefaultEmpty.vue";
 
 const { t } = useI18n();
 const tabs = [
@@ -46,6 +47,7 @@ const searchQueryParams = ref<ProductPostListReq>({
 
 function handleTabChange(key: string) {
   searchQueryParams.value.tab = key;
+  requestList(0);
 }
 const listData = ref<RollResult<ProductPostListResp>>({
   next: 0,
@@ -64,8 +66,11 @@ function checkOverflow(container: HTMLDivElement) {
   }
   container.setAttribute('checkOverflow', 'true');
 }
+
 function requestList(next = listData.value.next) {
-  console.log('requestList.next', next);
+  if (next == null) {
+    return;
+  }
   productPostListApi({
     ...searchQueryParams.value,
     next,
@@ -75,9 +80,9 @@ function requestList(next = listData.value.next) {
     } else {
       listData.value.list.push(...res.list);
       listData.value.next = res.next;
-      console.log('res.next', res.next)
     }
     nextTick(() => {
+      // 过滤掉已经被计算过的
       itemRefs.value.filter(item => !item.hasAttribute('checkOverflow'))
         .map(el => {
           checkOverflow(el);
@@ -92,6 +97,13 @@ function load() {
 onMounted(() => {
   requestList()
 });
+function handlePostThumbs(postId: string) {
+  productPostThumbsUpApi({
+    productCode: route.params.productCode as string,
+    postId,
+    thumbsUp: true
+  });
+}
 </script>
 <template>
   <BackTop :target="postContainerRef"  />
@@ -129,84 +141,97 @@ onMounted(() => {
             </div>
           </div>
           <!--  主体区域  -->
-          <div class="pt-5">
+          <div class="pt-5 pb-8">
             <div class="h-full grid grid-cols-[1fr_auto] gap-2">
-              <div class="flex flex-col gap-5">
-                <!--          skeleton-->
-                <div v-for="data in listData.list" :key="data.postId"
-                     class="rounded-xl shadow p-4 skeleton bg-base-100">
-                  <div class="flex mb-3 justify-between">
-                    <div class="flex gap-2">
-                      <!--  产品阶段状态  -->
-                      <DictData :dict-type="ProductConstants.post.post_status"
-                                :value="data.postHandleProgress">
-                        <template #default="{ dict }">
-                          <tag-plus v-bind="dict.meta.tag"
-                                    :tag-name="dict.label" />
-                        </template>
-                      </DictData>
-                    </div>
-                    <div class="flex gap-2">
-                      <!--   帖子类型   -->
-                      <DictData :dict-type="ProductConstants.post.post_type"
-                                :value="data.postType">
-                        <template #default="{ dict }">
-                          <tag-plus v-bind:="dict.meta.tag"
-                                    :tag-name="dict.label" />
-                        </template>
-                      </DictData>
-                      <tag-plus v-if="data.postTop"
-                                :icon="{ name: 'product-pin' }"
-                                :tag-name="t('common.top')"
-                                type="primary"
-                                effect="plain"
-                                round />
-                    </div>
-                  </div>
-                  <div v-if="data.postTitle" class="font-bold">
-                    {{data.postTitle}}
-                  </div>
-                  <div ref="itemRefs" class="max-h-64 overflow-y-hidden relative">
-                    <div class="post-container">
-                      <div v-html="data.postRawHtml"></div>
-                    </div>
-                    <button class="showMoreBtn text-sm hover:bg-gray-200 absolute bottom-0 left-0 right-0 bg-gray-100 p-2 text-center rounded">
-                      点击查看更多
-                    </button>
-                  </div>
-                  <div class="flex items-center mt-6 justify-between">
-                    <div class="flex items-center gap-2">
-                      <div class="avatar cursor-pointer">
-                        <div class="w-10 rounded-full">
-                          <img :src="data.memberInfo.memberAvatar" />
-                        </div>
+              <!-- 列表区域 -->
+              <div>
+                <div v-if="listData.list && listData.list.length > 0" class="flex flex-col gap-5">
+                  <div v-for="data in listData.list" :key="data.postId"
+                       class="rounded-xl shadow p-4 skeleton bg-base-100">
+                    <div class="flex mb-3 justify-between">
+                      <div class="flex gap-2">
+                        <!--  产品阶段状态  -->
+                        <DictData :dict-type="ProductConstants.post.post_status"
+                                  :value="data.postHandleProgress">
+                          <template #default="{ dict }">
+                            <tag-plus v-bind="dict.meta.tag"
+                                      :tag-name="dict.label" />
+                          </template>
+                        </DictData>
                       </div>
-                      <div class="flex flex-col gap-1">
-                        <div class="flex gap-2 text-xs text-base-content">
-                          <div class="font-medium">{{data.memberInfo.memberNickname}}</div>
-                          <div>
-<!--                            <el-tag type="danger" size="small">超级管理员</el-tag>-->
+                      <div class="flex gap-2">
+                        <!--   帖子类型   -->
+                        <DictData :dict-type="ProductConstants.post.post_type"
+                                  :value="data.postType">
+                          <template #default="{ dict }">
+                            <tag-plus v-bind:="dict.meta.tag"
+                                      :tag-name="dict.label" />
+                          </template>
+                        </DictData>
+                        <tag-plus v-if="data.postTop"
+                                  :icon="{ name: 'product-pin' }"
+                                  :tag-name="t('common.top')"
+                                  type="primary"
+                                  effect="plain"
+                                  round />
+                      </div>
+                    </div>
+                    <div v-if="data.postTitle" class="font-bold">
+                      {{data.postTitle}}
+                    </div>
+                    <div ref="itemRefs" class="max-h-64 overflow-y-hidden relative">
+                      <div class="post-container">
+                        <div v-html="data.postRawHtml"></div>
+                      </div>
+                      <button class="showMoreBtn text-sm hover:bg-gray-200 absolute bottom-0 left-0 right-0 bg-gray-100 p-2 text-center rounded">
+                        点击查看更多
+                      </button>
+                    </div>
+                    <div class="flex items-center mt-6 justify-between">
+                      <div class="flex items-center gap-2">
+                        <div class="avatar cursor-pointer">
+                          <div class="w-10 rounded-full">
+                            <img :src="data.memberInfo.memberAvatar"  alt=""/>
                           </div>
                         </div>
-                        <div class="text-xs text-base-content font-medium">{{formatUserTime(data.createTime)}}</div>
-                      </div>
-                    </div>
-                    <div class="flex gap-2">
-                      <div class="flex items-center gap-1 cursor-pointer">
-                        <svg-icon svg-class="text-lg" name="product-thumbsUp"></svg-icon>
-<!--                        <svg-icon svg-class="text-lg" color="#2563eb" name="product-thumbsUpFill"></svg-icon>-->
-                        {{ data.postThumbsUpCount }}
-                      </div>
-                      <el-tooltip :content="t('product.follow')">
-                        <div class="flex items-center gap-1 cursor-pointer">
-                          <svg-icon svg-class="text-lg"  name="product-follow"></svg-icon>
-                          {{ data.postFollowCount }}
+                        <div class="flex flex-col gap-1">
+                          <div class="flex gap-2 text-xs text-base-content">
+                            <div class="font-medium">{{data.memberInfo.memberNickname}}</div>
+                            <div>
+                              <!--                            <el-tag type="danger" size="small">超级管理员</el-tag>-->
+                            </div>
+                          </div>
+                          <div class="text-xs text-base-content font-medium">{{formatUserTime(data.createTime)}}</div>
                         </div>
-                      </el-tooltip>
+                      </div>
+                      <div class="flex gap-2">
+                        <div class="flex items-center gap-1 cursor-pointer" @click="handlePostThumbs(data.postId)">
+                          <svg-icon svg-class="text-lg" name="product-thumbsUp"></svg-icon>
+                          <!--                        <svg-icon svg-class="text-lg" color="#2563eb" name="product-thumbsUpFill"></svg-icon>-->
+                          {{ data.postThumbsUpCount }}
+                        </div>
+                        <el-tooltip :content="t('product.follow')">
+                          <div class="flex items-center gap-1 cursor-pointer">
+                            <svg-icon svg-class="text-lg"  name="product-follow"></svg-icon>
+                            {{ data.postFollowCount }}
+                          </div>
+                        </el-tooltip>
+                      </div>
                     </div>
                   </div>
                 </div>
+                <DefaultEmpty v-else>
+                  <template #description>
+                    <div v-if="searchQueryParams.tab === 'FOLLOW'">
+                      还没有关注任何帖子
+                    </div>
+                    <div v-else>
+                      还没有数据噢
+                    </div>
+                  </template>
+                </DefaultEmpty>
               </div>
+              <!--  右边信息栏  -->
               <div>
                 <div class="flex-col gap-5 hidden lg:flex">
                   <!--  个人信息   -->

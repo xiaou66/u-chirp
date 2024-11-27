@@ -2,6 +2,7 @@ package u.chirp.application.product.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import u.boot.start.common.exception.NoDataException;
 import u.chirp.application.product.controller.app.vo.AppProductPostFollowReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostListGetReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
@@ -51,7 +52,7 @@ public interface IChirpProductPostService extends IService<ChirpProductPostDO> {
 
     AppProductPostListBO payloadQueryParam(AppProductPostListGetReqVO reqVo);
 
-    List<Long> searchIdList(AppProductPostListBO appProductPostListBO);
+    List<Long> searchIdList(AppProductPostListBO appProductPostListBO) throws NoDataException;
 
     List<ChirpProductPostListBO> payloadResult(List<Long> ids);
 }

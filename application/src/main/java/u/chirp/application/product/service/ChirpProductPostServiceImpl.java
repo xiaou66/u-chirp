@@ -1,12 +1,15 @@
 package u.chirp.application.product.service;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import u.boot.start.common.exception.NoDataException;
 import u.chirp.application.core.filecenter.local.vo.FileUrlVO;
 import u.chirp.application.core.filecenter.service.IChirpFileManagerService;
 import u.chirp.application.mumber.enums.CollectType;
@@ -76,11 +79,7 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
     @Transactional
     public void thumbsUp(AppProductPostThumbsUpReqVO reqVo, Long productId) {
         long loginMemberId = StpUtil.getLoginIdAsLong();
-        try {
-            verifyThumbsUp(reqVo, productId);
-        } catch (Exception e) {
-            return;
-        }
+        verifyThumbsUp(reqVo, productId);
 
         // 帖子的发布者点赞数 +/- 1
         ProductPostBaseInfoBO postBaseInfo = getPostBaseInfo(reqVo.getPostId());
@@ -97,16 +96,20 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
         }
     }
 
-    private void verifyThumbsUp(AppProductPostThumbsUpReqVO reqVo, Long productId) throws Exception {
+    private void verifyThumbsUp(AppProductPostThumbsUpReqVO reqVo, Long productId)  {
+        if (!postExists(productId, reqVo.getPostId())) {
+            throw exception(PRODUCT_POST_EXISTENCE);
+        }
+
         long loginMemberId = StpUtil.getLoginIdAsLong();
         if (Boolean.FALSE.equals(reqVo.getThumbsUp())) {
             if(!chirpMemberCollectService.hasCollect(CollectType.THUMBS_UP_POST, loginMemberId, reqVo.getPostId())) {
                 throw exception(REPEATED_REQUESTS);
             }
-        }
-
-        if (!postExists(productId, loginMemberId)) {
-            throw exception(PRODUCT_POST_EXISTENCE);
+        } else if (Boolean.TRUE.equals(reqVo.getThumbsUp())) {
+            if(chirpMemberCollectService.hasCollect(CollectType.THUMBS_UP_POST, loginMemberId, reqVo.getPostId())) {
+                throw exception(REPEATED_REQUESTS);
+            }
         }
     }
 
@@ -159,7 +162,11 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
     }
 
     @Override
-    public List<Long> searchIdList(AppProductPostListBO bo) {
+    public List<Long> searchIdList(AppProductPostListBO bo) throws NoDataException {
+        List<Long> ids = baseMapper.searchIdList(bo);
+        if (CollUtil.isEmpty(ids)) {
+            throw new NoDataException();
+        }
         return baseMapper.searchIdList(bo);
     }
 
@@ -198,9 +205,9 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
         }
     }
 
-    private boolean postExists(Long productId, Long memberId) {
+    private boolean postExists(Long productId, Long postId) {
         return exists(Wrappers.lambdaQuery(ChirpProductPostDO.class)
-                .eq(ChirpProductPostDO::getPostId, memberId)
+                .eq(ChirpProductPostDO::getPostId, postId)
                 .eq(ChirpProductPostDO::getProductId, productId));
     }
 

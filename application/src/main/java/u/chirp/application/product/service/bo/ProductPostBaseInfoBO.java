@@ -37,7 +37,7 @@ public class ProductPostBaseInfoBO {
     /**
      * 帖子类型
      */
-    private Integer postType;
+    private String postType;
 
     /**
      * 帖子处理进度
