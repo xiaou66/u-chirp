@@ -68,7 +68,9 @@ function checkOverflow(container: HTMLDivElement) {
   container.setAttribute('checkOverflow', 'true');
 }
 function requestList(next = listData.value.next) {
-  console.log('requestList.next', next);
+  if (next == null) {
+    return;
+  }
   productPostListApi({
     ...searchQueryParams.value,
     next,
@@ -132,7 +134,7 @@ onMounted(() => {
             </div>
           </div>
           <!--  主体区域  -->
-          <div class="pt-5">
+          <div class="pt-5 pb-8">
             <div class="h-full grid grid-cols-[1fr_auto] gap-2">
               <div class="flex flex-col gap-5">
                 <!--          skeleton-->
