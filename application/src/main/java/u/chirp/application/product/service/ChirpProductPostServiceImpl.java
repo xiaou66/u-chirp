@@ -159,8 +159,8 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
     }
 
     @Override
-    public List<Long> searchIdList(IPage<?> page, AppProductPostListBO bo) {
-        return baseMapper.searchIdList(page, bo);
+    public List<Long> searchIdList(AppProductPostListBO bo) {
+        return baseMapper.searchIdList(bo);
     }
 
     @Override

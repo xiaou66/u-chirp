@@ -3,6 +3,7 @@ package u.chirp.application.product.controller.app.vo;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import u.boot.start.common.pojo.PageParam;
+import u.boot.start.common.pojo.RollParam;
 import u.chirp.application.product.enums.AppProductPostListTab;
 
 /**
@@ -10,7 +11,7 @@ import u.chirp.application.product.enums.AppProductPostListTab;
  * @date 2024/11/21
  */
 @Data
-public class AppProductPostListGetReqVO extends PageParam {
+public class AppProductPostListGetReqVO extends RollParam {
     /**
      * 产品 code
      */

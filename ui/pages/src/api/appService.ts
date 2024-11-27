@@ -104,3 +104,11 @@ export interface pageParam {
   page?: number;
   pageSize?: number;
 }
+export interface RollParam {
+  next?: number;
+}
+
+export interface RollResult<T> {
+  next: number;
+  list: T[];
+}

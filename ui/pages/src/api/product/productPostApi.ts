@@ -1,4 +1,4 @@
-import {type pageParam, type PageResult, request} from "../appService";
+import { request, type RollParam, type RollResult} from "../appService";
 import type {ProductInfoResp} from "./productApi";
 
 export interface ProductPostSaveReq {
@@ -44,7 +44,7 @@ export async function productPostPostSaveApi(data: ProductPostSaveReq) {
   });
 }
 
-export interface ProductPostListReq extends pageParam {
+export interface ProductPostListReq extends RollParam {
   productCode: string;
   postTitle?: string;
   tab?: string;
@@ -108,7 +108,7 @@ export interface ProductPostListResp {
  * @param params
  */
 export async function productPostListApi(params: ProductPostListReq) {
-  return await request<PageResult<ProductPostListResp>>('GET', '/product/post/list', {
+  return await request<RollResult<ProductPostListResp>>('GET', '/product/post/list', {
     params
   });
 }

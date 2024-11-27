@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import u.boot.start.common.pojo.PageResult;
 import u.boot.start.common.pojo.R;
+import u.boot.start.common.pojo.RollResult;
 import u.chirp.application.product.controller.app.vo.*;
 import u.chirp.application.product.convert.ChirpProductPostConvert;
 import u.chirp.application.product.service.IChirpProductMemberService;
@@ -46,14 +47,13 @@ public class ChirpProductPostController {
      * @return
      */
     @GetMapping("/list")
-    public R<PageResult<ChirpProductPostListRespVO>> list(AppProductPostListGetReqVO reqVo) {
-        IPage<Long> page = new Page<>(reqVo.getPageNo(), reqVo.getPageSize());
+    public R<RollResult<ChirpProductPostListRespVO>> list(AppProductPostListGetReqVO reqVo) {
         AppProductPostListBO appProductPostListBO = chirpProductPostService.payloadQueryParam(reqVo);
-        List<Long> ids = chirpProductPostService.searchIdList(page, appProductPostListBO);
+        List<Long> ids = chirpProductPostService.searchIdList(appProductPostListBO);
         List<ChirpProductPostListBO> res = chirpProductPostService.payloadResult(ids);
         List<ChirpProductPostListRespVO> respList = ChirpProductPostConvert.INSTANCE
                 .toChirpProductPostListRespDO(res);
-        return R.success(new PageResult<>(respList, page.getTotal()));
+        return R.success(new RollResult<>(respList, ids.get(ids.size() - 1)));
     }
 
 

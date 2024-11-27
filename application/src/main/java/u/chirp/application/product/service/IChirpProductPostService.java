@@ -51,7 +51,7 @@ public interface IChirpProductPostService extends IService<ChirpProductPostDO> {
 
     AppProductPostListBO payloadQueryParam(AppProductPostListGetReqVO reqVo);
 
-    List<Long> searchIdList(IPage<?> page, AppProductPostListBO appProductPostListBO);
+    List<Long> searchIdList(AppProductPostListBO appProductPostListBO);
 
     List<ChirpProductPostListBO> payloadResult(List<Long> ids);
 }

@@ -9,7 +9,7 @@ import MemberInfoCard from "./components/MemberInfoCard.vue";
 import {useI18n} from "vue-i18n";
 import {productPostListApi, type ProductPostListReq, type ProductPostListResp} from "../../api";
 import {useRoute} from "vue-router";
-import type {PageResult} from "../../api/appService";
+import type {PageResult, RollResult} from "../../api/appService";
 import DictData from "@u-chirp/components/src/dict/DictData.vue";
 import { ProductConstants } from "../../constant";
 import BackTop from "@u-chirp/components/src/BackTop/BackTop.vue";
@@ -41,17 +41,17 @@ const tabs = [
 
 const route = useRoute();
 const searchQueryParams = ref<ProductPostListReq>({
-  pageSize: 10,
-  page: 1,
+  next: 0,
   tab: 'HOT',
   productCode: route.params.productCode as string,
-})
+});
+
 
 function handleTabChange(key: string) {
   searchQueryParams.value.tab = key;
 }
-const listData = ref<PageResult<ProductPostListResp>>({
-  total: 0,
+const listData = ref<RollResult<ProductPostListResp>>({
+  next: 0,
   list: [],
 });
 
@@ -65,22 +65,32 @@ function checkOverflow(container: HTMLDivElement) {
   } else {
     button.style.display = 'none'; // Hide the button if no overflow
   }
+  container.setAttribute('checkOverflow', 'true');
 }
-function requestList() {
+function requestList(next = listData.value.next) {
+  console.log('requestList.next', next);
   productPostListApi({
     ...searchQueryParams.value,
+    next,
   }).then(res => {
-    listData.value = res
+    if (next === 0) {
+      listData.value = res
+    } else {
+      listData.value.list.push(...res.list);
+      listData.value.next = res.next;
+      console.log('res.next', res.next)
+    }
     nextTick(() => {
-      itemRefs.value.map(el => {
-        checkOverflow(el);
-      })
+      itemRefs.value.filter(item => !item.hasAttribute('checkOverflow'))
+        .map(el => {
+          checkOverflow(el);
+        })
     });
   })
 }
 const postContainerRef = ref<HTMLElement>();
 function load() {
-
+  requestList();
 }
 onMounted(() => {
   requestList()
