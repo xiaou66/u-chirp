@@ -1,1 +1,2 @@
-export * from './DictData.vue';
+import DictData from './DictData.vue'
+export { DictData };

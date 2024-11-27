@@ -1,1 +1,2 @@
-export * from './TagPlus.vue';
+import TagPlus from './TagPlus.vue';
+export { TagPlus };

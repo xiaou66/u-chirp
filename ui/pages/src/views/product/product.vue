@@ -1,18 +1,15 @@
 <script lang="ts" setup>
 import ProductTopMenu from './components/ProductTopMenu.vue'
-import { SvgIcon } from '@u-chirp/components'
+import { SvgIcon, BackTop, TagPlus, DictData } from '@u-chirp/components'
 import {nextTick, onMounted, ref} from 'vue'
-import TagPlus from '@u-chirp/components/src/tags/TagPlus/TagPlus.vue'
 import { Button, Input, Tabs, TabsList, TabsTrigger } from '@u-chirp/shadcn'
 import ProductProblemIssue from './components/ProductProblemIssue.vue'
 import MemberInfoCard from "./components/MemberInfoCard.vue";
 import {useI18n} from "vue-i18n";
 import {productPostListApi, type ProductPostListReq, type ProductPostListResp} from "../../api";
 import {useRoute} from "vue-router";
-import type {PageResult, RollResult} from "../../api/appService";
-import DictData from "@u-chirp/components/src/dict/DictData.vue";
+import type {RollResult} from "../../api/appService";
 import { ProductConstants } from "../../constant";
-import BackTop from "@u-chirp/components/src/BackTop/BackTop.vue";
 import {formatUserTime} from "@u-chirp/utils";
 
 const { t } = useI18n();
