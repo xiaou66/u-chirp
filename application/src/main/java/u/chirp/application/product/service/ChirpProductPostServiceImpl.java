@@ -79,11 +79,7 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
     @Transactional
     public void thumbsUp(AppProductPostThumbsUpReqVO reqVo, Long productId) {
         long loginMemberId = StpUtil.getLoginIdAsLong();
-        try {
-            verifyThumbsUp(reqVo, productId);
-        } catch (Exception e) {
-            return;
-        }
+        verifyThumbsUp(reqVo, productId);
 
         // 帖子的发布者点赞数 +/- 1
         ProductPostBaseInfoBO postBaseInfo = getPostBaseInfo(reqVo.getPostId());
@@ -100,16 +96,20 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
         }
     }
 
-    private void verifyThumbsUp(AppProductPostThumbsUpReqVO reqVo, Long productId) throws Exception {
+    private void verifyThumbsUp(AppProductPostThumbsUpReqVO reqVo, Long productId)  {
+        if (!postExists(productId, reqVo.getPostId())) {
+            throw exception(PRODUCT_POST_EXISTENCE);
+        }
+
         long loginMemberId = StpUtil.getLoginIdAsLong();
         if (Boolean.FALSE.equals(reqVo.getThumbsUp())) {
             if(!chirpMemberCollectService.hasCollect(CollectType.THUMBS_UP_POST, loginMemberId, reqVo.getPostId())) {
                 throw exception(REPEATED_REQUESTS);
             }
-        }
-
-        if (!postExists(productId, loginMemberId)) {
-            throw exception(PRODUCT_POST_EXISTENCE);
+        } else if (Boolean.TRUE.equals(reqVo.getThumbsUp())) {
+            if(chirpMemberCollectService.hasCollect(CollectType.THUMBS_UP_POST, loginMemberId, reqVo.getPostId())) {
+                throw exception(REPEATED_REQUESTS);
+            }
         }
     }
 
@@ -205,9 +205,9 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
         }
     }
 
-    private boolean postExists(Long productId, Long memberId) {
+    private boolean postExists(Long productId, Long postId) {
         return exists(Wrappers.lambdaQuery(ChirpProductPostDO.class)
-                .eq(ChirpProductPostDO::getPostId, memberId)
+                .eq(ChirpProductPostDO::getPostId, postId)
                 .eq(ChirpProductPostDO::getProductId, productId));
     }
 
