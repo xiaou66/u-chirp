@@ -1,1 +1,2 @@
-export * from './UserEditor.vue';
+import UserEditor from './UserEditor.vue';
+export { UserEditor }

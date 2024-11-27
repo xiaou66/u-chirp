@@ -1,1 +1,2 @@
-export * from './DefaultEmpty.vue';
+import DefaultEmpty from './DefaultEmpty.vue';
+export { DefaultEmpty };

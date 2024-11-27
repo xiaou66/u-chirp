@@ -5,3 +5,4 @@ export * from './src/dialog';
 export * from './src/tags';
 export * from './src/BackTop';
 export * from './src/dict';
+export * from './src/empty'

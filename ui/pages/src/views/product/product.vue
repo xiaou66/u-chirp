@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import ProductTopMenu from './components/ProductTopMenu.vue'
-import { SvgIcon, BackTop, TagPlus, DictData } from '@u-chirp/components'
+import { SvgIcon, BackTop, TagPlus, DictData, DefaultEmpty } from '@u-chirp/components'
 import {nextTick, onMounted, ref} from 'vue'
 import { Button, Input, Tabs, TabsList, TabsTrigger } from '@u-chirp/shadcn'
 import ProductProblemIssue from './components/ProductProblemIssue.vue'
@@ -11,7 +11,6 @@ import {useRoute} from "vue-router";
 import type {RollResult} from "../../api/appService";
 import { ProductConstants } from "../../constant";
 import {formatUserTime} from "@u-chirp/utils";
-import DefaultEmpty from "@u-chirp/components/src/empty/DefaultEmpty/DefaultEmpty.vue";
 
 const { t } = useI18n();
 const tabs = [
