@@ -19,7 +19,7 @@
                 and cpp.post_good = 1
             </if>
             <if test='"FOLLOW".equals(bo.tab.name())'>
-                and cpp.collect_type = 2
+                and cmc.collect_type = 2
             </if>
             <if test="bo.next != null and bo.next > 0">
                 and cpp.post_id > #{bo.next}
@@ -29,6 +29,7 @@
         order by cpp.post_top desc
           <if test='"HOT".equals(bo.tab.name())'>, cpp.post_hot desc</if>
           <if test='"NEW".equals(bo.tab.name())'>, cpp.create_time desc</if>
+          <if test='"FOLLOW".equals(bo.tab.name())'>, cmc.create_time desc</if>
           , cpp.post_id
         limit 10
     </select>

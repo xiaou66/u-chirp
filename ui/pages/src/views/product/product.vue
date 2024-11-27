@@ -16,7 +16,7 @@ import {
 import {useRoute} from "vue-router";
 import type {RollResult} from "../../api/appService";
 import { ProductConstants } from "../../constant";
-import {formatUserTime} from "@u-chirp/utils";
+import {formatUserTime, isMobile} from "@u-chirp/utils";
 
 const { t } = useI18n();
 const tabs = [
@@ -85,17 +85,22 @@ function requestList(next = listData.value.next) {
   }).then(res => {
     if (next === 0) {
       listData.value = res
+      memberFollowPostIds.value.length = 0;
+      memberThumbsUpPostIds.value.length = 0;
     } else {
       listData.value.list.push(...res.list);
       listData.value.next = res.next;
     }
     const postIds = res.list.map(({ postId }) => postId);
-    productPostThumbsUpRecordApi(postIds).then((thumbsUpPostIds) => {
-      memberThumbsUpPostIds.value.push(...thumbsUpPostIds)
-    });
-    productPostFollowRecord(postIds).then((followPostIds) => {
-      memberFollowPostIds.value.push(...followPostIds);
-    });
+    if (postIds.length > 0) {
+      // 调用当前用户跟进和点赞内容
+      productPostThumbsUpRecordApi(postIds).then((thumbsUpPostIds) => {
+        memberThumbsUpPostIds.value.push(...thumbsUpPostIds)
+      });
+      productPostFollowRecord(postIds).then((followPostIds) => {
+        memberFollowPostIds.value.push(...followPostIds);
+      });
+    }
     nextTick(() => {
       // 过滤掉已经被计算过的
       itemRefs.value.filter(item => !item.hasAttribute('checkOverflow'))
@@ -115,7 +120,35 @@ function handlePostThumbs(postId: string, thumbsUp: boolean) {
     productCode: route.params.productCode as string,
     postId,
     thumbsUp
-  });
+  }).then(() => {});
+  const listItem = listData.value.list.find((item) => item.postId === postId);
+  if (thumbsUp && listItem) {
+    memberThumbsUpPostIds.value.push(postId);
+    listItem.postThumbsUpCount = (Number((listItem?.postThumbsUpCount || 0)) + 1).toString();
+  } else if (listItem) {
+    const index = memberThumbsUpPostIds.value.findIndex(thumbsUpPostId => thumbsUpPostId === postId);
+    memberThumbsUpPostIds.value.splice(index, 1);
+    listItem.postThumbsUpCount = (Number((listItem?.postThumbsUpCount || 0)) - 1).toString();
+  }
+}
+
+function handleFollow(postId: string, follow: boolean) {
+  productPostFollowApi({
+    productCode: route.params.productCode as string,
+    postId,
+    follow
+  }).then(() => {});
+
+  const listItem = listData.value.list.find((item) => item.postId === postId);
+  if (follow && listItem) {
+    memberFollowPostIds.value.push(postId);
+    listItem.postFollowCount = (Number((listItem?.postFollowCount || 0)) + 1).toString();
+  } else if (listItem) {
+    const index = memberFollowPostIds.value.findIndex(thumbsUpPostId => thumbsUpPostId === postId);
+    memberFollowPostIds.value.splice(index, 1);
+    console.log(memberFollowPostIds.value)
+    listItem.postFollowCount = (Number((listItem?.postFollowCount || 0)) - 1).toString();
+  }
 }
 </script>
 <template>
@@ -125,11 +158,24 @@ function handlePostThumbs(postId: string, thumbsUp: boolean) {
     <ProductTopMenu />
     <div ref="postContainerRef"
          v-infinite-scroll="requestList"
-         class="flex-1 bg-opacity-60 bg-base-200 flex justify-center overflow-y-auto">
-      <div class="mt-6  min-w-full flex justify-center">
-        <div class="w-10/12 grid grid-rows-[auto_1fr] h-full">
+         class="flex-1 bg-opacity-60 bg-base-200 flex justify-center overflow-y-auto pt-10 mobile:pt-2">
+      <div class="min-w-full flex justify-center">
+        <div class="w-10/12 2xl:w-8/12 xl:w-9/12 mobile:w-full mobile:p-2 h-full">
+          <div v-if="isMobile()" class="flex justify-between mb-3">
+            <div class="relative w-64 max-w-sm items-center">
+              <Input id="search" type="text" placeholder="搜索..." class="!pl-7" />
+              <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
+                  <svg-icon name="default-search"></svg-icon>
+                </span>
+            </div>
+            <ProductProblemIssue>
+              <template #trigger>
+                <Button>{{$t('product.createIssue')}}</Button>
+              </template>
+            </ProductProblemIssue>
+          </div>
           <!-- 检索区域  -->
-          <div class="flex justify-between items-center">
+          <div class="flex justify-between">
             <div class="flex gap-3">
               <button v-for="tab in tabs" :key="tab.key"
                       class="btn btn-sm"
@@ -140,13 +186,13 @@ function handlePostThumbs(postId: string, thumbsUp: boolean) {
               </button>
             </div>
             <div class="flex gap-3">
-              <div class="relative w-72 max-w-sm items-center hidden lg:block">
+              <div v-if="!isMobile()" class="relative w-72 max-w-sm items-center">
                 <Input id="search" type="text" placeholder="搜索..." class="!pl-7" />
                 <span class="absolute start-0 inset-y-0 flex items-center justify-center px-2">
                   <svg-icon name="default-search"></svg-icon>
                 </span>
               </div>
-              <ProductProblemIssue>
+              <ProductProblemIssue v-if="!isMobile()">
                 <template #trigger>
                   <Button>{{$t('product.createIssue')}}</Button>
                 </template>
@@ -217,22 +263,31 @@ function handlePostThumbs(postId: string, thumbsUp: boolean) {
                           <div class="text-xs text-base-content font-medium">{{formatUserTime(data.createTime)}}</div>
                         </div>
                       </div>
-                      <div class="flex gap-2">
-                        <div class="flex items-center gap-1 cursor-pointer">
+                      <div class="flex items-center gap-2 select-none">
+                        <div class="flex items-center gap-1 cursor-pointer w-10">
                           <svg-icon v-if="!memberThumbsUpPostIds.includes(data.postId)"
-                                    svg-class="text-lg"
+                                    svg-class="text-xl"
                                     name="product-thumbsUp"
                                     @click="handlePostThumbs(data.postId, true)"/>
-                          <svg-icon v-else svg-class="text-lg"
-                                    color="#2563eb"
+                          <svg-icon v-else
+                                    svg-class="text-xl"
+                                    color="#3C98FF"
                                     name="product-thumbsUpFill"
                                     @click="handlePostThumbs(data.postId, false)"/>
                           {{ data.postThumbsUpCount }}
                         </div>
                         <el-tooltip :content="t('product.follow')">
-                          <div class="flex items-center gap-1 cursor-pointer">
-                            <svg-icon svg-class="text-lg"  name="product-follow"></svg-icon>
-                            {{ data.postFollowCount }}
+                          <div class="flex items-center gap-1 cursor-pointer w-10">
+                            <svg-icon v-if="!memberFollowPostIds.includes(data.postId)"
+                                      color="#CDCDCD"
+                                      svg-class="text-2xl"
+                                      name="product-follow"
+                                      @click="handleFollow(data.postId, true)" />
+                            <svg-icon v-else color="#3C98FF"
+                                      svg-class="text-2xl"
+                                      name="product-follow"
+                                      @click="handleFollow(data.postId, false)" />
+                            <div>{{ data.postFollowCount }}</div>
                           </div>
                         </el-tooltip>
                       </div>

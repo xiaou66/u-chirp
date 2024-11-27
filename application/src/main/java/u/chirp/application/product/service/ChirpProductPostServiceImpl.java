@@ -191,16 +191,22 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
 
 
     private void verifyCollect(AppProductPostFollowReqVO reqVo, Long productId) throws Exception {
+        if (!postExists(productId, reqVo.getPostId())) {
+            throw exception(PRODUCT_POST_EXISTENCE);
+        }
+
         long loginMemberId = StpUtil.getLoginIdAsLong();
         if (Boolean.FALSE.equals(reqVo.getFollow())) {
             if(!chirpMemberCollectService.hasCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId())) {
                 throw exception(REPEATED_REQUESTS);
             }
+        } else if (Boolean.TRUE.equals(reqVo.getFollow())) {
+            if(chirpMemberCollectService.hasCollect(CollectType.COLLECT_POST, loginMemberId, reqVo.getPostId())) {
+                throw exception(REPEATED_REQUESTS);
+            }
         }
 
-        if (!postExists(productId, loginMemberId)) {
-            throw exception(PRODUCT_POST_EXISTENCE);
-        }
+
     }
 
     private boolean postExists(Long productId, Long postId) {

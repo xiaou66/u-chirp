@@ -34,7 +34,9 @@ function handleBackTop() {
 }
 </script>
 <template>
-  <div v-if="show" class="fixed right-10 bottom-10" @click="handleBackTop">
+  <div v-if="show"
+       class="fixed md:right-5 bottom-5 md:block hidden"
+       @click="handleBackTop">
     <div class="w-10 h-10 rounded-full bg-base-100 hover:bg-base-200 flex items-center justify-center cursor-pointer shadow-2xl backTop">
       <slot name="icon">
         <svg-icon :size="20"

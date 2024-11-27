@@ -74,12 +74,12 @@ export interface ProductPostListResp {
   /**
    * 点赞数
    */
-  postThumbsUpCount: number;
+  postThumbsUpCount: string;
 
   /**
    * 收藏数
    */
-  postFollowCount: number;
+  postFollowCount: string;
 
   /**
    * 是否置顶

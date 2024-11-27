@@ -52,11 +52,12 @@ public class ChirpMemberCollectServiceImpl extends ServiceImpl<ChirpMemberCollec
 
         return CollUtil.split(refIds, 50).stream()
                 .map(item -> baseMapper.selectList(Wrappers.lambdaQuery(ChirpMemberCollectDO.class)
-                            .eq(ChirpMemberCollectDO::getCollectMemberId, collectMember)
-                            .in(ChirpMemberCollectDO::getCollectRefId, refIds))
-                            .stream()
-                            .map(ChirpMemberCollectDO::getCollectRefId)
-                            .toList())
+                                .eq(ChirpMemberCollectDO::getCollectType, collectType)
+                                .eq(ChirpMemberCollectDO::getCollectMemberId, collectMember)
+                                .in(ChirpMemberCollectDO::getCollectRefId, refIds))
+                        .stream()
+                        .map(ChirpMemberCollectDO::getCollectRefId)
+                        .toList())
                 .flatMap(Collection::stream)
                 .toList();
     }
