@@ -5,16 +5,12 @@ import jakarta.servlet.Filter;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -22,7 +18,7 @@ import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import u.boot.start.web.api.Api;
 import u.boot.start.web.api.WebProperties;
-import u.boot.start.web.config.DateFormatConfig;
+import u.boot.start.web.config.JsonFormatConfig;
 import u.boot.start.web.exception.GlobalExceptionHandler;
 
 import java.util.Arrays;
@@ -34,7 +30,7 @@ import java.util.List;
  */
 @Data
 @AutoConfiguration
-@Import({GlobalExceptionHandler.class, DateFormatConfig.class})
+@Import({GlobalExceptionHandler.class, JsonFormatConfig.class})
 @EnableConfigurationProperties(WebProperties.class)
 public class WebAutoConfiguration implements WebMvcConfigurer {
     /**
