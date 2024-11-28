@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Tabs, TabsList, TabsTrigger, Button } from '@u-chirp/shadcn'
 import { SvgIcon, UDialog } from '@u-chirp/components'
-import UserEditor from '@u-chirp/components/src/Editor/UserEditor.vue'
-import {ref} from "vue";
-import type {UserEditorInstance} from "@u-chirp/components/src/Editor/Editor";
+import { UserEditor } from '@u-chirp/components'
+import { ref } from "vue";
+import type { UserEditorInstance } from "@u-chirp/components";
 import {useRoute} from "vue-router";
 import {productPostPostSaveApi} from "../../../api";
 

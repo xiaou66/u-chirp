@@ -6,7 +6,8 @@ import App from './App.vue'
 import router from './router'
 import 'virtual:svg-icons-register'
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate'
-
+import { installPlatformModule } from '@u-chirp/utils'
+installPlatformModule();
 const app = createApp(App)
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedState);

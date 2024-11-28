@@ -7,7 +7,8 @@
     "pages/src/**/*",
     "pages/src/**/*.vue",
     "pages/pm-src/**/*",
-    "pages/pm-src/**/*.vue"
+    "pages/pm-src/**/*.vue",
+    "packages/utils/platform/type.ts"
   ],
   "exclude": [
     "pages/src/**/__tests__/*",

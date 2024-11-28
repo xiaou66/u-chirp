@@ -20,7 +20,7 @@ const isDesktop = useMediaQuery('(min-width: 768px)')
         <slot name="trigger"></slot>
       </DialogTrigger>
     </DialogHeader>
-    <DialogContent class="!max-w-2xl">
+    <DialogContent class="!max-w-2xl" @pointerDownOutside.prevent @escapeKeyDown.prevent>
       <DialogHeader>
         <DialogTitle>
           <slot name="title"></slot>

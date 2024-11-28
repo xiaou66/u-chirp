@@ -11,11 +11,12 @@ onMounted(() => {
 </script>
 
 <template>
-    <FilePreview />
     <toaster  />
-    <div class="dark min-h-screen">
-      <router-view />
-    </div>
+    <FilePreview >
+      <div class="dark min-h-screen">
+        <router-view />
+      </div>
+    </FilePreview>
 </template>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, ref, provide, onMounted, onUnmounted} from "vue";
-import { SvgIcon } from "@u-chirp/components";
+import {SvgIcon} from "@u-chirp/components";
 import type {FilePreviewInstance, FilePreviewProps} from "./type";
 import hotkeys from "hotkeys-js";
 
@@ -27,6 +27,7 @@ function next() {
     fileIndex.value += 1;
   }
 }
+
 function previous() {
   if (fileIndex.value === 0) {
     fileIndex.value = fileList.value.length - 1;
@@ -42,17 +43,19 @@ function previewFile(files: (File | object)[], index = 0) {
     first.value = true
   }
   fileIndex.value = index;
-  fileList.value = files;
+  fileList.value = [...files];
   show.value = true;
   hotkeys.setScope('filePreview');
   hotKeyScope.value = hotkeys.getScope();
 }
+
 function hidePreviewFile() {
   show.value = false;
   fileIndex.value = 0;
   fileList.value.length = 0;
   hotkeys.setScope(hotKeyScope.value);
 }
+
 const hotKeyScope = ref<string>('default');
 onMounted(() => {
   hotkeys.unbind('esc', 'filePreview');
@@ -62,7 +65,6 @@ onMounted(() => {
     e.stopPropagation();
     hidePreviewFile();
   })
-  previewFile([]);
 });
 
 onUnmounted(() => {
@@ -76,56 +78,64 @@ provide<FilePreviewInstance>('filePreviewInstance', {
 defineExpose<FilePreviewInstance>({
   previewFile
 });
+function handleCover(e: MouseEvent) {
+  console.log('handleCover')
+  // e.stopPropagation();
+}
 </script>
 
 <template>
-  <Transition name="fade">
-    <div v-if="first"
-         v-show="show"
-         class="file-preview">
-      <div class="switchover">
-        <div v-show="fileIndex !== 0"
-             @click="previous">
-          <svg-icon color="#ffffff" name="default-arrowLeft" />
-        </div>
-        <div v-show="fileIndex !== fileList.length - 1 && fileList.length > 1"
-             @click="next">
-          <svg-icon color="#ffffff" name="default-arrowRight" />
-        </div>
-      </div>
-      <div class="file-preview-container">
-        <img class="select-none"
-             :src="fileUrl(fileList[fileIndex])"
-             alt="">
-      </div>
-      <div class="close"
-           @click="hidePreviewFile">
-        <svg-icon :size="18"
-                  color="#bfbfbf"
-                  hover-color="#ffffff"
-                  name="default-close" />
-      </div>
-      <div class="action">
-      </div>
-    </div>
-  </Transition>
+  <Teleport to="html">
+      <Transition name="fade">
+          <div v-if="first"
+               v-show="show"
+               class="file-preview">
+              <div class="switchover" @click="handleCover">
+                  <div v-show="fileIndex !== 0"
+                       @click="previous">
+                      <svg-icon color="#ffffff" name="default-arrowLeft"/>
+                  </div>
+                  <div v-show="fileIndex !== fileList.length - 1 && fileList.length > 1"
+                       @click="next">
+                      <svg-icon color="#ffffff" name="default-arrowRight"/>
+                  </div>
+              </div>
+              <div class="file-preview-container">
+                  <img class="select-none"
+                       :src="fileUrl(fileList[fileIndex])"
+                       alt="">
+              </div>
+              <div class="close"
+                   @click="hidePreviewFile">
+                  <svg-icon :size="18"
+                            color="#bfbfbf"
+                            hover-color="#ffffff"
+                            name="default-close"/>
+              </div>
+              <div class="action">
+              </div>
+          </div>
+      </Transition>
+  </Teleport>
+  <slot></slot>
 </template>
 
 <style lang="less" scoped>
 .file-preview {
   width: 100vw;
   height: 100vh;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 9999;
   background: rgba(0, 0, 0, 0.5);
 }
+
 .switchover {
   width: 100%;
   height: 100%;
   position: absolute;
-  >div {
+  > div {
     width: 40px;
     height: 40px;
     background: #606266;
@@ -139,13 +149,16 @@ defineExpose<FilePreviewInstance>({
     transform: translateY(-50%);
     cursor: pointer;
   }
-  >div:first-child {
+
+  > div:first-child {
     left: 10px;
   }
-  >div:last-child {
+
+  > div:last-child {
     right: 10px;
   }
 }
+
 .file-preview-container {
   width: 100%;
   height: 100%;
@@ -153,12 +166,14 @@ defineExpose<FilePreviewInstance>({
   justify-content: center;
   align-items: center;
   padding: 64px;
+
   img {
     max-width: 100% !important;
     max-height: 100% !important;
     object-fit: contain !important;
   }
 }
+
 .action {
   position: absolute;
   bottom: 20px;
@@ -174,6 +189,7 @@ defineExpose<FilePreviewInstance>({
   align-items: center;
   opacity: 0;
 }
+
 .close {
   position: absolute;
   right: 20px;
@@ -182,11 +198,12 @@ defineExpose<FilePreviewInstance>({
   height: 36px;
   border-radius: 50%;
   cursor: pointer;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 250ms ease;
