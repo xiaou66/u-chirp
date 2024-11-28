@@ -15,7 +15,7 @@ const fileUrl = computed(() => {
     if (item instanceof File) {
       return window.URL.createObjectURL(item);
     } else if (item) {
-      return item[props.fileUrlKey];
+      return (item as any)[props.fileUrlKey || 'url'] as string;
     }
   }
 })
@@ -39,7 +39,7 @@ function previous() {
 
 const show = ref(false);
 
-function previewFile(files: (File | object)[], index?: number) {
+function previewFile(files: (File | object)[], index = 0) {
   if (!first.value) {
     first.value = true
   }
