@@ -18,10 +18,8 @@ const fileUrl = computed(() => {
       return (item as any)[props.fileUrlKey || 'url'] as string;
     }
   }
-})
-function fileChange(e: any) {
-  fileList.value = Array.from(e.target.files);
-}
+});
+
 function next() {
   if (fileIndex.value === fileList.value.length - 1) {
     fileIndex.value = 0;
