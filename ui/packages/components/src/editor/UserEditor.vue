@@ -24,20 +24,13 @@ onMounted(() => {
   });
   editor.value = quill;
 
-  let toolbar = quill.getModule("toolbar");
+  const toolbar = quill.getModule("toolbar") as Toolbar;
   //对工具栏的image添加回调函数覆盖原本的方法
-  (toolbar as Toolbar).addHandler("image", () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.multiple = true;
-    input.click();
-    input.addEventListener('change', (e: Event) => {
-      fileList.value.push(...Array.from((e.target as any).files as FileList));
-      input.remove();
-    });
-    input.addEventListener('cancel', (e: Event) => {
-      input.remove()
-    })
+  toolbar.addHandler("image", () => {
+    window.platform.fileOps.openSelectFile()
+      .then(files => {
+        fileList.value.push(...files);
+      });
   });
 
   // 自定义粘贴图片功能
@@ -93,10 +86,14 @@ function handleOpenFilePreview(index: number) {
   filePreviewInstance?.previewFile(fileList.value, index)
 }
 
+function handleFileDelete(index: number) {
+  fileList.value.splice(index, 1);
+}
+
 </script>
 
 <template>
-  <div class="w-full h-full grid" style="grid-template-rows: calc(100% - 90px) 90px">
+  <div class="w-full h-full grid" style="display: flex; flex-direction: column;">
     <div class="light w-full h-full">
       <div id="editor" class="h-full post-edit-container"></div>
       <!--  工具条  -->
@@ -135,13 +132,14 @@ function handleOpenFilePreview(index: number) {
       </div>
     </div>
     <!-- 文件上传区 -->
-    <div class="pt-2 flex overflow-x-auto gap-2">
+    <div v-if="fileList.length > 0"
+         class="mt-2 flex overflow-x-auto gap-2 h-20 shrink-0">
       <div v-for="(file, index) in fileList"
            :key="index"
            class="h-20 w-20 rounded image-box"
            @click="() => handleOpenFilePreview(index)">
         <div class="h-20 w-20 cover">
-          <div class="right-action">
+          <div class="right-action" @click.stop="handleFileDelete(index)">
             <div>
               <svg-icon :size="18"
                         color="#ffffff"

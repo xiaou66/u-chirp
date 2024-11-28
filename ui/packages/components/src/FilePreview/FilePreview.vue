@@ -78,10 +78,6 @@ provide<FilePreviewInstance>('filePreviewInstance', {
 defineExpose<FilePreviewInstance>({
   previewFile
 });
-function handleCover(e: MouseEvent) {
-  console.log('handleCover')
-  // e.stopPropagation();
-}
 </script>
 
 <template>
@@ -90,7 +86,7 @@ function handleCover(e: MouseEvent) {
           <div v-if="first"
                v-show="show"
                class="file-preview">
-              <div class="switchover" @click="handleCover">
+              <div class="switchover">
                   <div v-show="fileIndex !== 0"
                        @click="previous">
                       <svg-icon color="#ffffff" name="default-arrowLeft"/>
@@ -106,7 +102,7 @@ function handleCover(e: MouseEvent) {
                        alt="">
               </div>
               <div class="close"
-                   @click="hidePreviewFile">
+                   @click.stop="hidePreviewFile">
                   <svg-icon :size="18"
                             color="#bfbfbf"
                             hover-color="#ffffff"
