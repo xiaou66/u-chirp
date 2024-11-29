@@ -1,35 +1,46 @@
 <script setup lang="ts">
 import {
-  Dialog, DialogContent, DialogDescription,
+  Dialog,
+  DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger, DialogFooter,
-  Drawer, DrawerContent, DrawerDescription,
+  DialogTrigger,
+  DialogFooter,
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
   DrawerHeader,
-  DrawerTitle, DrawerTrigger, DrawerFooter
+  DrawerTitle,
+  DrawerTrigger,
+  DrawerFooter,
 } from '@u-chirp/shadcn'
 import { useMediaQuery } from '@vueuse/core'
-import {ref} from "vue";
+import { ref } from 'vue'
+import type { UDialogInstance } from './type'
 
 const isDesktop = useMediaQuery('(min-width: 768px)')
 
-const show = ref(false);
+const show = ref(false)
 
 function handlePointerDownOutside(e: MouseEvent) {
   console.log(e.target)
   if (e.target instanceof HTMLElement) {
-    if (e.target.hasAttribute('vaul-drawer-visible')
-      || e.target.hasAttribute('data-state')) {
-      handleClose();
+    if (e.target.hasAttribute('vaul-drawer-visible') || e.target.hasAttribute('data-state')) {
+      handleClose()
     }
   }
 }
 function handleClose() {
-  show.value = false;
+  show.value = false
 }
 function handleTrigger() {
-  show.value = true;
+  show.value = true
 }
+
+defineExpose<UDialogInstance>({
+  close: handleClose,
+});
 </script>
 
 <template>
@@ -37,10 +48,12 @@ function handleTrigger() {
     <DialogTrigger @click="handleTrigger">
       <slot name="trigger"></slot>
     </DialogTrigger>
-    <DialogContent class="!max-w-2xl"
-                   @pointerDownOutside="handlePointerDownOutside"
-                   @escapeKeyDown="() => handleClose()"
-                   @close="handleClose">
+    <DialogContent
+      class="!max-w-2xl"
+      @pointerDownOutside="handlePointerDownOutside"
+      @escapeKeyDown="() => handleClose()"
+      @close="handleClose"
+    >
       <DialogHeader>
         <DialogTitle>
           <slot name="title"></slot>
@@ -58,13 +71,14 @@ function handleTrigger() {
     </DialogContent>
   </Dialog>
   <Drawer :open="show" v-else>
-    <DrawerTrigger as-child
-                   @click="handleTrigger">
+    <DrawerTrigger as-child @click="handleTrigger">
       <slot name="trigger"></slot>
     </DrawerTrigger>
-    <DrawerContent class="min-h-[60%] p-2"
-                   @pointerDownOutside="handlePointerDownOutside"
-                   @escapeKeyDown="() => handleClose()">
+    <DrawerContent
+      class="min-h-[60%] p-2"
+      @pointerDownOutside="handlePointerDownOutside"
+      @escapeKeyDown="() => handleClose()"
+    >
       <DrawerHeader class="text-left">
         <DrawerTitle>
           <slot name="title"></slot>
@@ -83,6 +97,4 @@ function handleTrigger() {
   </Drawer>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -32,6 +32,8 @@ export interface ProductPostSaveReq {
    * 帖子类型
    */
   postType: string;
+
+  fileIds?: string[];
 }
 
 /**

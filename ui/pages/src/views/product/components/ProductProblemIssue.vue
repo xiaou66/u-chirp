@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { Tabs, TabsList, TabsTrigger, Button } from '@u-chirp/shadcn'
-import { SvgIcon, UDialog } from '@u-chirp/components'
+import {SvgIcon, UDialog, type UDialogInstance} from '@u-chirp/components'
 import { UserEditor } from '@u-chirp/components'
 import { ref } from "vue";
 import type { UserEditorInstance } from "@u-chirp/components";
 import {useRoute} from "vue-router";
 import {productPostPostSaveApi} from "../../../api";
+import {uploadFile} from "../../../api";
 
 const tabs = [
   {
@@ -29,22 +30,37 @@ const submitData = ref({
 });
 const userEditorRef = ref<UserEditorInstance>();
 const route = useRoute();
-function handlePushPost() {
+const submitLoading = ref(false);
+const uDialogRef = ref<UDialogInstance>();
+async function handlePushPost() {
+  submitLoading.value = true;
+
   const editor = userEditorRef.value!.getEditor();
-  console.log('route', route.params);
+  const fileList = userEditorRef.value!.getFileList();
+  const fileIds: string[] = [];
+
+  if (fileList.length > 0) {
+    const fileInfoItems = await Promise.all(fileList.map(file => uploadFile(file)));
+    fileIds.push(...fileInfoItems.map(item => item.fileId))
+  }
+
   const { productCode } = route.params as any;
   productPostPostSaveApi({
     productCode,
     postTitle: '',
     postRawContent: JSON.stringify(editor.getContents()),
     postRawHtml: editor.getSemanticHTML(),
-    postType: submitData.value.tab
-  });
+    postType: submitData.value.tab,
+    fileIds,
+  }).then(() => {
+    submitLoading.value = false;
+    uDialogRef.value!.close();
+  })
 }
 </script>
 
 <template>
-  <UDialog>
+  <UDialog ref="uDialogRef">
     <template #trigger>
       <slot name="trigger"></slot>
     </template>
@@ -71,8 +87,11 @@ function handlePushPost() {
       <UserEditor ref="userEditorRef"></UserEditor>
     </div>
     <template #footer>
-      <Button class="w-full" @click="handlePushPost">
-        <svg-icon color="hsl(var(--primary-foreground))"
+      <Button class="w-full" @click="handlePushPost" :disabled="submitLoading">
+        <svg-icon v-if="submitLoading" color="hsl(var(--primary-foreground))"
+                  svg-class="animate-spin"
+                  name="default-loading" />
+        <svg-icon v-else color="hsl(var(--primary-foreground))"
                   name="default-publish" />
         发布
       </Button>
