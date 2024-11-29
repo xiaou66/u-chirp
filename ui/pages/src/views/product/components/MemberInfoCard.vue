@@ -18,11 +18,11 @@ const { productMemberInfo } = toRefs(useProductStore());
     </div>
     <div v-if="productMemberInfo">
       <div class="stats flex items-center gap-2">
-        <div class="stat">
+        <div class="stat cursor-pointer">
           <div class="stat-title text-center">{{$t('user.issue')}}</div>
           <div class="stat-value text-sm text-center">{{ productMemberInfo.problemCount }}</div>
         </div>
-        <div class="stat">
+        <div class="stat cursor-pointer">
           <div class="stat-title text-center">{{$t('user.beLiked')}}</div>
           <div class="stat-value text-sm text-center">{{ productMemberInfo.thumbsUpCount }}</div>
         </div>
