@@ -126,7 +126,23 @@ defineExpose<FilePreviewInstance>({
   z-index: 9999;
   background: rgba(0, 0, 0, 0.5);
 }
+// 图片容器
+.file-preview-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 64px;
 
+  img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+  }
+}
+
+// 左右切换按钮
 .switchover {
   width: 100%;
   height: 100%;
@@ -145,31 +161,17 @@ defineExpose<FilePreviewInstance>({
     transform: translateY(-50%);
     cursor: pointer;
   }
-
+  // 左按钮
   > div:first-child {
     left: 10px;
   }
-
+  // 右按钮
   > div:last-child {
     right: 10px;
   }
 }
 
-.file-preview-container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 64px;
-
-  img {
-    max-width: 100% !important;
-    max-height: 100% !important;
-    object-fit: contain !important;
-  }
-}
-
+// 底部操作区域
 .action {
   position: absolute;
   bottom: 20px;
@@ -186,6 +188,7 @@ defineExpose<FilePreviewInstance>({
   opacity: 0;
 }
 
+// 关闭按钮样式
 .close {
   position: absolute;
   right: 20px;
@@ -199,7 +202,7 @@ defineExpose<FilePreviewInstance>({
   justify-content: center;
   align-items: center;
 }
-
+// 预览弹框的动画效果
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 250ms ease;
