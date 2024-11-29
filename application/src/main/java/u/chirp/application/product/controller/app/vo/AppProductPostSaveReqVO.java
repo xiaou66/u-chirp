@@ -3,6 +3,8 @@ package u.chirp.application.product.controller.app.vo;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author xiaou
  * @date 2024/11/20
@@ -33,4 +35,9 @@ public class AppProductPostSaveReqVO extends AppProductPostBaseReqVO {
      * 帖子类型
      */
     private String postType;
+
+    /**
+     * 文件上传后拿到的文件ids
+     */
+    private List<Long> fileIds;
 }

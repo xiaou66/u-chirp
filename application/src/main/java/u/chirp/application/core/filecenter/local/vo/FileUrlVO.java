@@ -9,6 +9,10 @@ import lombok.Data;
 @Data
 public class FileUrlVO {
     /**
+     * 文件 id
+     */
+    private Long fileId;
+    /**
      * 缩略图
      */
     private String thumbnailUrl;

@@ -1,6 +1,7 @@
 package u.chirp.application.product.controller.app;
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import u.boot.start.common.pojo.PageResult;
 import u.boot.start.common.pojo.R;
 import u.boot.start.common.pojo.RollResult;
+import u.chirp.application.core.filecenter.service.IChirpFileManagerService;
 import u.chirp.application.mumber.enums.CollectType;
 import u.chirp.application.mumber.service.IChirpMemberCollectService;
+import u.chirp.application.product.constant.ProductFileManagerCodeConstant;
 import u.chirp.application.product.controller.app.vo.*;
 import u.chirp.application.product.convert.ChirpProductPostConvert;
 import u.chirp.application.product.service.IChirpProductMemberService;
@@ -44,6 +47,9 @@ public class ChirpProductPostController {
 
     @Resource
     private IChirpMemberCollectService chirpMemberCollectService;
+
+    @Resource
+    private IChirpFileManagerService chirpFileManagerService;
 
 
     /**
@@ -78,6 +84,11 @@ public class ChirpProductPostController {
     public R<Long> savePost(@Validated @RequestBody AppProductPostSaveReqVO reqVo) {
         Long productId = chirpProductService.getProductIdByCode(reqVo.getProductCode());
         Long postId = chirpProductPostService.savePost(reqVo, productId);
+        if (CollUtil.isEmpty(reqVo.getFileIds())) {
+            chirpFileManagerService.batchSaveRefFileIds(ProductFileManagerCodeConstant.POST_IMAGE,
+                    postId,
+                    reqVo.getFileIds());
+        }
         if (Objects.isNull(reqVo.getPostId())) {
             chirpProductMemberService.addPostCount(StpUtil.getLoginIdAsLong(), productId);
         }

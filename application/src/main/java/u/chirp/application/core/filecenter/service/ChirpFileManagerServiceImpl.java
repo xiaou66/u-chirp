@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import u.chirp.application.core.filecenter.convert.FileLibraryConvert;
 import u.chirp.application.core.filecenter.dal.dataobejct.ChirpFileManagerDO;
 import u.chirp.application.core.filecenter.dal.mysql.ChirpFileManagerMapper;
@@ -69,5 +70,39 @@ public class ChirpFileManagerServiceImpl extends ServiceImpl<ChirpFileManagerMap
             });
         }
         return result;
+    }
+
+    @Override
+    @Transactional
+    public void batchSaveRefFileIds(String funcCode, Long refId, List<Long> fileIds) {
+        List<Long> fileIdsInDb = baseMapper.selectList(Wrappers.lambdaQuery(ChirpFileManagerDO.class)
+                        .select(ChirpFileManagerDO::getFileId)
+                        .eq(ChirpFileManagerDO::getFuncCode, funcCode)
+                        .eq(ChirpFileManagerDO::getRefId, refId))
+                .stream()
+                .map(ChirpFileManagerDO::getFileId)
+                .toList();
+
+        if (CollUtil.isNotEmpty(fileIds)) {
+            CollUtil.split(fileIds, 30)
+                    .forEach(fileIdList -> baseMapper.batchInsert(funcCode, refId, fileIdList));
+        }
+
+        // 当前资源关联过文件
+        if (CollUtil.isNotEmpty(fileIdsInDb)) {
+
+            // 删除的文件 id
+            List<Long> deleteFileIds = fileIdsInDb.stream()
+                    .filter(fileId -> !fileIds.contains(fileId))
+                    .toList();
+
+            if (CollUtil.isNotEmpty(deleteFileIds)) {
+                CollUtil.split(fileIds, 30)
+                        .forEach(fileIdList -> baseMapper.delete(Wrappers.lambdaQuery(ChirpFileManagerDO.class)
+                                .in(ChirpFileManagerDO::getFileId, fileIdList)
+                                .eq(ChirpFileManagerDO::getRefId, refId)
+                                .eq(ChirpFileManagerDO::getFuncCode, funcCode)));
+            }
+        }
     }
 }

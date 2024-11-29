@@ -12,6 +12,7 @@ function toCamelCase(pascalCase: string) {
 }
 
 function installBrowserModule() {
+  // @ts-ignore
   import('./browser').then(moduleObj => {
     for (let key of Object.keys(moduleObj)) {
       // @ts-ignore
