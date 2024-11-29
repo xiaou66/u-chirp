@@ -6,10 +6,10 @@ import {getLanguageConfig} from "../api";
 export const useSystemStore = defineStore('systemStore', () => {
   const language = ref<string>('zh');
 
-  function loadLanguage(lang: string) {
+  async function loadLanguage(lang: string) {
     language.value = lang;
     const composer = useI18n();
-    getLanguageConfig(lang)
+    await getLanguageConfig(lang)
       .then(res => {
         composer.setLocaleMessage(lang, res);
         composer.locale.value = lang;

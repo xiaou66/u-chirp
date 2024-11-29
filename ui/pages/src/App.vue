@@ -5,8 +5,8 @@ import {onMounted} from "vue";
 import { FilePreview } from "@u-chirp/components";
 
 const systemStore = useSystemStore();
-onMounted(() => {
-  systemStore.loadLanguage('zh');
+onMounted(async () => {
+  await systemStore.loadLanguage('zh');
 })
 </script>
 

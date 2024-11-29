@@ -5,8 +5,8 @@ import { UserEditor } from '@u-chirp/components'
 import { ref } from "vue";
 import type { UserEditorInstance } from "@u-chirp/components";
 import {useRoute} from "vue-router";
-import {productPostPostSaveApi} from "../../../api";
-import {uploadFile} from "../../../api";
+import {productPostPostSaveApi} from "../../../../api";
+import {uploadFile} from "../../../../api";
 
 const tabs = [
   {

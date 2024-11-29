@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {useMemberStore, useProductStore} from "../../../stores";
+import {useMemberStore, useProductStore} from "../../../../stores";
 import {toRefs} from "vue";
 
 const { memberInfo } = toRefs(useMemberStore());
