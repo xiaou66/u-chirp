@@ -17,7 +17,7 @@ public class ChirpFileLibraryDO extends BaseDO<ChirpFileLibraryDO> {
     /**
      * 文件ID
      */
-    @TableId(value = "file_id", type = IdType.AUTO)
+    @TableId(value = "file_id", type = IdType.ASSIGN_ID)
     private Long fileId;
 
     /**
