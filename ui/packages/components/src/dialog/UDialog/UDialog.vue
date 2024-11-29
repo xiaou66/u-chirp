@@ -6,7 +6,7 @@ import {
   DialogTrigger, DialogFooter,
   Drawer, DrawerContent, DrawerDescription,
   DrawerHeader,
-  DrawerTitle, DrawerTrigger, DrawerFooter, DialogClose
+  DrawerTitle, DrawerTrigger, DrawerFooter
 } from '@u-chirp/shadcn'
 import { useMediaQuery } from '@vueuse/core'
 import {ref} from "vue";
@@ -39,7 +39,7 @@ function handleTrigger() {
     </DialogTrigger>
     <DialogContent class="!max-w-2xl"
                    @pointerDownOutside="handlePointerDownOutside"
-                   @escapeKeyDown="() => handleClose"
+                   @escapeKeyDown="() => handleClose()"
                    @close="handleClose">
       <DialogHeader>
         <DialogTitle>
@@ -57,11 +57,14 @@ function handleTrigger() {
       </DialogFooter>
     </DialogContent>
   </Dialog>
-  <Drawer v-else>
-    <DrawerTrigger as-child>
+  <Drawer :open="show" v-else>
+    <DrawerTrigger as-child
+                   @click="handleTrigger">
       <slot name="trigger"></slot>
     </DrawerTrigger>
-    <DrawerContent class="min-h-[60%] p-2">
+    <DrawerContent class="min-h-[60%] p-2"
+                   @pointerDownOutside="handlePointerDownOutside"
+                   @escapeKeyDown="() => handleClose()">
       <DrawerHeader class="text-left">
         <DrawerTitle>
           <slot name="title"></slot>
