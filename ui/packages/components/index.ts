@@ -9,3 +9,4 @@ export * from './src/empty'
 export * from './src/FilePreview';
 export * from './src/button';
 export * from './src/title';
+export * from './src/FileList';

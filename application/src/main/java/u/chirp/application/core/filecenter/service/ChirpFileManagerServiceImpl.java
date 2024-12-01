@@ -40,9 +40,11 @@ public class ChirpFileManagerServiceImpl extends ServiceImpl<ChirpFileManagerMap
         if (CollUtil.isEmpty(ids)) {
             return Map.of();
         }
+
+        ids = ids.stream().distinct().toList();
         List<ChirpFileManagerDO> chirpList = baseMapper.selectList(Wrappers.lambdaQuery(ChirpFileManagerDO.class)
                 .select(ChirpFileManagerDO::getFileId, ChirpFileManagerDO::getRefId)
-                .eq(ChirpFileManagerDO::getRefId, ids)
+                .in(ChirpFileManagerDO::getRefId, ids)
                 .eq(ChirpFileManagerDO::getFuncCode, funcCode));
 
         // 文件对应关联 id
@@ -60,11 +62,11 @@ public class ChirpFileManagerServiceImpl extends ServiceImpl<ChirpFileManagerMap
         for (FileUrlBO fileUrlBo : fileUrlBoList) {
             FileUrlVO fileUrlVo = FileLibraryConvert.INSTANCE.toFileUrlVO(fileUrlBo);
             Long refId = fileId2RefId.get(fileUrlBo.getFileId());
-            result.putIfAbsent(refId, CollUtil.newArrayList(fileUrlVo));
             result.computeIfPresent(refId,  (key, value) -> {
                 value.add(fileUrlVo);
                 return value;
             });
+            result.putIfAbsent(refId, CollUtil.newArrayList(fileUrlVo));
         }
         return result;
     }

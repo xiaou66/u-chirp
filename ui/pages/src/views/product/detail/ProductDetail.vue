@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {CardTitle, SvgIcon, UButton, UserEditor, type UserEditorInstance} from "@u-chirp/components";
+import {CardTitle, FileList, SvgIcon, UButton, UserEditor, type UserEditorInstance} from "@u-chirp/components";
 import { Button } from "@u-chirp/shadcn";
 import { useMediaQuery } from "@vueuse/core";
 import { MemberInfoContent } from "../components";
@@ -163,20 +163,9 @@ function requestReplyChildrenComment(commentId: string, next: string) {
           <PostPreview v-if="postDetail"
                        :content="postDetail.postRawHtml" />
         </div>
-        <div class="pt-5 flex gap-2 overflow-y-auto">
-          <div class="w-20 h-20 bg-orange-400 shrink-0"></div>
-          <div class="w-20 h-20 bg-orange-400 shrink-0"></div>
-          <div class="w-20 h-20 bg-orange-400 shrink-0"></div>
-          <div class="w-20 h-20 bg-orange-400 shrink-0"></div>
-          <div class="w-20 h-20 bg-orange-400 shrink-0"></div>
-          <div class="w-20 h-20 bg-orange-400 shrink-0"></div>
-          <div class="w-20 h-20 bg-orange-400 shrink-0"></div>
-          <div class="w-20 h-20 bg-orange-400 shrink-0"></div>
-          <div class="w-20 h-20 bg-orange-400 shrink-0"></div>
-          <div class="w-20 h-20 bg-orange-400 shrink-0"></div>
-          <div class="w-20 h-20 bg-orange-400 shrink-0"></div>
-          <div class="w-20 h-20 bg-orange-400 shrink-0"></div>
-        </div>
+        <FileList v-if="postDetail"
+                  v-model:file-list="postDetail.fileList"
+                  readonly />
 
         <div class="flex items-center justify-between">
           <div></div>

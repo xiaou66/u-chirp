@@ -2,7 +2,6 @@ package u.chirp.application.core.filecenter.local;
 
 import cn.dev33.satoken.annotation.SaIgnore;
 import cn.dev33.satoken.secure.SaSecureUtil;
-import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
@@ -17,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +36,7 @@ import u.chirp.application.core.sys.config.EncryptProperties;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
@@ -110,7 +109,8 @@ public class FileLocalStorageStrategy implements IFileStorageStrategy {
         previewUrlParams.setFileId(fileId);
         FileUrlBO fileUrlBo = new FileUrlBO();
         fileUrlBo.setFileId(fileId);
-        fileUrlBo.setPreviewUrl("/app/local/preview?key=" + SaSecureUtil.aesEncrypt(encryptProperties.getAseKey(), JsonUtils.toJsonString(previewUrlParams)));
+        String secKey = URLEncoder.encode(SaSecureUtil.aesEncrypt(encryptProperties.getAseKey(), JsonUtils.toJsonString(previewUrlParams)), Charsets.UTF_8);
+        fileUrlBo.setPreviewUrl("/app/local/preview?key=" + secKey);
         fileUrlBo.setThumbnailUrl(fileLibrary.getUploadFileName());
         return fileUrlBo;
     }
@@ -122,7 +122,8 @@ public class FileLocalStorageStrategy implements IFileStorageStrategy {
     public ResponseEntity<?> previewFile(@Validated FilePreviewReqVO reqVO) {
         LocalFilePreviewParams localFilePreviewParams = null;
         try {
-            localFilePreviewParams = JsonUtils.parseObject(SaSecureUtil.aesDecrypt(encryptProperties.getAseKey(), reqVO.getKey()), LocalFilePreviewParams.class);
+            String decKey = URLDecoder.decode(SaSecureUtil.aesDecrypt(encryptProperties.getAseKey(), reqVO.getKey()), Charsets.UTF_8);
+            localFilePreviewParams = JsonUtils.parseObject(decKey, LocalFilePreviewParams.class);
         } catch (Exception e) {
             throw ServiceExceptionUtil.exception(GlobalErrorCodeConstants.BAD_REQUEST);
         }

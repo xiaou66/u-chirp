@@ -15,7 +15,10 @@ const fileUrl = computed(() => {
     if (item instanceof File) {
       return window.URL.createObjectURL(item);
     } else if (item) {
-      return (item as any)[props.fileUrlKey || 'url'] as string;
+       const url = (item as any)[props.fileUrlKey || 'previewUrl'] as string;
+      return url.startsWith('http')
+        ? url
+        : `${import.meta.env.VITE_API_BASE_URL}${url}`
     }
   }
 });

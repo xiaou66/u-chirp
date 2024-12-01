@@ -109,7 +109,7 @@ public class ChirpProductPostController {
     public R<Long> savePost(@Validated @RequestBody AppProductPostSaveReqVO reqVo) {
         Long productId = chirpProductService.getProductIdByCode(reqVo.getProductCode());
         Long postId = chirpProductPostService.savePost(reqVo, productId);
-        if (CollUtil.isEmpty(reqVo.getFileIds())) {
+        if (CollUtil.isNotEmpty(reqVo.getFileIds())) {
             chirpFileManagerService.batchSaveRefFileIds(ProductFileManagerCodeConstant.POST_FILE,
                     postId,
                     reqVo.getFileIds());
