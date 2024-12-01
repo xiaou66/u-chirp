@@ -75,6 +75,7 @@ public class ChirpProductPostDO extends BaseDO<ChirpProductPostDO> {
 
     /**
      * 帖子类型
+     *
      */
     @TableField("post_type")
     private String postType;

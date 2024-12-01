@@ -1,6 +1,5 @@
 package u.chirp.application.product.controller.app.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 /**
@@ -8,7 +7,7 @@ import lombok.Data;
  * @date 2024/11/23
  */
 @Data
-public class ProductMemberInfoGetRespVO {
+public class ChirpProductMemberInfoGetRespVO {
 
     /**
      * 会员 id

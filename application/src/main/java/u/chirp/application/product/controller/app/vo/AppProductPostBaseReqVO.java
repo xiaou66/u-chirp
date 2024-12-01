@@ -13,5 +13,6 @@ public class AppProductPostBaseReqVO {
     /**
      * 产品 code
      */
+    @NotNull(message = "产品 code 不能为空")
     private String productCode;
 }

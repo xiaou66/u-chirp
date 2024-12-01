@@ -18,10 +18,7 @@ import u.chirp.application.mumber.service.bo.ChirpMemberBaseInfoBO;
 import u.chirp.application.mumber.service.bo.GenerateMemberBO;
 import u.chirp.application.mumber.service.bo.MemberLoginSuccessInfoBO;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -79,6 +76,15 @@ public class ChirpMemberServiceImpl extends ServiceImpl<ChirpMemberMapper, Chirp
                 )
                 .flatMap(Collection::stream)
                 .collect(Collectors.toMap(ChirpMemberDO::getMemberId, ChirpMemberConvert.INSTANCE::toChirpMemberBaseInfoBO));
+    }
+
+    @Override
+    public ChirpMemberBaseInfoBO getMemberBaseInfo(Long memberId) {
+        ChirpMemberDO chirpMember = getOne(Wrappers.lambdaQuery(ChirpMemberDO.class)
+                .select(ChirpMemberDO::getMemberId, ChirpMemberDO::getMemberNickname, ChirpMemberDO::getMemberAvatar)
+                .eq(ChirpMemberDO::getMemberId, memberId)
+                .last("limit 1"));
+        return ChirpMemberConvert.INSTANCE.toChirpMemberBaseInfoBO(chirpMember);
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import u.chirp.application.product.controller.app.vo.AppProductPostListGetReqVO;
 import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
+import u.chirp.application.product.controller.app.vo.ChirpProductPostGetRespVO;
 import u.chirp.application.product.controller.app.vo.ChirpProductPostListRespVO;
 import u.chirp.application.product.dal.dataobject.ChirpProductPostDO;
 import u.chirp.application.product.service.bo.AppProductPostListBO;
@@ -49,5 +50,9 @@ public interface ChirpProductPostConvert {
 
     @Mapping(target = "memberInfo", ignore = true)
     @Mapping(target = "fileList", ignore = true)
-    ChirpProductPostListBO toChirpProductPostListBO(ChirpProductPostDO productPostList);
+    ChirpProductPostListBO toChirpProductPostBO(ChirpProductPostDO productPostList);
+
+    @Mapping(target = "memberInfo", ignore = true)
+    @Mapping(target = "fileList", ignore = true)
+    ChirpProductPostGetRespVO toChirpProductPostGetRespVO(ChirpProductPostDO productPostDO);
 }

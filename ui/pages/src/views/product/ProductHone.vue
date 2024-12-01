@@ -2,14 +2,18 @@
 import { ProductTopMenu } from "./components";
 import { provide, ref} from "vue";
 import type {ProductHomeInject} from "./type";
+import {BackTop} from "@u-chirp/components";
 
 const containerRef = ref<HTMLElement>();
 provide<ProductHomeInject>('productHome', {
   container: containerRef
 });
+
+
 </script>
 
 <template>
+  <BackTop :target="containerRef"  />
   <!-- 产品主页 -->
   <div class="grid min-h-screen"
        style="grid-template-rows: 70px calc(100vh - 70px)">

@@ -44,6 +44,15 @@
 @monospace: monospace;
 @title-bar-height: 32px;
 
+
+p {
+  /* 允许文本换行 */
+  word-wrap: break-word; /* 旧版支持 */
+  overflow-wrap: break-word; /* 新版支持 */
+  white-space: normal; /* 允许文本在到达边界时换行 */
+}
+
+
 /*
  * -----------------------------------
  * h1 ~ h6
@@ -1998,4 +2007,3 @@ body.typora-export {
     padding: 0 64px 32px;
   }
 }
-

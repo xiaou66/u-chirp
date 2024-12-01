@@ -40,7 +40,7 @@ export default class QLinkTooltip extends Tooltip {
   listen() {
     this.quill.on('selection-change', (range, oldRange, source) => {
       console.log('selection-change', range, oldRange, source, this.__show)
-      if (source === Emitter.sources.API || !range) {
+      if (source === Emitter.sources.API || !range || !this.quill.getText().trim()) {
         console.log('selection-change-return', range, oldRange, source)
         return
       }

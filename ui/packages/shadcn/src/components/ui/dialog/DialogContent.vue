@@ -13,21 +13,15 @@ import {
 import { computed, type HTMLAttributes } from 'vue'
 
 const props = defineProps<DialogContentProps & { class?: HTMLAttributes['class'] }>()
-// @ts-ignore
-export type DialogCloseEmits = {
-  close: [];
-}
-const emits = defineEmits<DialogCloseEmits & DialogContentEmits>()
+const emits = defineEmits<DialogContentEmits>()
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props
 
   return delegated
 })
+
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
-function handleClose() {
-  emits('close')
-}
 </script>
 
 <template>
@@ -46,7 +40,6 @@ function handleClose() {
       <slot />
 
       <DialogClose
-        @click="handleClose"
         class="tw-absolute tw-right-4 tw-top-4 tw-rounded-sm tw-opacity-70 tw-ring-offset-background tw-transition-opacity hover:tw-opacity-100 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-ring focus:tw-ring-offset-2 disabled:tw-pointer-events-none data-[state=open]:tw-bg-accent data-[state=open]:tw-text-muted-foreground"
       >
         <Cross2Icon class="tw-w-4 tw-h-4" />

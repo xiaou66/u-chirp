@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import u.boot.start.common.pojo.R;
-import u.chirp.application.product.controller.app.vo.ProductMemberInfoGetRespVO;
+import u.chirp.application.product.controller.app.vo.ChirpProductMemberInfoGetRespVO;
 import u.chirp.application.product.convert.ChirpProductMemberConvert;
 import u.chirp.application.product.dal.dataobject.ChirpProductMemberDO;
 import u.chirp.application.product.service.IChirpProductMemberService;
@@ -36,15 +36,15 @@ public class ChirpProductMemberController {
      * @return
      */
     @GetMapping("info")
-    public R<ProductMemberInfoGetRespVO> info(String productCode) {
+    public R<ChirpProductMemberInfoGetRespVO> info(String productCode) {
         Long productId = chirpProductService.getProductIdByCode(productCode);
-        ProductMemberInfoGetRespVO respVO = Optional.ofNullable(chirpProductMemberService.getOne(Wrappers.lambdaQuery(ChirpProductMemberDO.class)
+        ChirpProductMemberInfoGetRespVO respVO = Optional.ofNullable(chirpProductMemberService.getOne(Wrappers.lambdaQuery(ChirpProductMemberDO.class)
                         .eq(ChirpProductMemberDO::getMemberId, StpUtil.getLoginIdAsLong())
                         .eq(ChirpProductMemberDO::getProductId, productId)
                         .last("limit 1")))
                 .map(ChirpProductMemberConvert.INSTANCE::convertProductMemberInfoGetRespVO)
                 .orElseGet(() -> {
-                    ProductMemberInfoGetRespVO productMemberDO = new ProductMemberInfoGetRespVO();
+                    ChirpProductMemberInfoGetRespVO productMemberDO = new ChirpProductMemberInfoGetRespVO();
                     productMemberDO.setMemberId(StpUtil.getLoginIdAsLong());
                     productMemberDO.setProblemCount(0L);
                     productMemberDO.setThumbsUpCount(0L);

@@ -3,10 +3,7 @@ package u.chirp.application.product.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import u.boot.start.common.exception.NoDataException;
-import u.chirp.application.product.controller.app.vo.AppProductPostFollowReqVO;
-import u.chirp.application.product.controller.app.vo.AppProductPostListGetReqVO;
-import u.chirp.application.product.controller.app.vo.AppProductPostSaveReqVO;
-import u.chirp.application.product.controller.app.vo.AppProductPostThumbsUpReqVO;
+import u.chirp.application.product.controller.app.vo.*;
 import u.chirp.application.product.dal.dataobject.ChirpProductPostDO;
 import u.chirp.application.product.service.bo.AppProductPostListBO;
 import u.chirp.application.product.service.bo.ChirpProductPostListBO;
@@ -52,7 +49,19 @@ public interface IChirpProductPostService extends IService<ChirpProductPostDO> {
 
     AppProductPostListBO payloadQueryParam(AppProductPostListGetReqVO reqVo);
 
-    List<Long> searchIdList(AppProductPostListBO appProductPostListBO) throws NoDataException;
+    List<Long> searchIdList(IPage<Long> page, AppProductPostListBO appProductPostListBO) throws NoDataException;
 
+    /**
+     * 格式化返回数据
+     * @param ids
+     * @return
+     */
     List<ChirpProductPostListBO> payloadResult(List<Long> ids);
+
+    /**
+     * 获取帖子详情
+     * @param reqVo
+     * @return
+     */
+    ChirpProductPostGetRespVO getPost(ChirpProductPostGetReqVO reqVo);
 }

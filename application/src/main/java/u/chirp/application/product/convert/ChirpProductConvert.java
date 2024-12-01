@@ -3,7 +3,7 @@ package u.chirp.application.product.convert;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import u.chirp.application.product.controller.admin.vo.ChirpProductItemRespVO;
-import u.chirp.application.product.controller.app.vo.ProductInfoGetRespVO;
+import u.chirp.application.product.controller.app.vo.ChirpProductInfoGetRespVO;
 import u.chirp.application.product.dal.dataobject.ChirpProductDO;
 
 import java.util.List;
@@ -20,5 +20,5 @@ public interface ChirpProductConvert {
 
     ChirpProductItemRespVO convert(ChirpProductDO list);
 
-    ProductInfoGetRespVO toProductInfoGetRespVO(ChirpProductDO product);
+    ChirpProductInfoGetRespVO toProductInfoGetRespVO(ChirpProductDO product);
 }

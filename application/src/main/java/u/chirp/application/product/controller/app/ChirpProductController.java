@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 import u.boot.start.common.exception.util.ServiceExceptionUtil;
 import u.boot.start.common.pojo.R;
 import u.chirp.application.product.ProductErrorCodeConstants;
-import u.chirp.application.product.controller.app.vo.ProductInfoGetRespVO;
+import u.chirp.application.product.controller.app.vo.ChirpProductInfoGetRespVO;
 import u.chirp.application.product.convert.ChirpProductConvert;
 import u.chirp.application.product.dal.dataobject.ChirpProductDO;
 import u.chirp.application.product.service.IChirpProductService;
 
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -36,7 +35,7 @@ public class ChirpProductController {
      */
     @GetMapping("info")
     @SaIgnore
-    public R<ProductInfoGetRespVO> info(String productCode) {
+    public R<ChirpProductInfoGetRespVO> info(String productCode) {
         ChirpProductDO product = Optional.ofNullable(chirpProductService.getOne(Wrappers.lambdaQuery(ChirpProductDO.class)
                         .eq(ChirpProductDO::getProductCode, productCode)
                         .last("limit 1")))

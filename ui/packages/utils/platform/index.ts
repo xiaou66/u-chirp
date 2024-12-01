@@ -1,5 +1,5 @@
 // 平台相关性代码
-import type { IFileOps } from "./type";
+import type {IClipboard, IFileOps} from "./type";
 export * from './type';
 
 // @ts-ignore
@@ -14,6 +14,7 @@ function toCamelCase(pascalCase: string) {
 function installBrowserModule() {
   // @ts-ignore
   import('./browser').then(moduleObj => {
+    console.log('moduleObj', moduleObj)
     for (let key of Object.keys(moduleObj)) {
       // @ts-ignore
       window.platform[toCamelCase(key)] = new moduleObj[key]();
@@ -30,6 +31,7 @@ declare global {
   interface Window {
     platform: {
       fileOps: IFileOps
+      clipboard: IClipboard
     }
   }
 }

@@ -3,6 +3,7 @@ package u.chirp.application.mumber.convert;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import u.chirp.application.mumber.controller.app.vo.ChirpMemberBaseInfoVO;
 import u.chirp.application.mumber.controller.app.vo.MemberInfoGetRespVO;
 import u.chirp.application.mumber.dal.dataobject.ChirpMemberDO;
 import u.chirp.application.mumber.service.bo.ChirpMemberBaseInfoBO;
@@ -30,4 +31,6 @@ public interface ChirpMemberConvert {
     MemberInfoGetRespVO toProductMemberInfoGetReqVO(ChirpMemberDO chirpMember);
 
     ChirpMemberBaseInfoBO toChirpMemberBaseInfoBO(ChirpMemberDO chirpMember);
+
+    ChirpMemberBaseInfoVO toChirpMemberBaseInfoVO(ChirpMemberBaseInfoBO posterBaseInfo);
 }

@@ -1,6 +1,8 @@
 package u.chirp.application.product.dal.dataobject;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import u.boot.start.db.mysql.BaseDO;
@@ -15,7 +17,7 @@ public class ChirpProductPostCommentDO extends BaseDO<ChirpProductPostCommentDO>
     /**
      * 评论 id
      */
-    @TableField("comment_id")
+    @TableId(value = "comment_id", type=IdType.ASSIGN_ID)
     private Long commentId;
 
     /**
@@ -37,6 +39,12 @@ public class ChirpProductPostCommentDO extends BaseDO<ChirpProductPostCommentDO>
     private Long replyCommentId;
 
     /**
+     * 被回复的人
+     */
+    @TableField("reply_member_id")
+    private Long replyMemberId;
+
+    /**
      * 回复原始 html 内容
      */
     @TableField("comment_raw_html")
@@ -53,4 +61,7 @@ public class ChirpProductPostCommentDO extends BaseDO<ChirpProductPostCommentDO>
      */
     @TableField("comment_thumbs_up_count")
     private Long commentThumbsUpCount;
+
+    @TableField("comment_children_count")
+    private Integer commentChildrenCount;
 }

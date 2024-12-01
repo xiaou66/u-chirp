@@ -17,11 +17,14 @@ import {
 } from '@u-chirp/shadcn'
 import { useMediaQuery } from '@vueuse/core'
 import { ref } from 'vue'
-import type { UDialogInstance } from './type'
+import type {UDialogInstance, UDialogProps} from './type'
+
+defineProps<UDialogProps>()
 
 const isDesktop = useMediaQuery('(min-width: 768px)')
 
-const show = ref(false)
+const show = ref(false);
+
 
 function handlePointerDownOutside(e: MouseEvent) {
   console.log(e.target)
@@ -40,19 +43,20 @@ function handleTrigger() {
 
 defineExpose<UDialogInstance>({
   close: handleClose,
-});
+  show: handleTrigger,
+})
 </script>
 
 <template>
   <Dialog v-if="isDesktop" :open="show">
-    <DialogTrigger @click="handleTrigger">
+    <DialogTrigger v-if="!hideTrigger" @click="handleTrigger">
       <slot name="trigger"></slot>
     </DialogTrigger>
     <DialogContent
       class="!max-w-2xl"
       @pointerDownOutside="handlePointerDownOutside"
       @escapeKeyDown="() => handleClose()"
-      @close="handleClose"
+      @close="() => handleClose()"
     >
       <DialogHeader>
         <DialogTitle>
@@ -70,12 +74,14 @@ defineExpose<UDialogInstance>({
       </DialogFooter>
     </DialogContent>
   </Dialog>
-  <Drawer :open="show" v-else>
-    <DrawerTrigger as-child @click="handleTrigger">
+  <Drawer v-else :open="show">
+    <DrawerTrigger v-if="!hideTrigger"
+                   as-child
+                   @click="handleTrigger">
       <slot name="trigger"></slot>
     </DrawerTrigger>
     <DrawerContent
-      class="min-h-[60%] p-2"
+      class="min-h-[52%] p-2"
       @pointerDownOutside="handlePointerDownOutside"
       @escapeKeyDown="() => handleClose()"
     >

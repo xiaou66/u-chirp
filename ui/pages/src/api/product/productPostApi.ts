@@ -1,5 +1,7 @@
-import { request, type RollParam, type RollResult} from "../appService";
+import {type pageParam, type PageResult, request, type RollParam, type RollResult} from "../appService";
 import type {ProductInfoResp} from "./productApi";
+import type { FileUrlVO } from "../core";
+import type {ChirpMemberBaseInfo} from "../member";
 
 export interface ProductPostSaveReq {
 
@@ -46,7 +48,7 @@ export async function productPostPostSaveApi(data: ProductPostSaveReq) {
   });
 }
 
-export interface ProductPostListReq extends RollParam {
+export interface ProductPostListReq extends pageParam {
   productCode: string;
   postTitle?: string;
   tab?: string;
@@ -110,7 +112,7 @@ export interface ProductPostListResp {
  * @param params
  */
 export async function productPostListApi(params: ProductPostListReq) {
-  return await request<RollResult<ProductPostListResp>>('GET', '/product/post/list', {
+  return await request<PageResult<ProductPostListResp>>('GET', '/product/post/list', {
     params
   });
 }
@@ -170,10 +172,93 @@ export async function productPostFollowApi(req: ProductPostCollectReq) {
  * 提取当前用户关注帖子
  * @param req
  */
-export async function productPostFollowRecord(postIds: string[]) {
+export async function productPostFollowRecordApi(postIds: string[]) {
   return await request<string[]>('POST', '/product/post/getFollowRecord', {
     data: {
       postIds,
     }
+  });
+}
+
+export interface ProductPostDetailReq {
+  /**
+   * 产品 code
+   */
+  productCode: string;
+  /**
+   * 帖子 id
+   */
+  postId: string;
+}
+
+export interface ProductPostDetailResp {
+  /**
+   * 帖子 id
+   */
+  postId: number;
+
+  /**
+   * 帖子标题
+   */
+  postTitle: string;
+
+  /**
+   * 原始 html 内容
+   */
+  postRawHtml: string;
+
+  /**
+   * 是否秒评
+   */
+  postGood: boolean;
+
+  /**
+   * 点赞数
+   */
+  postThumbsUpCount: number;
+
+  /**
+   * 收藏数
+   */
+  postFollowCount: number;
+
+  /**
+   * 是否置顶
+   */
+  postTop: boolean;
+
+  /**
+   * 帖子类型
+   */
+  postType: string;
+
+  /**
+   * 帖子处理进度
+   */
+  postHandleProgress: number;
+
+  /**
+   * 文件列表
+   */
+  fileList: FileUrlVO[];
+
+  /**
+   * 会员信息
+   */
+  memberInfo: ChirpMemberBaseInfo;
+
+  /**
+   * 发布时间
+   */
+  createTime: string;
+}
+
+/**
+ * 帖子详情
+ * @param req
+ */
+export async function productPostDetailApi(req: ProductPostDetailReq) {
+  return await request<ProductPostDetailResp>('GET', '/product/post/detail', {
+    params: req
   });
 }

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="u.chirp.application.product.dal.mysql.ChirpProductPostCommentMapper">
+
+    <select id="searchIdList" resultType="java.lang.Long">
+        select distinct cppc.comment_id
+        from chirp_product_post_comment cppc
+        where cppc.post_id = #{reqVo.postId}
+          and cppc.parent_comment_id = 0
+          <if test="reqVo.next != null">
+              and cppc.post_id &lt; #{reqVo.next}
+          </if>
+        group by cppc.comment_id
+        order by cppc.create_time desc
+        limit #{reqVo.pageSize}
+    </select>
+    <select id="searchSubCommentList"
+            resultType="u.chirp.application.product.dal.dataobject.ChirpProductPostCommentDO">
+        WITH SecondLevelComments AS (SELECT c2.creator,
+                                            c2.create_time,
+                                            c2.reply_member_id,
+                                            c2.comment_id,
+                                            c2.parent_comment_id,
+                                            c2.comment_raw_html,
+                                            ROW_NUMBER() OVER (PARTITION BY c2.parent_comment_id ORDER BY c2.create_time desc) AS rn
+                                     FROM chirp_product_post_comment AS c2
+                                     WHERE c2.parent_comment_id IN
+                                           <foreach collection="commentIds" open="(" item="item" separator="," close=")">#{item}</foreach>)
+        SELECT comment_id, parent_comment_id, comment_raw_html, reply_member_id, creator, create_time
+        FROM SecondLevelComments
+        WHERE rn &lt;= 5
+    </select>
+    <select id="getChildrenIdsList" resultType="java.lang.Long">
+        select cppc.comment_id from chirp_product_post_comment cppc
+        where cppc.parent_comment_id = #{reqVo.commentId} 
+        <if test="reqVo.next != null">
+            and cppc.comment_id &lt; #{reqVo.next}
+        </if>
+        order by cppc.create_time desc
+        limit  #{reqVo.pageSize}
+    </select>
+</mapper>

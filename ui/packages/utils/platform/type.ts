@@ -4,3 +4,11 @@ export interface IFileOps {
    */
   openSelectFile(): Promise<File[]>;
 }
+
+export interface IClipboard {
+  /**
+   * 复制文本
+   * @param text 文本
+   */
+  copyText(text: string);
+}

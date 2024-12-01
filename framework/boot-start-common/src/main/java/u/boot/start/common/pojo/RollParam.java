@@ -8,5 +8,12 @@ import lombok.Data;
  */
 @Data
 public class RollParam {
+    /**
+     * 页尺
+     */
+    private Integer pageSize = 10;
+    /**
+     * 游标
+     */
     private Long next;
 }

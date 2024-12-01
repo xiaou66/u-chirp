@@ -18,6 +18,7 @@ import u.chirp.application.product.constant.ProductFileManagerCodeConstant;
 import u.chirp.application.product.controller.app.vo.*;
 import u.chirp.application.product.convert.ChirpProductPostConvert;
 import u.chirp.application.product.service.IChirpProductMemberService;
+import u.chirp.application.product.service.IChirpProductPostCommentService;
 import u.chirp.application.product.service.IChirpProductPostService;
 import u.chirp.application.product.service.IChirpProductService;
 import u.chirp.application.product.service.bo.AppProductPostListBO;
@@ -51,6 +52,9 @@ public class ChirpProductPostController {
     @Resource
     private IChirpFileManagerService chirpFileManagerService;
 
+    @Resource
+    private IChirpProductPostCommentService chirpProductPostCommentService;
+
 
     /**
      * 帖子列表
@@ -59,18 +63,39 @@ public class ChirpProductPostController {
      * @tags v1.0.0
      */
     @GetMapping("/list")
-    public R<RollResult<ChirpProductPostListRespVO>> list(AppProductPostListGetReqVO reqVo) {
+    public R<PageResult<ChirpProductPostListRespVO>> list(AppProductPostListGetReqVO reqVo) {
         AppProductPostListBO appProductPostListBO = chirpProductPostService.payloadQueryParam(reqVo);
+        Page<Long> page = new Page<>(reqVo.getPageNo(), reqVo.getPageSize());
+        // 不用查询 count 数量, 因为页面使用无限加载
+        page.setSearchCount(false);
         List<Long> ids = null;
         try {
-            ids = chirpProductPostService.searchIdList(appProductPostListBO);
+            ids = chirpProductPostService.searchIdList(page, appProductPostListBO);
         }catch (Exception e) {
-            return R.success(RollResult.empty());
+            return R.success(PageResult.empty());
         }
         List<ChirpProductPostListBO> res = chirpProductPostService.payloadResult(ids);
         List<ChirpProductPostListRespVO> respList = ChirpProductPostConvert.INSTANCE
                 .toChirpProductPostListRespDO(res);
-        return R.success(new RollResult<>(respList, ids.get(ids.size() - 1)));
+
+
+        final List<Long> postIds = ids;
+        List<ChirpProductPostListRespVO> list = respList.stream()
+                .sorted((a, b) -> postIds.indexOf(a.getPostId() - postIds.indexOf(b.getPostId())))
+                .toList();
+        return R.success(new PageResult<>(list, page.getTotal()));
+    }
+
+    /**
+     * 获取帖子详情
+     * @param reqVo
+     * @return
+     * @tags v1.0.0
+     */
+    @GetMapping("/detail")
+    public R<ChirpProductPostGetRespVO> getPost(@Validated ChirpProductPostGetReqVO reqVo) {
+        ChirpProductPostGetRespVO respVo = chirpProductPostService.getPost(reqVo);
+        return R.success(respVo);
     }
 
 
@@ -85,7 +110,7 @@ public class ChirpProductPostController {
         Long productId = chirpProductService.getProductIdByCode(reqVo.getProductCode());
         Long postId = chirpProductPostService.savePost(reqVo, productId);
         if (CollUtil.isEmpty(reqVo.getFileIds())) {
-            chirpFileManagerService.batchSaveRefFileIds(ProductFileManagerCodeConstant.POST_IMAGE,
+            chirpFileManagerService.batchSaveRefFileIds(ProductFileManagerCodeConstant.POST_FILE,
                     postId,
                     reqVo.getFileIds());
         }
@@ -135,8 +160,8 @@ public class ChirpProductPostController {
 
     /**
      * 关注
-     * @tags v1.0.0
      * @param reqVo
+     * @tags v1.0.0
      */
     @PostMapping("/follow")
     public R<ProductPostBaseInfoBO> follow(@Validated @RequestBody AppProductPostFollowReqVO reqVo) {

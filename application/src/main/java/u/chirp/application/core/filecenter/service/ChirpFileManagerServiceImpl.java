@@ -13,10 +13,7 @@ import u.chirp.application.core.filecenter.dal.mysql.ChirpFileManagerMapper;
 import u.chirp.application.core.filecenter.local.vo.FileUrlVO;
 import u.chirp.application.core.filecenter.service.bo.FileUrlBO;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -70,6 +67,12 @@ public class ChirpFileManagerServiceImpl extends ServiceImpl<ChirpFileManagerMap
             });
         }
         return result;
+    }
+
+    @Override
+    public List<FileUrlVO> getFileList(String funcCode, Long refId) {
+        return batchGetFile(funcCode, Collections.singletonList(refId))
+                .getOrDefault(refId, Collections.emptyList());
     }
 
     @Override

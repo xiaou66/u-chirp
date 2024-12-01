@@ -7,6 +7,7 @@ import type { UserEditorInstance } from "@u-chirp/components";
 import {useRoute} from "vue-router";
 import {productPostPostSaveApi} from "../../../../api";
 import {uploadFile} from "../../../../api";
+import { UButton } from "@u-chirp/components";
 
 const tabs = [
   {
@@ -45,7 +46,7 @@ async function handlePushPost() {
   }
 
   const { productCode } = route.params as any;
-  productPostPostSaveApi({
+  await productPostPostSaveApi({
     productCode,
     postTitle: '',
     postRawContent: JSON.stringify(editor.getContents()),
@@ -83,18 +84,18 @@ async function handlePushPost() {
         </TabsTrigger>
       </TabsList>
     </Tabs>
-    <div class="pt-3 h-56 mobile:h-72">
+    <div class="pt-3 h-56 mobile:h-56">
       <UserEditor ref="userEditorRef"></UserEditor>
     </div>
     <template #footer>
-      <Button class="w-full" @click="handlePushPost" :disabled="submitLoading">
-        <svg-icon v-if="submitLoading" color="hsl(var(--primary-foreground))"
-                  svg-class="animate-spin"
-                  name="default-loading" />
-        <svg-icon v-else color="hsl(var(--primary-foreground))"
-                  name="default-publish" />
+      <UButton :handle-click="handlePushPost"
+               size="auto">
+        <template #icon>
+          <svg-icon color="hsl(var(--primary-foreground))"
+                    name="default-publish" />
+        </template>
         发布
-      </Button>
+      </UButton>
     </template>
   </UDialog>
 </template>

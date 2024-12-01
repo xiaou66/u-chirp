@@ -6,18 +6,22 @@ import ProductProblemIssue from './components/ProductProblemIssue.vue'
 import MemberInfoCard from "./components/MemberInfoCard.vue";
 import {useI18n} from "vue-i18n";
 import {
-  productPostFollowApi, productPostFollowRecord,
+  productPostFollowApi, productPostFollowRecordApi,
   productPostListApi,
   type ProductPostListReq,
   type ProductPostListResp,
-  productPostThumbsUpApi, productPostThumbsUpRecordApi
+  productPostThumbsUpRecordApi
 } from "../../../api";
 import {useRoute, useRouter} from "vue-router";
-import type {RollResult} from "../../../api/appService";
+import type {PageResult, RollResult} from "../../../api/appService";
 import { ProductConstants } from "../../../constant";
-import {formatUserTime, isMobile} from "@u-chirp/utils";
+import { isMobile } from "@u-chirp/utils";
 import type {ProductHomeInject} from "../type";
 import {useInfiniteScroll} from "@vueuse/core";
+import PosterInfo from "../components/MemberInfo.vue";
+import PostPreview from "../components/PostPreview.vue";
+import PostThumbsUp from "../components/PostThumbsUp.vue";
+import PostFollow from "../components/PostFollow.vue";
 
 const { t } = useI18n();
 const tabs = [
@@ -45,7 +49,7 @@ const tabs = [
 
 const route = useRoute();
 const searchQueryParams = ref<ProductPostListReq>({
-  next: 0,
+  pageNo: 1,
   tab: 'HOT',
   productCode: route.params.productCode as string,
 });
@@ -53,10 +57,11 @@ const searchQueryParams = ref<ProductPostListReq>({
 
 function handleTabChange(key: string) {
   searchQueryParams.value.tab = key;
-  requestList(0);
+  requestList(1);
 }
-const listData = ref<RollResult<ProductPostListResp>>({
-  next: 0,
+const listLoadFinish = ref(false);
+const listData = ref<PageResult<ProductPostListResp>>({
+  total: 0,
   list: [],
 });
 
@@ -76,21 +81,24 @@ function checkOverflow(container: HTMLDivElement) {
 const memberFollowPostIds = ref<string[]>([]);
 const memberThumbsUpPostIds = ref<string[]>([]);
 
-function requestList(next = listData.value.next) {
-  if (next == null) {
-    return;
-  }
+function requestList(pageNo = searchQueryParams.value.pageNo + 1) {
+  console.log('requestList', pageNo)
+  const pageSize = 20;
   productPostListApi({
     ...searchQueryParams.value,
-    next,
+    pageNo,
+    pageSize,
   }).then(res => {
-    if (next === 0) {
+    searchQueryParams.value.pageNo = pageNo;
+    if (!res.list.length || res.list.length != pageSize) {
+      listLoadFinish.value = true;
+    }
+    if (pageNo === 1) {
       listData.value = res
       memberFollowPostIds.value.length = 0;
       memberThumbsUpPostIds.value.length = 0;
     } else {
       listData.value.list.push(...res.list);
-      listData.value.next = res.next;
     }
     const postIds = res.list.map(({ postId }) => postId);
     if (postIds.length > 0) {
@@ -98,7 +106,7 @@ function requestList(next = listData.value.next) {
       productPostThumbsUpRecordApi(postIds).then((thumbsUpPostIds) => {
         memberThumbsUpPostIds.value.push(...thumbsUpPostIds)
       });
-      productPostFollowRecord(postIds).then((followPostIds) => {
+      productPostFollowRecordApi(postIds).then((followPostIds) => {
         memberFollowPostIds.value.push(...followPostIds);
       });
     }
@@ -111,36 +119,35 @@ function requestList(next = listData.value.next) {
     });
   })
 }
-const postContainerRef = ref<HTMLElement>();
-
+const productHomeInject = inject<ProductHomeInject>('productHome');
+// 无限加载
+const { reset } = useInfiniteScroll(
+  productHomeInject!.container,
+  () => requestList(),
+  {
+    distance: 30,
+    interval: 2500,
+    canLoadMore: () => !listLoadFinish.value
+  }
+);
 onMounted(() => {
-  requestList()
+  requestList(1)
 });
+
 function handlePostThumbs(postId: string, thumbsUp: boolean) {
-  productPostThumbsUpApi({
-    productCode: route.params.productCode as string,
-    postId,
-    thumbsUp
-  }).then(() => {});
-  const listItem = listData.value.list.find((item) => item.postId === postId);
+  const listItem = listData.value.list.find((item) => item.postId.toString() === postId.toString());
   if (thumbsUp && listItem) {
     memberThumbsUpPostIds.value.push(postId);
     listItem.postThumbsUpCount = (Number((listItem?.postThumbsUpCount || 0)) + 1).toString();
   } else if (listItem) {
-    const index = memberThumbsUpPostIds.value.findIndex(thumbsUpPostId => thumbsUpPostId === postId);
+    const index = memberThumbsUpPostIds.value.findIndex(thumbsUpPostId => thumbsUpPostId.toString() === postId.toString());
     memberThumbsUpPostIds.value.splice(index, 1);
     listItem.postThumbsUpCount = (Number((listItem?.postThumbsUpCount || 0)) - 1).toString();
   }
 }
 
 function handleFollow(postId: string, follow: boolean) {
-  productPostFollowApi({
-    productCode: route.params.productCode as string,
-    postId,
-    follow
-  }).then(() => {});
-
-  const listItem = listData.value.list.find((item) => item.postId === postId);
+  const listItem = listData.value.list.find((item) => item.postId.toString() === postId.toString());
   if (follow && listItem) {
     memberFollowPostIds.value.push(postId);
     listItem.postFollowCount = (Number((listItem?.postFollowCount || 0)) + 1).toString();
@@ -154,28 +161,12 @@ function handleFollow(postId: string, follow: boolean) {
 
 const router = useRouter();
 function handleOpenPostDetail(postId: string) {
-  console.log('handleOpenPostDetail');
-  const productCode = route.query.productCode;
+  const productCode = route.params.productCode;
   router.push({ path: `/product/${productCode}/post/${postId}` });
 }
-
-const productHomeInject = inject<ProductHomeInject>('productHome');
-
-// 无限加载
-const { reset } = useInfiniteScroll(
-  productHomeInject!.container,
-  () => requestList(),
-  {
-    distance: 30,
-    interval: 2500,
-    canLoadMore: () => !!listData.value.next
-  }
-);
 </script>
 <template>
-  <BackTop :target="postContainerRef"  />
-  <div ref="postContainerRef"
-       class="flex-1 w-full h-full pt-10 mobile:pt-2">
+  <div class="flex-1 w-full h-full pt-10 mobile:pt-2">
     <!-- 检索区域  -->
     <div v-if="isMobile()" class="flex justify-between mb-3">
       <div class="relative w-64 max-w-sm items-center">
@@ -254,57 +245,22 @@ const { reset } = useInfiniteScroll(
                 {{data.postTitle}}
               </div>
               <div ref="itemRefs"
-                   class="max-h-64 overflow-y-hidden relative cursor-pointer"
-                   @click="() => handleOpenPostDetail(data.postId)">
-                <div class="post-container">
-                  <div v-html="data.postRawHtml"></div>
-                </div>
+                   class="max-h-64 overflow-y-hidden relative"
+                   @dblclick="() => handleOpenPostDetail(data.postId)">
+                <PostPreview :content="data.postRawHtml" />
                 <div class="overflow-cover" />
               </div>
               <div class="flex items-center mt-6 justify-between">
-                <div class="flex items-center gap-2">
-                  <div class="avatar cursor-pointer">
-                    <div class="w-10 rounded-full">
-                      <img :src="data.memberInfo.memberAvatar"  alt=""/>
-                    </div>
-                  </div>
-                  <div class="flex flex-col gap-1">
-                    <div class="flex gap-2 text-xs text-base-content">
-                      <div class="font-medium">{{data.memberInfo.memberNickname}}</div>
-                      <div>
-                        <!--                            <el-tag type="danger" size="small">超级管理员</el-tag>-->
-                      </div>
-                    </div>
-                    <div class="text-xs text-base-content font-medium">{{formatUserTime(data.createTime)}}</div>
-                  </div>
-                </div>
+                <PosterInfo v-bind="data.memberInfo" :create-time="data.createTime" />
                 <div class="flex items-center gap-2 select-none">
-                  <div class="flex items-center gap-1 cursor-pointer w-10">
-                    <svg-icon v-if="!memberThumbsUpPostIds.includes(data.postId)"
-                              svg-class="text-xl"
-                              name="product-thumbsUp"
-                              @click="handlePostThumbs(data.postId, true)"/>
-                    <svg-icon v-else
-                              svg-class="text-xl"
-                              color="#3C98FF"
-                              name="product-thumbsUpFill"
-                              @click="handlePostThumbs(data.postId, false)"/>
-                    {{ data.postThumbsUpCount }}
-                  </div>
-                  <el-tooltip :content="t('product.follow')">
-                    <div class="flex items-center gap-1 cursor-pointer w-10">
-                      <svg-icon v-if="!memberFollowPostIds.includes(data.postId)"
-                                color="#CDCDCD"
-                                svg-class="text-2xl"
-                                name="product-follow"
-                                @click="handleFollow(data.postId, true)" />
-                      <svg-icon v-else color="#3C98FF"
-                                svg-class="text-2xl"
-                                name="product-follow"
-                                @click="handleFollow(data.postId, false)" />
-                      <div>{{ data.postFollowCount }}</div>
-                    </div>
-                  </el-tooltip>
+                  <PostThumbsUp :post-id="data.postId"
+                                :post-thumbs-up-count=" data.postThumbsUpCount"
+                                :thumbs-up-status="memberThumbsUpPostIds.includes(data.postId.toString())"
+                                @handlePostThumbs="handlePostThumbs" />
+                  <PostFollow :post-id="data.postId"
+                              :post-follow-count="data.postFollowCount"
+                              :follow-status="memberFollowPostIds.includes(data.postId)"
+                              @handleFollow="handleFollow" />
                 </div>
               </div>
             </div>
@@ -344,11 +300,6 @@ const { reset } = useInfiniteScroll(
     </div>
   </div>
 </template>
-<style lang="less">
-.post-container {
-  @import "@u-chirp/components/src/assets/poststyle";
-}
-</style>
 <style lang="less" scoped>
 //@import "mdmdt.css";
 .overflow-cover {

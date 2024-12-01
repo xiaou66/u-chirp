@@ -101,11 +101,12 @@ export interface PageResult<T> {
 }
 
 export interface pageParam {
-  page?: number;
+  pageNo?: number;
   pageSize?: number;
 }
 export interface RollParam {
   next?: number | null;
+  pageSize?: number;
 }
 
 export interface RollResult<T> {

@@ -37,4 +37,12 @@ public interface IChirpMemberService extends IService<ChirpMemberDO> {
      * @return
      */
     Map<Long, ChirpMemberBaseInfoBO> batchGetMemberBaseInfo(Collection<Long> memberIds);
+
+    /**
+     * 获取会员基本信息
+     * @param memberId 会员
+     * @return 会员基本信息
+     */
+    ChirpMemberBaseInfoBO getMemberBaseInfo(Long memberId);
+
 }

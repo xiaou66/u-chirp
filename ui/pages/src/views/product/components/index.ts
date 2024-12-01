@@ -1,2 +1,4 @@
 import ProductTopMenu from './ProductTopMenu.vue';
-export { ProductTopMenu };
+import MemberInfoContent from "./MemberInfoContent.vue";
+import MemberInfo from "./MemberInfo.vue";
+export { ProductTopMenu, MemberInfoContent, MemberInfo };

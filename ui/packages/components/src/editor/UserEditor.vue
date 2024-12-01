@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from 'vue'
+import {computed, markRaw, onMounted, ref, watch} from 'vue'
 import Quill from "quill";
 import 'quill/dist/quill.snow.css';
 import Link from './components/Link';
@@ -8,21 +8,37 @@ import {SvgIcon} from "../icon";
 import {useFilePreview} from "../FilePreview/FilePreview";
 import type Toolbar from "quill/modules/toolbar";
 
+const props = withDefaults( defineProps<{
+  hideToolbar?: '#H'[];
+  disable?: boolean;
+}>(), {
+  hideToolbar: [] as any,
+  disable: false
+});
+
 const editor = ref<Quill>();
 
 
 const fileList = ref<File[]>([]);
+
+watch(() => props.disable, (disable: boolean) => {
+  editor.value!.enable(!disable);
+});
+
+const editorRef = ref<HTMLElement>();
+const toolbarRef = ref<HTMLElement>();
 onMounted(() => {
   Quill.register('modules/link', Link, true);
-  const quill = new Quill("#editor", {
+  const quill = new Quill(editorRef.value, {
     theme: "snow",
     modules: {
-      toolbar: '#toolbar',
+      toolbar: toolbarRef.value,
       link: true,
       clipboard: false
     },
   });
-  editor.value = quill;
+  editor.value = markRaw(quill);
+  quill.enable(!props.disable);
 
   const toolbar = quill.getModule("toolbar") as Toolbar;
   //对工具栏的image添加回调函数覆盖原本的方法
@@ -67,10 +83,16 @@ onMounted(() => {
   }, true);
 });
 
+function clearAllData() {
+
+  editor.value!.setText("");
+  fileList.value.length = 0;
+}
 // 文件列表
 defineExpose<UserEditorInstance>({
   getEditor: () => editor.value!,
   getFileList: () => fileList.value,
+  clearAllData,
 });
 
 const fileUrl = computed(() => {
@@ -95,9 +117,9 @@ function handleFileDelete(index: number) {
 <template>
   <div class="w-full h-full grid" style="display: flex; flex-direction: column;">
     <div class="light w-full h-full">
-      <div id="editor" class="h-full post-edit-container"></div>
+      <div id="editor" ref="editorRef" class="h-full post-edit-container overflow-x-auto"></div>
       <!--  工具条  -->
-      <div id="toolbar" class="flex items-center justify-between">
+      <div id="toolbar" ref="toolbarRef" class="flex items-center justify-between">
         <div class="flex-1">
           <div class="ql-formats">
             <button class="ql-image"></button>
@@ -112,7 +134,7 @@ function handleFileDelete(index: number) {
             </button>
             <button class="ql-code"></button>
           </div>
-          <div class="ql-formats">
+          <div class="ql-formats" v-if="!hideToolbar.includes('#H')">
             <button class="ql-header" value="1"></button>
             <button class="ql-header" value="2"></button>
             <button class="ql-header" value="3"></button>

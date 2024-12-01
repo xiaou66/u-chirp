@@ -1,4 +1,4 @@
-import { request } from "./appService";
+import { request } from "../appService";
 
 
 export interface UserPasswordLoginReq {

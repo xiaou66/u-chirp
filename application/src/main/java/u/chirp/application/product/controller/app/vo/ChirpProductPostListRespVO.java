@@ -1,6 +1,5 @@
 package u.chirp.application.product.controller.app.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import u.chirp.application.core.filecenter.local.vo.FileUrlVO;
 import u.chirp.application.mumber.controller.app.vo.ChirpMemberBaseInfoVO;
@@ -10,7 +9,7 @@ import java.util.List;
 
 /**
  * @author xiaou
- * @date 2024/11/22
+ * @date 2024/11/30
  */
 @Data
 public class ChirpProductPostListRespVO {

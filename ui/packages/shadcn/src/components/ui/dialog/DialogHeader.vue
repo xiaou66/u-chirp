@@ -5,7 +5,6 @@ import { cn } from '@/lib/utils'
 const props = defineProps<{
   class?: HTMLAttributes['class']
 }>()
-
 </script>
 
 <template>

@@ -22,3 +22,11 @@ export interface FileInfoItem {
    */
   fileType: string;
 }
+
+
+export interface FileUrlVO {
+  fileId: string;
+  thumbnailUrl: string;
+  previewUrl: string;
+  fileType: string;
+}
