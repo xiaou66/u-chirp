@@ -28,5 +28,5 @@ public interface ChirpProductPostMapper extends BaseMapper<ChirpProductPostDO> {
     @Update("update chirp_product_post set post_follow_count = post_follow_count - 1 where product_id = #{productId} and post_id = #{postId}")
     void unFollow(@Param("productId") Long productId, @Param("postId") Long postId, @Param("collect") Boolean collect);
 
-    List<Long> searchIdList(@Param("bo") AppProductPostListBO bo);
+    List<Long> searchIdList(@Param("page") IPage<Long> page, @Param("bo") AppProductPostListBO bo);
 }

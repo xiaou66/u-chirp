@@ -2,6 +2,7 @@ package u.chirp.application.product.service.bo;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import u.boot.start.common.pojo.PageParam;
 import u.boot.start.common.pojo.RollParam;
 import u.chirp.application.product.enums.AppProductPostListTab;
 
@@ -10,7 +11,7 @@ import u.chirp.application.product.enums.AppProductPostListTab;
  * @date 2024/11/21
  */
 @Data
-public class AppProductPostListBO extends RollParam {
+public class AppProductPostListBO extends PageParam {
 
     /**
      * 产品 id

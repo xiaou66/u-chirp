@@ -11,7 +11,7 @@ import u.chirp.application.product.enums.AppProductPostListTab;
  * @date 2024/11/21
  */
 @Data
-public class AppProductPostListGetReqVO extends RollParam {
+public class AppProductPostListGetReqVO extends PageParam {
     /**
      * 产品 code
      */
