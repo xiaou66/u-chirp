@@ -198,7 +198,7 @@ function requestReplyChildrenComment(commentId: string, next: string | null) {
                    style="padding-top: 2.5px;"
                    @click="handleCopyShareUrl">
                 <svg-icon :size="18" name="default-share"></svg-icon>
-                <span class="text-xs font-medium">
+                <span class="font-medium w-10">
                   分享
                 </span>
               </div>
@@ -246,7 +246,11 @@ function requestReplyChildrenComment(commentId: string, next: string | null) {
               <user-editor ref="commentEditor" :hide-toolbar="['#H']"></user-editor>
             </div>
           </div>
-          <div class="flex justify-end mt-4">
+          <div class="flex justify-end gap-3 mt-4">
+            <Button variant="outline">
+              <svg-icon name="default-close" />
+              关闭
+            </Button>
             <UButton v-if="memberStore.memberInfo"
                      :handle-click="handleCreateComment">
               <template #icon>
@@ -263,7 +267,7 @@ function requestReplyChildrenComment(commentId: string, next: string | null) {
         </div>
         <!--  列表   -->
         <ProductReplyComment ref="replyCommentRef"
-                             @ok="(commentId) => requestReplyChildrenComment(commentId, null)" />
+                             @ok="(commentId: any) => requestReplyChildrenComment(commentId, null)" />
         <div class="flex"
              v-for="comment in commentList.list"
              :key="comment.commentId">

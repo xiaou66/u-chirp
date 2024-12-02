@@ -5,6 +5,7 @@ const props = defineProps<{
   memberNickname: string;
   memberAvatar: string;
   createTime: string;
+
 }>();
 </script>
 

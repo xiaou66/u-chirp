@@ -10,7 +10,6 @@ import {
 import {ref} from "vue";
 import type {ProductReplyCommentInstance} from "./ProductReplyComment";
 import {productPostCommentCreateApi, type ProductPostCommentItem, uploadFile} from "../../../../../api";
-import {c} from "vite/dist/node/types.d-aGj9QkWt";
 import {useRoute} from "vue-router";
 
 

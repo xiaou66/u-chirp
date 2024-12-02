@@ -3,6 +3,7 @@ import { MemberInfo } from "../../components";
 import type { ChirpMemberBaseInfo } from "../../../../api";
 import {ProductConstants} from "../../../../constant";
 import {CardTitle, DictData, TagPlus} from "@u-chirp/components";
+import SvgIcon from "@u-chirp/components/src/icon/SvgIcon/SvgIcon.vue";
 
 defineProps<{
   postHandleProgress: number;
@@ -16,37 +17,60 @@ defineProps<{
   <div v-if="memberInfo && createTime">
     <div class="mb-4">
       <CardTitle>
-        吐槽人信息
+        吐槽信息
       </CardTitle>
     </div>
-    <div class="flex items-center justify-between text-sm">
-      <div>
-        当前阶段:
+    <!--  帖子发布人  -->
+    <div>
+      <div class="divider divider-start">
+        <div class="text-sm text-neutral opacity-70">
+          发布人
+        </div>
       </div>
-      <DictData :dict-type="ProductConstants.post.post_status"
-                :value="postHandleProgress">
-        <template #default="{ dict }">
-          <tag-plus v-bind="dict.meta.tag"
-                    :tag-name="dict.label" />
-        </template>
-      </DictData>
+      <div class="flex  justify-between text-sm mt-2">
+        <MemberInfo v-bind="memberInfo" :create-time="createTime" />
+      </div>
     </div>
-    <div class="flex items-center justify-between text-sm mt-2">
-      <div>
-        吐槽类型:
+
+    <div>
+      <div class="divider divider-start">
+        <div class="text-sm text-neutral opacity-70">
+          吐槽类型
+        </div>
       </div>
-      <!--   帖子类型   -->
-      <DictData :dict-type="ProductConstants.post.post_type"
-                :value="postType">
-        <template #default="{ dict }">
-          <tag-plus v-bind:="dict.meta.tag"
-                    :tag-name="dict.label" />
-        </template>
-      </DictData>
+      <div class="flex  justify-between text-sm mt-2">
+        <DictData :dict-type="ProductConstants.post.post_type"
+                  :value="postType">
+          <template #default="{ dict }">
+            <tag-plus v-bind="dict.meta.tag"
+                      :tag-name="dict.label" />
+          </template>
+        </DictData>
+        <div>
+          <svg-icon :size="20" name="default-setting" />
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="divider divider-start">
+        <div class="text-sm text-neutral opacity-70">
+          当前阶段
+        </div>
+      </div>
+      <div class="flex  justify-between text-sm mt-2">
+        <DictData :dict-type="ProductConstants.post.post_status"
+                  :value="postHandleProgress">
+          <template #default="{ dict }">
+            <tag-plus v-bind="dict.meta.tag"
+                      :tag-name="dict.label" />
+          </template>
+        </DictData>
+        <div>
+          <svg-icon :size="20" name="default-setting" />
+        </div>
+      </div>
     </div>
     <div class="divider"></div>
-    <!--  帖子发布人  -->
-    <MemberInfo v-bind="memberInfo" :create-time="createTime" />
   </div>
 </template>
 
