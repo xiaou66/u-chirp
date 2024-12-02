@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {CardTitle, FileList, SvgIcon, UButton, UserEditor, type UserEditorInstance} from "@u-chirp/components";
 import { Button } from "@u-chirp/shadcn";
-import { useMediaQuery } from "@vueuse/core";
+import {useInfiniteScroll, useMediaQuery} from "@vueuse/core";
 import { MemberInfoContent } from "../components";
-import {onMounted, ref} from "vue";
+import {inject, onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {
   productPostCommentChildrenListApi,
@@ -19,6 +19,7 @@ import {useMemberStore} from "../../../stores";
 import type {RollResult} from "../../../api/appService";
 import PostThumbsUp from "../components/PostThumbsUp.vue";
 import PostFollow from "../components/PostFollow.vue";
+import type {ProductHomeInject} from "../type";
 const isDesktop = useMediaQuery('(min-width: 768px)');
 
 const memberStore = useMemberStore();
@@ -51,15 +52,19 @@ onMounted(() => {
 });
 
 function handlePostThumbs(postId: string, thumbsUp: boolean) {
-  postThumbsUp.value = thumbsUp;
-  const postThumbsUpCount = postDetail.value.postThumbsUpCount;
-  postDetail.value.postThumbsUpCount = (Number(postThumbsUpCount) + (thumbsUp ? 1 : -1)).toString();
+  if (postDetail.value) {
+    postThumbsUp.value = thumbsUp;
+    const postThumbsUpCount = postDetail.value.postThumbsUpCount;
+    postDetail.value.postThumbsUpCount = (Number(postThumbsUpCount) + (thumbsUp ? 1 : -1)).toString();
+  }
 }
 
 function handleFollow(postId: string, follow: boolean) {
-  postFollowStatus.value = follow;
-  const postFollowCount = postDetail.value.postFollowCount;
-  postDetail.value.postFollowCount = (Number(postFollowCount) + (follow ? 1 : -1)).toString();
+  if (postDetail.value) {
+    postFollowStatus.value = follow;
+    const postFollowCount = postDetail.value.postFollowCount;
+    postDetail.value.postFollowCount = (Number(postFollowCount) + (follow ? 1 : -1)).toString();
+  }
 }
 const commentEditor = ref<UserEditorInstance>();
 
@@ -88,30 +93,46 @@ async function handleCreateComment() {
     // 清空输入框
     commentEditor.value!.clearAllData();
   });
-  requestCommentList(null);
+  requestCommentList(-1);
 }
 
 
-const commentList = ref<RollResult<ProductPostCommentItem>>([]);
+const commentList = ref<RollResult<ProductPostCommentItem>>([] as any);
 
 function requestCommentList(next = commentList.value.next) {
-  const { postId, productCode } = route.params as any;
-  productPostCommentListApi({
-    postId,
-    productCode,
-    next
-  }).then(res => {
-    if (next == null) {
-      commentList.value = res;
-    } else {
-      commentList.value.list.push(...res.list);
-      commentList.value.next = res.next;
-    }
-  });
+  console.log('requestCommentList', next)
+  const { postId, productCode } = route.params as {postId: string, productCode: string};
+  if (next !== null)
+    productPostCommentListApi({
+      postId: postId,
+      productCode,
+      next
+    }).then(res => {
+      if (next == -1) {
+        commentList.value = res;
+        commentList.value.next = res.next;
+      } else {
+        commentList.value.list.push(...res.list);
+        commentList.value.next = res.next;
+        console.log('commentList.value.next', commentList.value.next)
+      }
+    });
 }
 
+// 无限加载
+const productHomeInject = inject<ProductHomeInject>('productHome');
+const { reset } = useInfiniteScroll(
+  productHomeInject!.container,
+  () => requestCommentList(),
+  {
+    distance: 30,
+    interval: 2500,
+    canLoadMore: () => commentList.value.next !== null
+  },
+);
+
 onMounted(() => {
-  requestCommentList(null);
+  requestCommentList(-1);
 })
 
 
@@ -121,10 +142,12 @@ function handleCopyShareUrl() {
 const replyCommentRef = ref<ProductReplyCommentInstance>();
 function openReplyComment(comment: ProductPostCommentItem) {
   console.log('comment', comment);
-  replyCommentRef.value.show(comment);
+  if (replyCommentRef.value) {
+    replyCommentRef.value.show(comment);
+  }
 }
 
-function requestReplyChildrenComment(commentId: string, next: string) {
+function requestReplyChildrenComment(commentId: string, next: string | null) {
   const pageSize = 10;
   productPostCommentChildrenListApi({
     next,
@@ -181,13 +204,13 @@ function requestReplyChildrenComment(commentId: string, next: string) {
               </div>
             </div>
             <div v-if="postDetail" class="flex items-center gap-2">
-              <PostThumbsUp :post-id="route.params.postId"
+              <PostThumbsUp :post-id="route.params.postId as string"
                             :post-thumbs-up-count="postDetail.postThumbsUpCount"
                             @handlePostThumbs="handlePostThumbs"
                             :thumbs-up-status="postThumbsUp"
               />
               <div style="padding-top: 1px">
-                <PostFollow :post-id="route.params.postId"
+                <PostFollow :post-id="route.params.postId as string"
                             :post-follow-count="postDetail.postFollowCount"
                             @handleFollow="handleFollow"
                             :follow-status="postFollowStatus" />

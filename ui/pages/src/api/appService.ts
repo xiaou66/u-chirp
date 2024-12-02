@@ -105,7 +105,7 @@ export interface pageParam {
   pageSize?: number;
 }
 export interface RollParam {
-  next?: number | null;
+  next?: number | null | string;
   pageSize?: number;
 }
 

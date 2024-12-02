@@ -8,7 +8,7 @@
         where cppc.post_id = #{reqVo.postId}
           and cppc.parent_comment_id = 0
           <if test="reqVo.next != null">
-              and cppc.post_id &lt; #{reqVo.next}
+              and cppc.comment_id &lt; #{reqVo.next}
           </if>
         group by cppc.comment_id
         order by cppc.create_time desc

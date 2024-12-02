@@ -49,6 +49,7 @@ export async function productPostPostSaveApi(data: ProductPostSaveReq) {
 }
 
 export interface ProductPostListReq extends pageParam {
+  postId: string;
   productCode: string;
   postTitle?: string;
   tab?: string;
@@ -215,12 +216,12 @@ export interface ProductPostDetailResp {
   /**
    * 点赞数
    */
-  postThumbsUpCount: number;
+  postThumbsUpCount: string;
 
   /**
    * 收藏数
    */
-  postFollowCount: number;
+  postFollowCount: string;
 
   /**
    * 是否置顶

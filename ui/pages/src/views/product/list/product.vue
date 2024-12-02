@@ -257,7 +257,7 @@ function handleOpenPostDetail(postId: string) {
                        style="padding-top: 3px;" @click="() => handleOpenPostDetail(data.postId)">
                     <svg-icon name="default-detail"
                               color="oklch(var(--ac))"
-                              svg-class="text-xl" />
+                              :size="18" />
                     <div class="w-8">
                       详情
                     </div>

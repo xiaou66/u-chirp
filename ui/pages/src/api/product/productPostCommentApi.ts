@@ -23,7 +23,7 @@ export async function productPostCommentCreateApi(req: ProductPostCommentCreateR
 }
 
 
-export interface ProductPostListReq extends RollParam {
+export interface ProductPostCommentListReq extends RollParam {
   productCode: string;
   postId: string;
   keyword?: string;
@@ -46,11 +46,12 @@ export interface ProductPostCommentItem {
   end?: boolean;
 }
 
+
 /**
  * 评论列表
  * @param req
  */
-export async function productPostCommentListApi(req: ProductPostListReq) {
+export async function productPostCommentListApi(req: ProductPostCommentListReq) {
   return await request<RollResult<ProductPostCommentItem>>('GET', 'product/post/comment/getList', {
     params: req
   });
