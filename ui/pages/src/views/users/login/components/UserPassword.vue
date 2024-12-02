@@ -29,7 +29,7 @@ async function handleLogin(e: Event) {
     setToken(data).then(() => {});
     // TODO productCode 参数暂时写死
     const productCode = 'hrf7YE3v4Ue3'
-    router.replace({ name: 'product', params: { productCode }  })
+    router.replace({ name: 'productList', params: { productCode }  })
       .then(() => {
         loadProductMemberInfo(productCode);
         loadProductInfo(productCode);

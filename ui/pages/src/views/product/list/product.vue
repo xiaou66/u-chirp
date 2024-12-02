@@ -253,6 +253,15 @@ function handleOpenPostDetail(postId: string) {
               <div class="flex items-center mt-6 justify-between">
                 <PosterInfo v-bind="data.memberInfo" :create-time="data.createTime" />
                 <div class="flex items-center gap-2 select-none">
+                  <div class="flex items-center gap-1 text-sm link-hover cursor-pointer"
+                       style="padding-top: 3px;" @click="() => handleOpenPostDetail(data.postId)">
+                    <svg-icon name="default-detail"
+                              color="oklch(var(--ac))"
+                              svg-class="text-xl" />
+                    <div class="w-8">
+                      详情
+                    </div>
+                  </div>
                   <PostThumbsUp :post-id="data.postId"
                                 :post-thumbs-up-count=" data.postThumbsUpCount"
                                 :thumbs-up-status="memberThumbsUpPostIds.includes(data.postId.toString())"
