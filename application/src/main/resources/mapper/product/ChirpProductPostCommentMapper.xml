@@ -7,7 +7,7 @@
         from chirp_product_post_comment cppc
         where cppc.post_id = #{reqVo.postId}
           and cppc.parent_comment_id = 0
-          <if test="reqVo.next != null">
+          <if test="reqVo.next != null and reqVo.next != -1">
               and cppc.comment_id &lt; #{reqVo.next}
           </if>
         group by cppc.comment_id
