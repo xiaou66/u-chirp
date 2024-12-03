@@ -2,8 +2,9 @@
 import { MemberInfo } from "../../components";
 import type { ChirpMemberBaseInfo } from "../../../../api";
 import {ProductConstants} from "../../../../constant";
-import {CardTitle, DictData, TagPlus} from "@u-chirp/components";
+import {CardTitle, DictData, TagPlus, UButton} from "@u-chirp/components";
 import SvgIcon from "@u-chirp/components/src/icon/SvgIcon/SvgIcon.vue";
+import {DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, Button} from "@u-chirp/shadcn";
 
 defineProps<{
   postHandleProgress: number;
@@ -70,16 +71,59 @@ defineProps<{
         </div>
       </div>
     </div>
+    <!-- 订阅 -->
+<!--    <div class="w-full">
+      <div class="divider"></div>
+      <DropdownMenu>
+        <DropdownMenuTrigger class="w-full">
+          <div class="w-full">
+            <Button class="w-full" variant="outline">
+              订阅
+            </Button>
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem>Billing</DropdownMenuItem>
+          <DropdownMenuItem>Team</DropdownMenuItem>
+          <DropdownMenuItem>Subscription</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>-->
     <div class="divider"></div>
-    <div class="flex items-center gap-2">
-      <div>
-        <svg-icon :size="18" color="#3a00db" hover-color="#3a00db" name="product-ding" />
+    <div class="flex flex-col gap-2 ">
+      <div class="action items-center gap-2 text-sm">
+        <div>
+          <svg-icon :size="18" name="product-ding" />
+        </div>
+        <div>钉住吐槽</div>
+<!--        <div>取消钉住</div>-->
       </div>
-      <div>钉住</div>
+      <div class="action items-center gap-2 text-sm">
+        <div>
+          <svg-icon :size="18" name="default-lock" />
+        </div>
+        <div>锁定吐槽</div>
+        <!--        <div>取消钉住</div>-->
+      </div>
+      <div class="action text-sm">
+        <div>
+          <svg-icon :size="18" name="default-delete" />
+        </div>
+        <div>删除吐槽</div>
+      </div>
     </div>
   </div>
 </template>
 
-<style scoped>
-
+<style scoped lang="less">
+.action {
+  display: flex;
+  gap: 1rem;
+  &:hover {
+    color: oklch(var(--p));
+    cursor: pointer;
+    fill: #0d50cc;
+  }
+}
 </style>

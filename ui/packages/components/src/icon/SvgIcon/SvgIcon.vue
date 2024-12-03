@@ -34,9 +34,6 @@ function handleMouseLeave() {
 </template>
 
 <style  scoped>
-svg, span {
-  transition: all 250ms linear;
-}
 svg {
   width: 1em;
   height: 1em;

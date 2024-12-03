@@ -29,7 +29,7 @@ export interface SvgIconProps {
 }
 
 export const svgIconDefaultProps = createDefaultProps<SvgIconProps>({
-  color: '#333',
+  color: '',
   prefix: 'icon',
   size: 14,
   svgClass: '',
