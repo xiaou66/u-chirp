@@ -71,6 +71,12 @@ defineProps<{
       </div>
     </div>
     <div class="divider"></div>
+    <div class="flex items-center gap-2">
+      <div>
+        <svg-icon :size="18" color="#3a00db" hover-color="#3a00db" name="product-ding" />
+      </div>
+      <div>钉住</div>
+    </div>
   </div>
 </template>
 

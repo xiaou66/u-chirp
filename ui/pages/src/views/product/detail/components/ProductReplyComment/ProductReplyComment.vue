@@ -43,7 +43,7 @@ async function handleReplyComment() {
     fileIds.push(...fileInfoItems.map(item => item.fileId))
   }
 
-  const { commentId, parentCommentId } = commentData.value;
+  const { commentId, parentCommentId } = commentData.value!;
   const { postId } = route.params as {postId: string};
   await productPostCommentCreateApi({
     postId,
@@ -52,7 +52,7 @@ async function handleReplyComment() {
     commentRawHtml: editor.getSemanticHTML(),
     fileIds
   });
-  dialogRef.value.close();
+  dialogRef.value!.close();
   emits('ok', parentCommentId.toString() === '0' ? commentId : parentCommentId);
 }
 

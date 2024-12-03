@@ -195,10 +195,10 @@ function requestReplyChildrenComment(commentId: string, next: string | null) {
           <div class="flex items-center gap-2">
             <div class="text-sm flex items-center">
               <div class="flex items-center gap-1 cursor-pointer"
-                   style="padding-top: 2.5px;"
+                   style="padding-top: 2px;"
                    @click="handleCopyShareUrl">
                 <svg-icon :size="18" name="default-share"></svg-icon>
-                <span class="font-medium w-10">
+                <span class="font-medium w-9">
                   分享
                 </span>
               </div>
@@ -349,7 +349,7 @@ function requestReplyChildrenComment(commentId: string, next: string | null) {
       </div>
     </div>
     <!--  PC:吐槽信息  -->
-    <div v-if="isDesktop" class="w-3/12 shrink-0" >
+    <div v-if="isDesktop" class="w-2/12 shrink-0" >
       <div class="w-full p-5 rounded-xl shadow bg-base-100">
         <ProductPosterInfo v-if="postDetail"
                            :member-info="postDetail.memberInfo"
