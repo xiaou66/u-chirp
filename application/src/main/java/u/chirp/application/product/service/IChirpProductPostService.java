@@ -2,6 +2,7 @@ package u.chirp.application.product.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import u.boot.start.common.exception.NoDataException;
 import u.chirp.application.product.controller.app.vo.*;
@@ -66,5 +67,16 @@ public interface IChirpProductPostService extends IService<ChirpProductPostDO> {
      */
     ChirpProductPostGetRespVO getPost(ChirpProductPostGetReqVO reqVo);
 
+    /**
+     * 将帖子状态设置为关闭
+     * @param postId
+     */
     void closePost(Long postId);
+
+    /**
+     * 帖子类型修改
+     * @param postId 帖子 id
+     * @param postType 帖子类型
+     */
+    void postTypeModify(Long postId, String postType);
 }

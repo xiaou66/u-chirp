@@ -16,6 +16,7 @@ import u.chirp.application.mumber.enums.CollectType;
 import u.chirp.application.mumber.service.IChirpMemberCollectService;
 import u.chirp.application.mumber.service.IChirpMemberService;
 import u.chirp.application.mumber.service.bo.ChirpMemberBaseInfoBO;
+import u.chirp.application.product.constant.PostHandleProgressConstant;
 import u.chirp.application.product.constant.ProductFileManagerCodeConstant;
 import u.chirp.application.product.controller.app.vo.*;
 import u.chirp.application.product.convert.ChirpProductPostConvert;
@@ -208,7 +209,16 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
 
     @Override
     public void closePost(Long postId) {
+        baseMapper.update(Wrappers.lambdaUpdate(ChirpProductPostDO.class)
+                .eq(ChirpProductPostDO::getPostId, postId)
+                .set(ChirpProductPostDO::getPostHandleProgress, PostHandleProgressConstant.CLOSED));
+    }
 
+    @Override
+    public void postTypeModify(Long postId, String postType) {
+        baseMapper.update(Wrappers.lambdaUpdate(ChirpProductPostDO.class)
+                .eq(ChirpProductPostDO::getPostId, postId)
+                .set(ChirpProductPostDO::getPostType, postType));
     }
 
 

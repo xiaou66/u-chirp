@@ -178,6 +178,18 @@ public class ChirpProductPostController {
     @PostMapping("/closed")
     public R<Boolean> closePost(@Validated @RequestBody AppProductPostActionReqVO reqVo) {
         chirpProductPostService.closePost(reqVo.getPostId());
-        return R.success(false);
+        return R.success(true);
+    }
+
+    /**
+     * 修改帖子类型
+     * @param reqVO
+     * @return
+     * @tags v1.0.0
+     */
+    @PostMapping("/modifyPostType")
+    public R<Boolean> postTypeModify(@Validated @RequestBody AppProductPostPostTypeModifyReqVO reqVO) {
+        chirpProductPostService.postTypeModify(reqVO.getPostId(), reqVO.getPostType());
+        return R.success(true);
     }
 }
