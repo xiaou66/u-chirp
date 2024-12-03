@@ -349,7 +349,7 @@ function requestReplyChildrenComment(commentId: string, next: string | null) {
       </div>
     </div>
     <!--  PC:吐槽信息  -->
-    <div v-if="isDesktop" class="w-2/12 shrink-0" >
+    <div v-if="isDesktop" class="w-3/12 shrink-0" >
       <div class="w-full p-5 rounded-xl shadow bg-base-100">
         <ProductPosterInfo v-if="postDetail"
                            :member-info="postDetail.memberInfo"

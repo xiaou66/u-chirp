@@ -2,8 +2,7 @@
 import { MemberInfo } from "../../components";
 import type { ChirpMemberBaseInfo } from "../../../../api";
 import {ProductConstants} from "../../../../constant";
-import {CardTitle, DictData, TagPlus, UButton} from "@u-chirp/components";
-import SvgIcon from "@u-chirp/components/src/icon/SvgIcon/SvgIcon.vue";
+import {CardTitle, DictData, TagPlus, SvgIcon} from "@u-chirp/components";
 import {DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, Button} from "@u-chirp/shadcn";
 
 defineProps<{
@@ -90,6 +89,37 @@ defineProps<{
         </DropdownMenuContent>
       </DropdownMenu>
     </div>-->
+    <!-- 参与人 -->
+    <div class="divider divider-start">
+      <div class="text-sm text-neutral opacity-70">
+        参与人
+      </div>
+    </div>
+    <div class="">
+      <div class="avatar-group -space-x-6 rtl:space-x-reverse">
+        <div class="avatar">
+          <div class="w-9">
+            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+          </div>
+        </div>
+        <div class="avatar">
+          <div class="w-9">
+            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"  alt=""/>
+          </div>
+        </div>
+        <div class="avatar">
+          <div class="w-9">
+            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+          </div>
+        </div>
+        <div class="avatar">
+          <div class="w-9">
+            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 额外操作区   -->
     <div class="divider"></div>
     <div class="flex flex-col gap-2 ">
       <div class="action items-center gap-2 text-sm">
