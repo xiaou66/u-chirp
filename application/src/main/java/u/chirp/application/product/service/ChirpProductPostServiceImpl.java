@@ -206,6 +206,11 @@ public class ChirpProductPostServiceImpl extends ServiceImpl<ChirpProductPostMap
         return data;
     }
 
+    @Override
+    public void closePost(Long postId) {
+
+    }
+
 
     private void verifyCollect(AppProductPostFollowReqVO reqVo, Long productId) throws Exception {
         if (!postExists(productId, reqVo.getPostId())) {

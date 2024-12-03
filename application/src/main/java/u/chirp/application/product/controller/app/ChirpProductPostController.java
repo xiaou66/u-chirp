@@ -170,4 +170,14 @@ public class ChirpProductPostController {
         ProductPostBaseInfoBO productPost = chirpProductPostService.getPostBaseInfo(reqVo.getPostId());
         return R.success(productPost);
     }
+
+    /**
+     * 关闭帖子
+     * @tags v1.0.0
+     */
+    @PostMapping("/closed")
+    public R<Boolean> closePost(@Validated @RequestBody AppProductPostActionReqVO reqVo) {
+        chirpProductPostService.closePost(reqVo.getPostId());
+        return R.success(false);
+    }
 }

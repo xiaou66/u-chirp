@@ -2,6 +2,7 @@ package u.chirp.application.product.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import jakarta.validation.constraints.NotNull;
 import u.boot.start.common.exception.NoDataException;
 import u.chirp.application.product.controller.app.vo.*;
 import u.chirp.application.product.dal.dataobject.ChirpProductPostDO;
@@ -64,4 +65,6 @@ public interface IChirpProductPostService extends IService<ChirpProductPostDO> {
      * @return
      */
     ChirpProductPostGetRespVO getPost(ChirpProductPostGetReqVO reqVo);
+
+    void closePost(Long postId);
 }
