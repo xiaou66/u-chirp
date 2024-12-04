@@ -13,4 +13,5 @@ include 'auth'
 include 'framework:boot-start-utools'
 findProject(':framework:boot-start-utools')?.name = 'boot-start-utools'
 include 'api'
+include 'api'
 

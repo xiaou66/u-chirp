@@ -12,6 +12,7 @@ repositories {
 dependencies {
     // 导入约束依赖
     implementation platform(project(':dependencies'))
+    implementation project(':api')
     implementation project(':framework:boot-start-common')
     implementation project(':framework:boot-start-web')
 

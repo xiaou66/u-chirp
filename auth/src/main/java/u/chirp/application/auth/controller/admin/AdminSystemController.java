@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import u.boot.start.common.pojo.R;
 import u.boot.start.common.utils.FilePathUtils;
+import u.chirp.application.api.mumber.IChirpMemberApi;
 import u.chirp.application.auth.controller.admin.vo.SystemInitReqVo;
 import u.chirp.application.auth.controller.admin.vo.SystemAdminLoginReqVO;
 import u.chirp.application.auth.service.IAdminUserService;
@@ -34,6 +35,9 @@ public class AdminSystemController {
     private final IAdminUserService adminUserService;
 
 
+    @Resource
+    private final IChirpMemberApi chirpMemberApi;
+
     /**
      * 登录超级管理员
      * @param reqVo
@@ -44,6 +48,7 @@ public class AdminSystemController {
         String token = adminUserService.login(reqVo, getIdentity());
         return R.success(token);
     }
+
     /**
      * 初始化超级管理员
      * @tags v1.0.0

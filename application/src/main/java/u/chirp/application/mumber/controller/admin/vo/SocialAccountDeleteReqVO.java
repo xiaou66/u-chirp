@@ -1,4 +1,4 @@
-package u.chirp.application.mumber.controller.admin;
+package u.chirp.application.mumber.controller.admin.vo;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
