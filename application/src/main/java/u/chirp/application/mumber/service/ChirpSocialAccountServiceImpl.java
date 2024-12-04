@@ -12,7 +12,7 @@ import u.chirp.application.mumber.dal.mysql.ChirpSocialAccountMapper;
  */
 @Service
 public class ChirpSocialAccountServiceImpl extends ServiceImpl<ChirpSocialAccountMapper, ChirpSocialAccountDO>
-        implements IChirpSocialAccountService{
+        implements IChirpSocialAccountService {
     @Override
     public ChirpSocialAccountDO getByClientId(String clientId) {
         return baseMapper.selectOne(Wrappers.lambdaQuery(ChirpSocialAccountDO.class)
